@@ -34,17 +34,17 @@ switch ($method) {
 
 
 function handleGET($conn) {
-    if (isset($_GET['id'])) { // get by id
-        $id = $_GET['id'];
-        $result = $conn->query("SELECT * FROM users WHERE id=$id");
+    if (isset($_REQUEST['id'])) { // get by id
+        $id = $_REQUEST['id'];
+        $user = getRecordById($conn, $id);
         
 
-        if ($result->num_rows == 0) {
+        if (!$result) {
             setStatusCodeAndEchoJson(200, "User not found", null);
             return;
         }
         
-        setStatusCodeAndEchoJson(200, "User found", $result->fetch_assoc());
+        setStatusCodeAndEchoJson(200, "User found", $user);
         return;
     }
 
@@ -52,6 +52,7 @@ function handleGET($conn) {
     $result = $conn->query("SELECT * FROM users");
     $users = [];
     while ($row = $result->fetch_assoc()) {
+        $row['id'] = (int) $row['id'];
         $users[] = $row;
     }
 
@@ -64,17 +65,9 @@ function handleGET($conn) {
 
 
 function handlePOST($conn, $input){
-    $username   = $input['username'];
-    $pw_hash    = password_hash($input['password'], PASSWORD_DEFAULT);
-    $lname      = $input['lname'];
-    $fname      = $input['fname'];
-    $phone      = $input['phone'];
-    $email      = $input['email'];
-    $gender     = $input['gender'];
-    $type       = $input['type'];
-    $dob        = $input['birthday'];
 
-    $id = hash('sha256', $username . $pw_hash . $email . $phone . $dob);
+    include 'get_users_fields.php';
+
 
     try {
         // Check if username, email, or phone already exists
@@ -97,44 +90,65 @@ function handlePOST($conn, $input){
             return;
         }
 
-
         // Proceed with the insertion if unique
-        $insertQuery = "INSERT INTO users (id, username, password, lname, fname, email, phone, gender, type, birthday) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $insertQuery = "INSERT INTO users (username, password, lname, fname, email, phone, gender, type, birthday) 
+                                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($insertQuery);
-        $stmt->bind_param("ssssssssss", $id, $username, $pw_hash, $lname, $fname, $email, $phone, $gender, $type, $dob);
+        $stmt->bind_param("sssssssss", $username, $pw_hash, $lname, $fname, $email, $phone, $gender, $type, $dob);
+        // $result = $stmt->execute();
+        // echo 'hehe ', $result;
+
         
-        if (!$stmt->execute()) {
+        $isInserted = $stmt->execute();
+        if (!$isInserted) {
             throw new Exception("Database error: " . $stmt->error);
         }
 
-        setStatusCodeAndEchoJson(201, "POST successfully", $stmt->get_result()->fetch_assoc());        
-    
+
+        $newUser = getNewlyInsertedRecord($conn);
+        setStatusCodeAndEchoJson(201, "POST successfully", $newUser);        
+        
     } catch (Exception $e) {
-        setStatusCodeAndEchoJson(400, "POST failed", $e->getMessage());
+        setStatusCodeAndEchoJson(400, "Exception: POST failed", $e->getMessage());
     }
 }
 
 
 
-function handlePUT($conn, $input) {
-    // $id = $input['id'];
-    // $username = $input['username'];
-    // $pw_hash = password_hash($input['password'], PASSWORD_DEFAULT);
-    // $lname = $input['lname'];
-    // $fname = $input['fname'];
-    // $phone = $input['phone'];
-    // $email = $input['email'];
-    // $gender
+function handlePUT($conn, $input) { // update
 
+    include 'get_users_fields.php';
 
-    $id = $_GET['id'];
-        $name = $input['name'];
-        $email = $input['email'];
-        $age = $input['age'];
-        $conn->query("UPDATE users SET name='$name',
-                     email='$email', age=$age WHERE id=$id");
-        echo json_encode(["message" => "User updated successfully"]);
+    if (isset($_REQUEST['id'])) {
+        $id = $_REQUEST['id'];
+        
+        $selectQuery = "SELECT * FROM users WHERE id=?";
+        $stmt = $conn->prepare($selectQuery);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        if ($result->num_rows == 0) {
+            setStatusCodeAndEchoJson(404, "User not found", null);
+            return;
+        }
+
+        $updateQuery = "UPDATE users SET username=?, password=?, lname=?, fname=?, email=?, phone=?, gender=?, type=?, birthday=? WHERE id=?";
+        $stmt = $conn->prepare($updateQuery);
+        $stmt->bind_param("sssssssssi", $username, $pw_hash, $lname, $fname, $email, $phone, $gender, $type, $dob, $id);
+        if(!$stmt->execute()){
+            setStatusCodeAndEchoJson(400, "PUT failed", null);
+            return;
+        }
+
+        
+        $newUser = getRecordById($conn, $id);
+        setStatusCodeAndEchoJson(200, "PUT successfully", $newUser);
+
+    }else if (isset($_REQUEST['username'])){
+
+    }
+
 }
 
 
@@ -142,9 +156,6 @@ function handleDELETE($conn) {
     // $id = $_GET['id'];
     // $conn->query("DELETE FROM users WHERE id=$id");
     // echo json_encode(["message" => "User deleted successfully"]);
-
-
-    
     $id = $_GET['id'];
     $conn->query("DELETE FROM users WHERE id=$id");
     echo json_encode(["message" => "User deleted successfully"]);
