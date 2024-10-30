@@ -12,7 +12,7 @@
 <body>
     
     
-    <div class="container">
+    <!-- <div class="container">
         <header>
             hehe
         </header>
@@ -31,6 +31,8 @@
 
 
 
-    <script src="script.js"></script>
+    <script src="script.js"></script> -->
+
+    <?php include './api/test.php'; ?>
 </body>
 </html>
