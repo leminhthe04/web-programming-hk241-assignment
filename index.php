@@ -33,6 +33,6 @@
 
     <script src="script.js"></script> -->
 
-    <?php include './api/test.php'; ?>
+    <?php include './api/api.php'; ?>
 </body>
 </html>
