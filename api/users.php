@@ -39,8 +39,8 @@ function handleGET($conn) {
         $user = getRecordById($conn, $id);
         
 
-        if (!$result) {
-            setStatusCodeAndEchoJson(200, "User not found", null);
+        if (!$user) {
+            setStatusCodeAndEchoJson(200, "There are no user have id=$id", null);
             return;
         }
         
@@ -74,30 +74,43 @@ function handlePOST($conn, $input){
         $statusCode = null;
         $msg = null;
         
-        if(!isUnique($conn, 'username', $username)){
-            $statusCode = 409;
-            $msg = "POST failed. Username already exists";
-        } else if(!isUnique($conn, 'email', $email)){
-            $statusCode = 409;
-            $msg = "POST failed. Email already exists";
-        } else if(!isUnique($conn, 'phone', $phone)){
-            $statusCode = 409;
-            $msg = "POST failed. Phone already exists";
+        if(!isUniqueAttribute($conn, 'username', $username)){
+            setStatusCodeAndEchoJson(409, "POST failed. Username already exists", null);
+            return;
         }
-
-        if ($statusCode != null) {
-            setStatusCodeAndEchoJson($statusCode, $msg, null);
+        if(!isUniqueAttribute($conn, 'email', $email)){
+            setStatusCodeAndEchoJson(409, "POST failed. Email already exists", null);
+            return;
+        }
+        if(!isUniqueAttribute($conn, 'phone', $phone)){
+            setStatusCodeAndEchoJson(409, "POST failed. Phone already exists", null);
             return;
         }
 
         // Proceed with the insertion if unique
-        $insertQuery = "INSERT INTO users (username, password, lname, fname, email, phone, gender, type, birthday) 
-                                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $insertQuery = "INSERT INTO users  (username, 
+                                            password, 
+                                            lname, 
+                                            fname, 
+                                            email, 
+                                            phone, 
+                                            gender, 
+                                            type, 
+                                            birthday
+                                           ) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($insertQuery);
-        $stmt->bind_param("sssssssss", $username, $pw_hash, $lname, $fname, $email, $phone, $gender, $type, $dob);
-        // $result = $stmt->execute();
-        // echo 'hehe ', $result;
-
+        $stmt->bind_param("sssssssss", 
+                            $username, 
+                            $pw_hash, 
+                            $lname, 
+                            $fname, 
+                            $email, 
+                            $phone, 
+                            $gender, 
+                            $type, 
+                            $dob
+                        );
         
         $isInserted = $stmt->execute();
         if (!$isInserted) {
@@ -117,38 +130,73 @@ function handlePOST($conn, $input){
 
 function handlePUT($conn, $input) { // update
 
-    include 'get_users_fields.php';
-
+    $id = null;
     if (isset($_REQUEST['id'])) {
         $id = $_REQUEST['id'];
-        
-        $selectQuery = "SELECT * FROM users WHERE id=?";
-        $stmt = $conn->prepare($selectQuery);
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        
-        $result = $stmt->get_result();
-        if ($result->num_rows == 0) {
-            setStatusCodeAndEchoJson(404, "User not found", null);
+        // Check existing user has id
+        if(!getRecordById($conn, $id)){
+            setStatusCodeAndEchoJson(404, "There are no user have id=$id", null);
             return;
         }
-
-        $updateQuery = "UPDATE users SET username=?, password=?, lname=?, fname=?, email=?, phone=?, gender=?, type=?, birthday=? WHERE id=?";
-        $stmt = $conn->prepare($updateQuery);
-        $stmt->bind_param("sssssssssi", $username, $pw_hash, $lname, $fname, $email, $phone, $gender, $type, $dob, $id);
-        if(!$stmt->execute()){
-            setStatusCodeAndEchoJson(400, "PUT failed", null);
+    } else if (isset($_REQUEST['username'])){
+        $username = $_REQUEST['username'];
+        // Check existing user has username
+        $user = getRecordByUniqueAttr($conn, 'username', $username);
+        if(!$user){
+            setStatusCodeAndEchoJson(404, "There are no user have username=$username", null);
             return;
         }
-
-        
-        $newUser = getRecordById($conn, $id);
-        setStatusCodeAndEchoJson(200, "PUT successfully", $newUser);
-
-    }else if (isset($_REQUEST['username'])){
-
+        $id = $user['id'];
     }
 
+    // new data
+    include 'get_users_fields.php';
+
+
+    // Check if (new) email or phone is not unique
+    if(!isUniqueAttribute($conn, 'email', $email, $id)){
+        setStatusCodeAndEchoJson(409, "PUT failed. This new email is used for another account", null);
+        return;
+    }
+    if(!isUniqueAttribute($conn, 'phone', $phone, $id)){
+        setStatusCodeAndEchoJson(409, "PUT failed. This new phone is used for another account", null);
+        return;
+    }
+
+
+    $updateQuery = "UPDATE users SET 
+                                username=?, 
+                                password=?, 
+                                lname=?, 
+                                fname=?, 
+                                email=?, 
+                                phone=?, 
+                                gender=?, 
+                                type=?, 
+                                birthday=? 
+                    WHERE id=?"
+                    ;
+    $stmt = $conn->prepare($updateQuery);
+    $stmt->bind_param("sssssssssi", 
+                        $username, 
+                        $pw_hash, 
+                        $lname, 
+                        $fname, 
+                        $email, 
+                        $phone, 
+                        $gender, 
+                        $type, 
+                        $dob, 
+                        $id
+                    );
+    if(!$stmt->execute()){
+        setStatusCodeAndEchoJson(400, "PUT failed", null);
+        return;
+    }
+
+    
+    $newUser = getRecordById($conn, $id);
+    setStatusCodeAndEchoJson(200, "Change info. successfully", $newUser);
 }
 
 
