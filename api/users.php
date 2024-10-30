@@ -10,6 +10,9 @@ $method = $_SERVER['REQUEST_METHOD'];
 $input = json_decode(file_get_contents('php://input'), true);
 
 
+define('TB_NAME', 'users');
+
+
 switch ($method) {
     case 'GET':
         handleGET($conn);
@@ -34,19 +37,30 @@ switch ($method) {
 
 
 function handleGET($conn) {
+    $user = null;
     if (isset($_REQUEST['id'])) { // get by id
         $id = $_REQUEST['id'];
-        $user = getRecordById($conn, $id);
+        $user = getRecordById($conn, TB_NAME, $id);
         
-
         if (!$user) {
             setStatusCodeAndEchoJson(200, "There are no user have id=$id", null);
             return;
         }
+    } else if (isset($_REQUEST['username'])) { // get by username
+        $username = $_REQUEST['username'];
+        $user = getRecordByUniqueAttr($conn, TB_NAME, 'username', $username);
         
+        if (!$user) {
+            setStatusCodeAndEchoJson(200, "There are no user have username=$username", null);
+            return;
+        }
+    }
+
+    if ($user){
         setStatusCodeAndEchoJson(200, "User found", $user);
         return;
     }
+
 
     // get all users
     $result = $conn->query("SELECT * FROM users");
@@ -71,24 +85,21 @@ function handlePOST($conn, $input){
 
     try {
         // Check if username, email, or phone already exists
-        $statusCode = null;
-        $msg = null;
-        
-        if(!isUniqueAttribute($conn, 'username', $username)){
+        if(!isUniqueAttribute($conn, TB_NAME, 'username', $username)){
             setStatusCodeAndEchoJson(409, "POST failed. Username already exists", null);
             return;
         }
-        if(!isUniqueAttribute($conn, 'email', $email)){
+        if(!isUniqueAttribute($conn, TB_NAME, 'email', $email)){
             setStatusCodeAndEchoJson(409, "POST failed. Email already exists", null);
             return;
         }
-        if(!isUniqueAttribute($conn, 'phone', $phone)){
+        if(!isUniqueAttribute($conn, TB_NAME, 'phone', $phone)){
             setStatusCodeAndEchoJson(409, "POST failed. Phone already exists", null);
             return;
         }
 
         // Proceed with the insertion if unique
-        $insertQuery = "INSERT INTO users  (username, 
+        $insertQuery = "INSERT INTO " . TB_NAME .  " (username, 
                                             password, 
                                             lname, 
                                             fname, 
@@ -118,7 +129,7 @@ function handlePOST($conn, $input){
         }
 
 
-        $newUser = getNewlyInsertedRecord($conn);
+        $newUser = getNewlyInsertedRecord($conn, TB_NAME);
         setStatusCodeAndEchoJson(201, "POST successfully", $newUser);        
         
     } catch (Exception $e) {
@@ -141,7 +152,7 @@ function handlePUT($conn, $input) { // update
     } else if (isset($_REQUEST['username'])){
         $username = $_REQUEST['username'];
         // Check existing user has username
-        $user = getRecordByUniqueAttr($conn, 'username', $username);
+        $user = getRecordByUniqueAttr($conn, TB_NAME, 'username', $username);
         if(!$user){
             setStatusCodeAndEchoJson(404, "There are no user have username=$username", null);
             return;
@@ -154,17 +165,17 @@ function handlePUT($conn, $input) { // update
 
 
     // Check if (new) email or phone is not unique
-    if(!isUniqueAttribute($conn, 'email', $email, $id)){
+    if(!isUniqueAttribute($conn, TB_NAME, 'email', $email, $id)){
         setStatusCodeAndEchoJson(409, "PUT failed. This new email is used for another account", null);
         return;
     }
-    if(!isUniqueAttribute($conn, 'phone', $phone, $id)){
+    if(!isUniqueAttribute($conn, TB_NAME, 'phone', $phone, $id)){
         setStatusCodeAndEchoJson(409, "PUT failed. This new phone is used for another account", null);
         return;
     }
 
 
-    $updateQuery = "UPDATE users SET 
+    $updateQuery = "UPDATE TB_NAME SET 
                                 username=?, 
                                 password=?, 
                                 lname=?, 
@@ -194,20 +205,44 @@ function handlePUT($conn, $input) { // update
         return;
     }
 
-    
-    $newUser = getRecordById($conn, $id);
+    $newUser = getRecordById($conn, TB_NAME, $id);
     setStatusCodeAndEchoJson(200, "Change info. successfully", $newUser);
 }
 
 
 function handleDELETE($conn) {
-    // $id = $_GET['id'];
-    // $conn->query("DELETE FROM users WHERE id=$id");
-    // echo json_encode(["message" => "User deleted successfully"]);
-    $id = $_GET['id'];
-    $conn->query("DELETE FROM users WHERE id=$id");
-    echo json_encode(["message" => "User deleted successfully"]);
     
+    if(isset($__REQUEST['delAll'])){
+        deleteAllRecords($conn, TB_NAME);
+        return;
+    }
+
+    $id = null;
+    if (isset($_REQUEST['id'])) {
+        $id = $_REQUEST['id'];
+        // Check existing user has id
+        if(!getRecordById($conn, TB_NAME, $id)){
+            setStatusCodeAndEchoJson(404, "There are no user have id=$id", null);
+            return;
+        }
+    } else if (isset($_REQUEST['username'])){
+        $username = $_REQUEST['username'];
+        // Check existing user has username
+        $user = getRecordByUniqueAttr($conn, TB_NAME, 'username', $username);
+        if(!$user){
+            setStatusCodeAndEchoJson(404, "There are no user have username=$username", null);
+            return;
+        }
+        $id = $user['id'];
+    }
+
+    if(!deleteRecordById($conn, TB_NAME, $id)){
+        setStatusCodeAndEchoJson(400, "Exception: DELETE failed", null);
+        return;    
+    }
+
+    $users = getAllRecords($conn, TB_NAME) ?? null;
+    setStatusCodeAndEchoJson(200, "DELETE successfully", $users);
 }
 
 
