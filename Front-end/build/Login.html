@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMCDIN4rZt6JmYScLbW6EPFPtTYYWRG4Y42HOjo" crossorigin="anonymous">
+
+</head>
+<body>
+    <header class="bg-gray-700 text-white sticky top-0 z-10">
+        <section class="max-w-4xl mx-auto p-4 flex justify-between items-center">
+            <h1 class="text-3xl font-medium">Exclusive</h1>
+            <div>
+                <button class="text-3xl sm:hidden">
+                    &#9776;
+                </button>
+                <nav class="hidden sm:block space-x-8 text-xl" aria-label="main">
+                    <a href="#register" class="hover:oopacity-90">Register</a>
+                    <a href="#login" class="hover:oopacity-90">Log in</a>
+                    <a href="#about" class="hover:oopacity-90">About</a>
+                </nav>
+            </div>
+        </section> 
+    </header>
+    
+
+
+    <div class="grid grid-flow-col auto-cols-max justify-center items-center h-screen">
+        <div class="col-1">
+            <img src="https://static.vecteezy.com/system/resources/previews/005/879/539/original/cloud-computing-modern-flat-concept-for-web-banner-design-man-enters-password-and-login-to-access-cloud-storage-for-uploading-and-processing-files-illustration-with-isolated-people-scene-free-vector.jpg" alt="" width="500px">
+        </div>
+        <div class="col-2 justify-items-center">
+            <h1 class="font-bold text-lg">REGISTRATION</h1>
+            <form action="http://localhost/api/user.php" method="POST">
+                <div class="mt-2">
+                    <label for="username"> Username: </label>
+                    <input type="text" class="border-b-2 focus:ring-0 focus:outline-none focus:border-transparent focus:border-gray-800" name="username">
+                </div>
+                <div class="mt-2">
+                    <label for="email" class="inline-block w-200">Email: </label>
+                    <input type="text" class="border-b-2 focus:ring-0 focus:outline-none focus:border-transparent focus:border-gray-800" name="email">
+                </div>
+                <div class="mt-2">
+                    <label for="password" class="w-50">Password: </label>
+                    <input type="text" class="border-b-2 focus:ring-0 focus:outline-none focus:border-transparent focus:border-gray-800" name="password">
+                </div>
+                <div class="mt-2">
+                    <label for="phone" class="w-50">Phone number: </label>
+                    <input type="text" class="border-b-2 focus:ring-0 focus:outline-none focus:border-transparent focus:border-gray-800" name="phone">
+                </div>
+
+                <div class="border rounded-md border-b-gray-200 mt-20 p-2 w-full text-center bg-red-600">
+                    <button class="uppercase text-white">Sign up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
