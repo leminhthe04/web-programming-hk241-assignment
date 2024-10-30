@@ -175,7 +175,7 @@ function handlePUT($conn, $input) { // update
     }
 
 
-    $updateQuery = "UPDATE TB_NAME SET 
+    $updateQuery = "UPDATE " . TB_NAME . " SET 
                                 username=?, 
                                 password=?, 
                                 lname=?, 
