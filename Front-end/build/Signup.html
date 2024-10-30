@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Sign up</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMCDIN4rZt6JmYScLbW6EPFPtTYYWRG4Y42HOjo" crossorigin="anonymous">
 
@@ -32,19 +32,22 @@
             <img src="https://static.vecteezy.com/system/resources/previews/005/879/539/original/cloud-computing-modern-flat-concept-for-web-banner-design-man-enters-password-and-login-to-access-cloud-storage-for-uploading-and-processing-files-illustration-with-isolated-people-scene-free-vector.jpg" alt="" class="w-3/4">
         </div>
         <div class="col-2 w-1/2 text-2xl">
-            <h1 class="font-bold text-3xl text-center">LOG IN</h1>
+            <h1 class="font-bold text-3xl text-center">REGISTRATION</h1>
             <form action="http://localhost/api/user.php" method="POST" class="w-full">
                 <div class="pt-6"> Username:</div>
                 <input type="text" class="block w-3/4 border-b-2 focus:ring-0 focus:outline-none focus:border-transparent focus:border-gray-800" name="username">
+                <div class="pt-6"> Email:</div>
+                <input type="text" class="block w-3/4 border-b-2 focus:ring-0 focus:outline-none focus:border-transparent focus:border-gray-800" name="username">
                 <div class="pt-6"> Password:</div>
                 <input type="password" class="block w-3/4 border-b-2 focus:ring-0 focus:outline-none focus:border-transparent focus:border-gray-800" name="username">
+                <div class="pt-6"> Phone:</div>
+                <input type="number" class="block w-3/4 border-b-2 focus:ring-0 focus:outline-none focus:border-transparent focus:border-gray-800" name="username">
+                
+           
                 <div class="text-center w-full mt-20">
-                    <button class="uppercase rounded-md text-white bg-red-600  border-b-gray-200 p-2 w-60">Log in</button>
+                    <button class="uppercase rounded-md text-white bg-red-600  border-b-gray-200 p-2 w-60">Sign up</button>
                 </div>
-
-                <div class="w-full mt-5">
-                    <p>You've an account already? <a href="/Login.html" class="underline">Log in</a></p> 
-                </div>
+                
             </form>
         </div>
     </div>
