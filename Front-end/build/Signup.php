@@ -9,7 +9,9 @@
 </head>
 
 <body>
-
+    <?php 
+        include 'Header.php';
+    ?>
     <div class="">
 
         <div class="flex w-full">
@@ -27,27 +29,14 @@
 
                         <div class="space-y-6 w-full">
 
-                            <div class="mb- flex items-end w-full">
-                                <div class="w-1/2">
-                                    <div>Họ</div>
-                                    <input
-                                        type="text"
-                                        id="name"
-                                        name="firstName"
-                                        class="mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 "
-                                        placeholder="Huỳnh Bảo" />
-                                </div>
-
-                                <div class="w-1/2">
-                                    <div>Tên</div>
-                                    <input
-                                        type="text"
-                                        id="name"
-                                        name="lastName"
-                                        class="mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100"
-                                        placeholder="Ngọc" />
-                                </div>
-
+                            <div class="w-full">
+                                <div>Họ tên</div>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="firstName"
+                                    class="mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 "
+                                    placeholder="Huỳnh Bảo" />
                             </div>
                             <div class="mb-4">
                                 <div>Email</div>
@@ -165,5 +154,9 @@
         </div>
     </div>
 </body>
+
+<?php
+include 'Footer.php';
+?>
 
 </html>
