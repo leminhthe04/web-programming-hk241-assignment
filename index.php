@@ -32,7 +32,5 @@
 
 
     <script src="script.js"></script> -->
-
-    <?php include './api/api.php'; ?>
 </body>
 </html>
