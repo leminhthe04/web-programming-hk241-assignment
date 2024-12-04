@@ -44,10 +44,12 @@ CREATE TABLE products (
 CREATE TABLE product_images (
     id                      INT                         AUTO_INCREMENT                  PRIMARY KEY,
     product_id              INT                                                         NOT NULL,
-    url                     TEXT                                                        NOT NULL,
+    url                     VARCHAR(255)                                                NOT NULL,
 
     CONSTRAINT FK_product_images__products
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    FOREIGN KEY (product_id) REFERENCES products(id),
+
+    UNIQUE(product_id, url);
 );
 
 

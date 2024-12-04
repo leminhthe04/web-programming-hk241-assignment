@@ -98,7 +98,6 @@ CREATE PROCEDURE findByNameHasToken (IN _token VARCHAR(255))
 BEGIN CALL findByFieldHasToken('products', 'name', _token); END;
 
 
-
 CALL insertProduct("Iphone 15", 1000.00, "The best phone ever", 100, 12);
 
 CALL insertProduct("Iphone 16", 1000.00, "The best phone ever", 100, 13);

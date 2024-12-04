@@ -167,6 +167,37 @@ if (preg_match('/^\/api\/product\/review\/(\d+)$/', $uri, $matches)){
 }
 
 
+///////////////////////////// PRODUCT IMAGE APIs //////////////////////
+
+if (preg_match('/^\/api\/product-image\/all$/', $uri)){
+    require __DIR__.'/api/productImage/getAll.php';
+    exit;
+}
+
+if (preg_match('/^\/api\/product-image\/detail\/(\d+)$/', $uri, $matches)){
+    $_GET['id'] = $matches[1];
+    require __DIR__.'/api/productImage/detail.php';
+    exit;
+}
+
+if (preg_match('/^\/api\/product-image\/product\/(\d+)$/', $uri, $matches)){
+    $_GET['product_id'] = $matches[1];
+    require __DIR__.'/api/productImage/getAllByProductId.php';
+    exit;
+}
+
+if (preg_match('/^\/api\/product-image\/create$/', $uri)){
+    require __DIR__.'/api/productImage/create.php';
+    exit;
+}
+
+if (preg_match('/^\/api\/product-image\/delete\/(\d+)$/', $uri, $matches)){
+    $_GET['id'] = $matches[1];
+    require __DIR__.'/api/productImage/delete.php';
+    exit;
+}
+
+
 ///////////////////////////// REVIEW APIs /////////////////////////////
 
 if (preg_match('/^\/api\/review\/all$/', $uri)){
