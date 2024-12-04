@@ -23,7 +23,6 @@ CREATE TABLE categories (
     name                    VARCHAR(50)                 UNIQUE                          NOT NULL
 );
 
-
 CREATE TABLE products (
     id                      INT                         AUTO_INCREMENT                  PRIMARY KEY,
     name                    VARCHAR(50)                 UNIQUE                          NOT NULL,
@@ -36,8 +35,9 @@ CREATE TABLE products (
     creation_date           TIMESTAMP                   DEFAULT CURRENT_TIMESTAMP       NOT NULL,
     status                  ENUM('Available', 'Stop Selling', 'Sold Out')
                                                         DEFAULT 'Available'             NOT NULL,
-    ADD CONSTRAINT FK_products__categories
-    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL;
+
+    CONSTRAINT FK_products__categories
+    FOREIGN KEY (category) REFERENCES categories(name) ON DELETE SET NULL
 );
 
 
