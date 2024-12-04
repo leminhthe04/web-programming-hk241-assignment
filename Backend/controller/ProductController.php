@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../model/Product.php';
 require_once __DIR__ . '/../model/Category.php';
+require_once __DIR__ . '/../controller/ProductImageController.php';
 
 class ProductController {
 
@@ -93,7 +94,7 @@ class ProductController {
     }
 
 
-    public function insertProduct($name, $price, $description, $quantity, $category_id, $status) {
+    public function insertProduct($name, $price, $description, $quantity, $category_id, $status, $image_urls) {
         
         // check some field are valid in private functions, if not return error message for the first invalid field
         $validMessage = $this->fieldAreValid($name, $price, $quantity, $category_id, $status)['message'];
@@ -114,7 +115,19 @@ class ProductController {
         }
 
         $product = new Product();
-        return $product->insertProduct($name, $price, $description, $quantity, $category_id, $status);
+        $respone = $product->insertProduct($name, $price, $description, $quantity, $category_id, $status);
+
+        $product_id = $respone['data']['id'];
+
+        if ($image_urls) {
+            $productImageController = new ProductImageController();
+            foreach ($image_urls as $url) {
+                $productImageController->insertProductImage($product_id, $url);
+            }
+            $respone['message'] .= "\nProduct images created";
+        }
+
+        return $respone;
     }
 
     public function updateProductName($id, $name) {
