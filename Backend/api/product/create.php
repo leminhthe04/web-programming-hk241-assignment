@@ -37,7 +37,13 @@ if ($quantity === null) {
 $category_id = $data['category_id'] ?? null;
 $status = $data['status'] ?? null;
 
+
+$image_urls = $data['image_urls'] ?? null;
+
+// print_r($image_urls);
+
+
 $productController = new ProductController();
-$respone = $productController->insertProduct($name, $price, $description, $quantity, $category_id, $status);
+$respone = $productController->insertProduct($name, $price, $description, $quantity, $category_id, $status, $image_urls);
 setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>
