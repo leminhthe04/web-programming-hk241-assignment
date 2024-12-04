@@ -166,6 +166,7 @@ if (preg_match('/^\/api\/product\/review\/(\d+)$/', $uri, $matches)){
     exit;
 }
 
+
 ///////////////////////////// PRODUCT IMAGE APIs //////////////////////
 
 if (preg_match('/^\/api\/product-image\/all$/', $uri)){
@@ -195,6 +196,7 @@ if (preg_match('/^\/api\/product-image\/delete\/(\d+)$/', $uri, $matches)){
     require __DIR__.'/api/productImage/delete.php';
     exit;
 }
+
 
 ///////////////////////////// REVIEW APIs /////////////////////////////
 
