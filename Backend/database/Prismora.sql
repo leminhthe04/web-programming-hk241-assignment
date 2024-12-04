@@ -29,7 +29,7 @@ CREATE TABLE products (
     price                   DECIMAL(10, 2)                                              NOT NULL,
     quantity                INT                                                         NOT NULL,
     description             TEXT,
-    category                VARCHAR(50),
+    category_id             INT,
     buy_count               INT                         DEFAULT 0                       NOT NULL,
     avg_rating              DECIMAL(2, 1)               DEFAULT 0.0                     NOT NULL,
     creation_date           TIMESTAMP                   DEFAULT CURRENT_TIMESTAMP       NOT NULL,
@@ -83,5 +83,7 @@ CREATE TABLE reviews (
     product_id              INT                                                         NOT NULL,
     rating                  INT                                                         NOT NULL,
     comment                 TEXT,
-    time                    TIMESTAMP                   DEFAULT CURRENT_TIMESTAMP       NOT NULL
+    time                    TIMESTAMP                   DEFAULT CURRENT_TIMESTAMP       NOT NULL,
+
+    CHECK (rating >= 1 AND rating <= 5)
 );
