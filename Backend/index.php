@@ -14,6 +14,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 ////////////////////// USER APIs //////////////////////
 
+
 if (preg_match('/^\/api\/user\/all$/', $uri)){
     require __DIR__.'/api/user/getAll.php';
     exit;
