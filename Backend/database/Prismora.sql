@@ -19,8 +19,10 @@ CREATE TABLE users (
 
 
 CREATE TABLE categories (
-    name                    VARCHAR(50)                                                PRIMARY KEY
+    id                      INT                         AUTO_INCREMENT                  PRIMARY KEY,
+    name                    VARCHAR(50)                 UNIQUE                          NOT NULL
 );
+
 
 CREATE TABLE products (
     id                      INT                         AUTO_INCREMENT                  PRIMARY KEY,
@@ -28,15 +30,14 @@ CREATE TABLE products (
     price                   DECIMAL(10, 2)                                              NOT NULL,
     quantity                INT                                                         NOT NULL,
     description             TEXT,
-    category                VARCHAR(50)                                                 NOT NULL,
+    category                VARCHAR(50),
     buy_count               INT                         DEFAULT 0                       NOT NULL,
     avg_rating              DECIMAL(2, 1)               DEFAULT 0.0                     NOT NULL,
     creation_date           TIMESTAMP                   DEFAULT CURRENT_TIMESTAMP       NOT NULL,
     status                  ENUM('Available', 'Stop Selling', 'Sold Out')
                                                         DEFAULT 'Available'             NOT NULL,
-
     CONSTRAINT FK_products__categories
-    FOREIGN KEY (category) REFERENCES categories(name)
+    FOREIGN KEY (category) REFERENCES categories(name) ON DELETE SET NULL
 );
 
 
