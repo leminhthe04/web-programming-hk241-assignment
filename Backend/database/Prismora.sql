@@ -30,14 +30,14 @@ CREATE TABLE products (
     price                   DECIMAL(10, 2)                                              NOT NULL,
     quantity                INT                                                         NOT NULL,
     description             TEXT,
-    category                VARCHAR(50),
+    category_id             INT,
     buy_count               INT                         DEFAULT 0                       NOT NULL,
     avg_rating              DECIMAL(2, 1)               DEFAULT 0.0                     NOT NULL,
     creation_date           TIMESTAMP                   DEFAULT CURRENT_TIMESTAMP       NOT NULL,
     status                  ENUM('Available', 'Stop Selling', 'Sold Out')
                                                         DEFAULT 'Available'             NOT NULL,
-    CONSTRAINT FK_products__categories
-    FOREIGN KEY (category) REFERENCES categories(name) ON DELETE SET NULL
+    ADD CONSTRAINT FK_products__categories
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL;
 );
 
 
@@ -83,5 +83,7 @@ CREATE TABLE reviews (
     product_id              INT                                                         NOT NULL,
     rating                  INT                                                         NOT NULL,
     comment                 TEXT,
-    time                    TIMESTAMP                   DEFAULT CURRENT_TIMESTAMP       NOT NULL
+    time                    TIMESTAMP                   DEFAULT CURRENT_TIMESTAMP       NOT NULL,
+
+    CHECK (rating >= 1 AND rating <= 5)
 );

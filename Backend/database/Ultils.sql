@@ -21,6 +21,25 @@ BEGIN
 END;
 
 
+DROP PROCEDURE IF EXISTS findAllByField;
+CREATE PROCEDURE findAllByField (
+    IN _tableName VARCHAR(50),
+    IN _columnName VARCHAR(50),
+    IN _value VARCHAR(255)
+)
+BEGIN
+    SET @tableName = _tableName;
+    SET @columnName = _columnName;
+    SET @value = _value;
+
+    SET @query = CONCAT('SELECT * FROM ', @tableName, ' WHERE ', @columnName, ' = ?');
+    PREPARE stmt FROM @query;
+    EXECUTE stmt USING @value;
+
+    DEALLOCATE PREPARE stmt;
+END;
+
+
 DROP PROCEDURE IF EXISTS checkUniqueValue;
 CREATE PROCEDURE checkUniqueValue (
     IN _tableName VARCHAR(50),
@@ -78,7 +97,8 @@ DROP PROCEDURE IF EXISTS checkExist;
 CREATE PROCEDURE checkExist (
     IN _tableName VARCHAR(50),
     IN _columnName VARCHAR(50),
-    IN _value VARCHAR(255)
+    IN _value VARCHAR(255),
+    OUT isExist BOOLEAN
 )
 BEGIN
     SET @tableName = _tableName;
@@ -88,9 +108,10 @@ BEGIN
     SET @checkQuery = CONCAT('SELECT COUNT(*) INTO @countRec FROM ', @tableName, ' WHERE ', @columnName, ' = ?');
     PREPARE stmtCheck FROM @checkQuery;
     EXECUTE stmtCheck USING @value;
-    IF @countRec = 0 THEN
-        SIGNAL SQLSTATE '45404' SET MESSAGE_TEXT = 'Record not found!';
-    END IF;
+
+    SET isExist = (@countRec > 0);
+
+    DEALLOCATE PREPARE stmtCheck;
 END;
 
 
@@ -101,7 +122,11 @@ CREATE PROCEDURE findById (
 )
 BEGIN
 
-    CALL checkExist(_tableName, 'id', _id);
+    CALL checkExist(_tableName, 'id', _id, @isExist);
+    IF NOT @isExist THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Record not found';
+    END IF;
 
     SET @tableName = _tableName;
     SET @id = _id;
@@ -123,7 +148,11 @@ CREATE PROCEDURE findByUniqueField (
 )
 BEGIN
     
-    CALL checkExist(_tableName, _columnName, _value);
+    CALL checkExist(_tableName, _columnName, _value, @isExist);
+    IF NOT @isExist THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Record not found';
+    END IF;
 
     SET @tableName = _tableName;
     SET @columnName = _columnName;
@@ -148,7 +177,11 @@ CREATE PROCEDURE updateFieldById (
 )
 BEGIN
 
-    CALL checkExist(_tableName, 'id', _id);
+    CALL checkExist(_tableName, 'id', _id, @isExist);
+    IF NOT @isExist THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Record not found';
+    END IF;
 
     SET @tableName = _tableName;
     SET @id = _id;
@@ -171,7 +204,7 @@ CREATE PROCEDURE deleteById (
 )
 BEGIN
 
-    CALL checkExist(_tableName, 'id', _id);
+    CALL checkExist(_tableName, 'id', _id, @isExist);
 
     SET @tableName = _tableName;
     SET @id = _id;
@@ -194,3 +227,40 @@ BEGIN
     DEALLOCATE PREPARE stmt;
 END;
 
+
+DROP PROCEDURE IF EXISTS updateValueForWholeColumn;
+CREATE PROCEDURE updateValueForWholeColumn (
+    IN _tableName VARCHAR(255),
+    IN _columnName VARCHAR(255),
+    IN _value VARCHAR(255)
+)
+BEGIN
+    SET @tableName = _tableName;
+    SET @columnName = _columnName;
+    SET @value = _value;
+
+    SET @query = CONCAT('UPDATE ', @tableName, ' SET ', @columnName, ' = ?');
+    PREPARE stmt FROM @query;
+    EXECUTE stmt USING @value;
+
+    DEALLOCATE PREPARE stmt;
+END;
+
+
+DROP PROCEDURE IF EXISTS findByFieldHasToken;
+CREATE PROCEDURE findByFieldHasToken (
+    IN _tableName VARCHAR(255),
+    IN _columnName VARCHAR(255),
+    IN _token VARCHAR(255)
+)
+BEGIN
+    SET @tableName = _tableName;
+    SET @columnName = _columnName;
+    SET @token = _token;
+
+    SET @query = CONCAT("SELECT * FROM ", @tableName, " WHERE ", @columnName, " LIKE '%", @token, "%';");
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+
+    DEALLOCATE PREPARE stmt;
+END;
