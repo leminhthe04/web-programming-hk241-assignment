@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS prismora;
-CREATE DATABASE prismora CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+DROP DATABASE IF EXISTS prismora_tmp;
+CREATE DATABASE prismora_tmp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE prismora;
+USE prismora_tmp;
 
 
 
@@ -37,7 +37,7 @@ CREATE TABLE products (
                                                         DEFAULT 'Available'             NOT NULL,
 
     CONSTRAINT FK_products__categories
-    FOREIGN KEY (category) REFERENCES categories(name) ON DELETE SET NULL
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
 );
 
 
@@ -49,7 +49,7 @@ CREATE TABLE product_images (
     CONSTRAINT FK_product_images__products
     FOREIGN KEY (product_id) REFERENCES products(id),
 
-    UNIQUE(product_id, url);
+    UNIQUE(product_id, url)
 );
 
 

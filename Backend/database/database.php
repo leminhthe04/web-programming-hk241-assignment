@@ -1,7 +1,7 @@
 <?php
 define('DB_HOST', 'localhost');
-define('DB_USER', 'lemin'); 
-define('DB_PASS', 'ehtEhtmysqlazzA04%'); 
+define('DB_USER', 'ngoc'); 
+define('DB_PASS', ''); 
 define('DB_NAME', 'prismora'); 
 
 header('Content-Type: text/html; charset=UTF-8');

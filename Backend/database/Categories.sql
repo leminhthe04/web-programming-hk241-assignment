@@ -13,7 +13,7 @@
 
 -- POST
 DROP PROCEDURE IF EXISTS insertCategory;
-CREATE PROCEDURE insertCategory (
+DELIMITER // CREATE PROCEDURE insertCategory (
     IN _name VARCHAR(50)
 ) BEGIN
 
@@ -27,13 +27,13 @@ CREATE PROCEDURE insertCategory (
     INSERT INTO categories(name) VALUES (_name);
 
     SELECT LAST_INSERT_ID() AS id;
-END;
+END // DELIMITER ;
 
 
 
 -- PUT
 DROP PROCEDURE IF EXISTS updateCategoryName;
-CREATE PROCEDURE updateCategoryName (IN _id INT, IN _name VARCHAR(50))
+DELIMITER // CREATE PROCEDURE updateCategoryName (IN _id INT, IN _name VARCHAR(50))
 BEGIN 
     CALL checkUniqueValueForUpdate('categories', 'name', _name, _id, @isUniqueName);
     IF NOT @isUniqueName THEN
@@ -42,7 +42,7 @@ BEGIN
     END IF;
 
     CALL updateFieldById('categories', _id, 'name', _name); 
-END;
+END // DELIMITER ;
 
 
 
