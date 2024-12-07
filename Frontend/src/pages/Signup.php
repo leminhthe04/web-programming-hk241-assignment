@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./css/output.css">
+    <title>SIGN UP</title>
+    <link rel="stylesheet" href="../output.css">
+
 </head>
 
 <body>
-    <?php 
-        include 'Header.php';
+    <?php
+    include '../components/Header.php';
     ?>
     <div class="">
 
@@ -153,10 +154,19 @@
             </div>
         </div>
     </div>
+    <?php
+    include '../components/Footer.php';
+    ?>
+
+    <script lang="javascript">
+        var menuLog = document.getElementById("log");
+        menuLog.innerText = "Đăng ký";
+        var menuAttr = menuLog.getAttribute("class");
+        menuAttr += " underline";
+        menuLog.setAttribute("class", menuAttr);
+    </script>
 </body>
 
-<?php
-include 'Footer.php';
-?>
+
 
 </html>
