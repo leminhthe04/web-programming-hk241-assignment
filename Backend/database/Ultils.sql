@@ -1,28 +1,28 @@
 USE prismora;
 
 DROP PROCEDURE IF EXISTS showColumns;
-CREATE PROCEDURE showColumns (IN tableName VARCHAR(50))
+DELIMITER // CREATE PROCEDURE showColumns (IN tableName VARCHAR(50))
 BEGIN
     SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_DEFAULT
     FROM INFORMATION_SCHEMA.COLUMNS
     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME LIKE tableName;
-END;
+END // DELIMITER ;
 
 
 
 DROP PROCEDURE IF EXISTS findAll;
-CREATE PROCEDURE findAll (IN _tableName VARCHAR(50))
+DELIMITER // CREATE PROCEDURE findAll (IN _tableName VARCHAR(50))
 BEGIN
     SET @tableName = _tableName;
     SET @query = CONCAT('SELECT * FROM ', @tableName);
     PREPARE stmt FROM @query;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
-END;
+END // DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS findAllByField;
-CREATE PROCEDURE findAllByField (
+DELIMITER // CREATE PROCEDURE findAllByField (
     IN _tableName VARCHAR(50),
     IN _columnName VARCHAR(50),
     IN _value VARCHAR(255)
@@ -37,11 +37,11 @@ BEGIN
     EXECUTE stmt USING @value;
 
     DEALLOCATE PREPARE stmt;
-END;
+END // DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS checkUniqueValue;
-CREATE PROCEDURE checkUniqueValue (
+DELIMITER // CREATE PROCEDURE checkUniqueValue (
     IN _tableName VARCHAR(50),
     IN _columnName VARCHAR(50),
     IN _value VARCHAR(255),
@@ -61,12 +61,12 @@ BEGIN
     SET isUnique = @result;
 
     DEALLOCATE PREPARE stmt;
-END;
+END // DELIMITER ;
 
 
 -- check if the value is unique in the table, except for the record with the given id (record to be updated)
 DROP PROCEDURE IF EXISTS checkUniqueValueForUpdate;
-CREATE PROCEDURE checkUniqueValueForUpdate (
+DELIMITER // CREATE PROCEDURE checkUniqueValueForUpdate (
     IN _tableName VARCHAR(50),
     IN _columnName VARCHAR(50),
     IN _value VARCHAR(255),
@@ -89,12 +89,12 @@ BEGIN
     SET isUnique = (@result = 0);
 
     DEALLOCATE PREPARE stmt;
-END;
+END // DELIMITER ;
 
 
 
 DROP PROCEDURE IF EXISTS checkExist;
-CREATE PROCEDURE checkExist (
+DELIMITER // CREATE PROCEDURE checkExist (
     IN _tableName VARCHAR(50),
     IN _columnName VARCHAR(50),
     IN _value VARCHAR(255),
@@ -112,11 +112,11 @@ BEGIN
     SET isExist = (@countRec > 0);
 
     DEALLOCATE PREPARE stmtCheck;
-END;
+END // DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS findById;
-CREATE PROCEDURE findById (
+DELIMITER // CREATE PROCEDURE findById (
     IN _tableName VARCHAR(255),
     IN _id INT
 )
@@ -136,12 +136,12 @@ BEGIN
     EXECUTE stmt USING @id;
 
     DEALLOCATE PREPARE stmt;
-END;
+END // DELIMITER ;
 
 
 
 DROP PROCEDURE IF EXISTS findByUniqueField;
-CREATE PROCEDURE findByUniqueField (
+DELIMITER // CREATE PROCEDURE findByUniqueField (
     IN _tableName VARCHAR(255),
     IN _columnName VARCHAR(255),
     IN _value VARCHAR(255)
@@ -163,13 +163,13 @@ BEGIN
     EXECUTE stmt USING @value;
 
     DEALLOCATE PREPARE stmt;
-END;
+END // DELIMITER ;
 
 
 
 
 DROP PROCEDURE IF EXISTS updateFieldById;
-CREATE PROCEDURE updateFieldById (
+DELIMITER // CREATE PROCEDURE updateFieldById (
     IN _tableName VARCHAR(255),
     IN _id INT,
     IN _columnName VARCHAR(255),
@@ -193,12 +193,12 @@ BEGIN
     EXECUTE stmt USING @value, @id;
 
     DEALLOCATE PREPARE stmt;
-END;
+END // DELIMITER ;
 
 
 
 DROP PROCEDURE IF EXISTS deleteById;
-CREATE PROCEDURE deleteById (
+DELIMITER // CREATE PROCEDURE deleteById (
     IN _tableName VARCHAR(255),
     IN _id INT
 )
@@ -214,22 +214,22 @@ BEGIN
     EXECUTE stmt USING @id;
 
     DEALLOCATE PREPARE stmt;
-END;
+END // DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS deleteAll;
-CREATE PROCEDURE deleteAll (IN _tableName VARCHAR(50))
+DELIMITER // CREATE PROCEDURE deleteAll (IN _tableName VARCHAR(50))
 BEGIN
     SET @tableName = _tableName;
     SET @query = CONCAT('DELETE FROM ', @tableName);
     PREPARE stmt FROM @query;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
-END;
+END // DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS updateValueForWholeColumn;
-CREATE PROCEDURE updateValueForWholeColumn (
+DELIMITER // CREATE PROCEDURE updateValueForWholeColumn (
     IN _tableName VARCHAR(255),
     IN _columnName VARCHAR(255),
     IN _value VARCHAR(255)
@@ -244,11 +244,11 @@ BEGIN
     EXECUTE stmt USING @value;
 
     DEALLOCATE PREPARE stmt;
-END;
+END // DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS findByFieldHasToken;
-CREATE PROCEDURE findByFieldHasToken (
+DELIMITER // CREATE PROCEDURE findByFieldHasToken (
     IN _tableName VARCHAR(255),
     IN _columnName VARCHAR(255),
     IN _token VARCHAR(255)
@@ -263,4 +263,4 @@ BEGIN
     EXECUTE stmt;
 
     DEALLOCATE PREPARE stmt;
-END;
+END // DELIMITER ;

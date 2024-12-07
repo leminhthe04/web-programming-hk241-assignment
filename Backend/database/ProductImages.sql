@@ -14,7 +14,7 @@
 -- POST
 -- $name, $price, $description, $quantity, $category_id, $status
 DROP PROCEDURE IF EXISTS insertProductImage;
-CREATE PROCEDURE insertProductImage (
+DELIMITER // CREATE PROCEDURE insertProductImage (
     IN _product_id INT,
     IN _url VARCHAR(255)
 ) BEGIN
@@ -27,12 +27,12 @@ CREATE PROCEDURE insertProductImage (
     INSERT INTO product_images(product_id, url) VALUES (_product_id, _url);
 
     SELECT LAST_INSERT_ID() AS id;
-END;
+END // DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS findByProductId;
-CREATE PROCEDURE findByProductId (IN _product_id INT)
-BEGIN CALL findByUniqueField('product_images', 'product_id', _product_id); END;
+DELIMITER // CREATE PROCEDURE findByProductId (IN _product_id INT)
+BEGIN CALL findByUniqueField('product_images', 'product_id', _product_id); END // DELIMITER ;
 
 
 CALL insertProductImage(1, 'https://hinh1.jpg');
