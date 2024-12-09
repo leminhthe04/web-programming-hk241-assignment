@@ -1,5 +1,4 @@
 <?php
-
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -7,14 +6,30 @@ ini_set('display_errors', 1);
 
 require_once __DIR__.'/lib/utils.php';
 
-
 $uri = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
 
 
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Methods: POST, GET, PUT, OPTIONS"); 
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+// header("Access-Control-Allow-Credentials: true");
+
+
+
 // $uri = str_replace('/Assignment/Backend', '', $uri);
 ////////////////////// USER APIs //////////////////////
+if ($method == 'OPTIONS') {
+    // CORS preflight request
+    http_response_code(200);
+    exit;
+}
 
+
+if (preg_match('/\/api\/hi$/', $uri)){
+    require __DIR__.'/api/hi.php';
+    exit;
+} 
 
 if (preg_match('/\/api\/user\/all$/', $uri)){
     require __DIR__.'/api/user/getAll.php';
@@ -32,7 +47,7 @@ if (preg_match('/\/api\/user\/signup$/', $uri)){
     exit;
 }
 
-if (preg_match('/\/api\/user\/login$/', $uri)){
+if ($method = 'POST' &&  preg_match('/\/api\/user\/login$/', $uri)){
     require __DIR__.'/api/user/login.php';
     exit;
 }
