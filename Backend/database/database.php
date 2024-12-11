@@ -1,15 +1,15 @@
 <?php
-// define('DB_HOST', 'localhost');
-// define('DB_USER', 'lemin'); 
-// define('DB_PASS', 'ehtEhtmysqlazzA04%'); 
-// define('DB_NAME', 'prismora'); 
-
-
-define('DB_HOST', 'mysql-service-btl-cnpm.f.aivencloud.com');
-define('DB_USER', 'avnadmin'); 
-define('DB_PASS', 'AVNS_EGkAPz8AzV68D2Xg-p0'); 
+define('DB_HOST', 'localhost');
+define('DB_USER', 'lemin'); 
+define('DB_PASS', 'ehtEhtmysqlazzA04%'); 
 define('DB_NAME', 'prismora'); 
-define('DB_PORT', '12567');
+define('DB_PORT', '3306');
+
+// define('DB_HOST', 'mysql-service-btl-cnpm.f.aivencloud.com');
+// define('DB_USER', 'avnadmin'); 
+// define('DB_PASS', 'AVNS_EGkAPz8AzV68D2Xg-p0'); 
+// define('DB_NAME', 'prismora'); 
+// define('DB_PORT', '12567');
 
 header('Content-Type: text/html; charset=UTF-8');
 

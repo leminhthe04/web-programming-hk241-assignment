@@ -25,37 +25,44 @@ $userController = new UserController();
 $responses = [];
 
 $name = $data['name'] ?? null;
-if ($name) {
+if ($name !== null) {
+    $name = htmlspecialchars($name);
     $responses['name'] = $userController->updateUserName($id, $name);
 }
 
 $email = $data['email'] ?? null;
-if ($email) {
+if ($email !== null) {
+    $email = htmlspecialchars($email);
     $responses['email'] = $userController->updateUserEmail($id, $email);
 }
 
 $phone = $data['phone'] ?? null;
-if ($phone) {
+if ($phone !== null) {
+    $phone = htmlspecialchars($phone);
     $responses['phone'] = $userController->updateUserPhone($id, $phone);
 }
 
 $sex = $data['sex'] ?? null;
-if ($sex) {
+if ($sex !== null) {
+    $sex = htmlspecialchars($sex);
     $responses['sex'] = $userController->updateUserSex($id, $sex);
 }
 
 $role = $data['role'] ?? null;
-if ($role) {
+if ($role !== null) {
+    $role = htmlspecialchars($role);
     $responses['role'] = $userController->updateUserRole($id, $role);
 }
 
 $avatar = $data['avt_url'] ?? null;
-if ($avatar) {
+if ($avatar !== null) {
+    $avatar = htmlspecialchars($avatar);
     $responses['avt_url'] = $userController->updateUserAvatar($id, $avatar);
 }
 
 $address = $data['address'] ?? null;
-if ($address) {
+if ($address !== null) {
+    $address = htmlspecialchars($address);
     $responses['address'] = $userController->updateUserAddress($id, $address);
 }
 

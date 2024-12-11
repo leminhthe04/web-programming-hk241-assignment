@@ -5,6 +5,7 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 require_once __DIR__ . '/../database/database.php';
 require_once __DIR__ . '/../lib/utils.php';
+require_once __DIR__ . '/Order.php';
 
 class User {
 
@@ -43,6 +44,37 @@ class User {
             return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
+
+    public function getHistory($id, $offset, $limit) {
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+        try {
+            $stmt = $this->conn->prepare("CALL findUserHistory(?)");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $table = $stmt->get_result();
+            $history = Util::fetch($table);
+            $stmt->close();
+
+            $order = new Order();
+            $orders = [];
+            foreach ($history as $h) {
+                $order_id = $h['order_id'];
+                $order_detail = $order->getById($order_id);
+                if (isset($order_detail['code'])) return $order_detail;
+                $orders[$order_id] = $order_detail;
+            }   
+
+            $page_count = ceil(count($orders) / $limit);
+            sort($orders);
+            $orders = array_slice($orders, $offset, $limit);
+            $data = ["page_count" => $page_count, "data" => $orders];
+            return $data;
+        } catch (mysqli_sql_exception $e) {
+            return Util::getResponseArray(400, $e->getMessage(), null);
+        }
+    }
+
 
     public function getByEmail($email) {
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);

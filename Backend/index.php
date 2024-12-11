@@ -18,7 +18,8 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 
 // $uri = str_replace('/Assignment/Backend', '', $uri);
-////////////////////// USER APIs //////////////////////
+
+
 if ($method == 'OPTIONS') {
     // CORS preflight request
     http_response_code(200);
@@ -30,6 +31,8 @@ if ($method == 'OPTIONS') {
 //     require __DIR__.'/api/hi.php';
 //     exit;
 // } 
+
+////////////////////// USER APIs //////////////////////
 
 if (preg_match('/\/api\/user\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
     $_GET['offset'] = $matches[1];
@@ -43,6 +46,16 @@ if (preg_match('/\/api\/user\/detail\/(\d+)$/', $uri, $matches)){
     require __DIR__.'/api/user/detail.php';
     exit;
 }
+
+
+if (preg_match('/\/api\/user\/history\/(\d+)\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
+    $_GET['id'] = $matches[1];
+    $_GET['offset'] = $matches[2];
+    $_GET['limit'] = $matches[3];
+    require __DIR__.'/api/user/history.php';
+    exit;
+}
+
 
 if (preg_match('/\/api\/user\/signup$/', $uri)){
     require __DIR__.'/api/user/signup.php';
@@ -271,6 +284,52 @@ if (preg_match('/\/api\/review\/update\/(\d+)$/', $uri, $matches)){
     require __DIR__.'/api/review/update.php';
     exit;
 }
+
+//////////////////////////////// ORDER APIs /////////////////////////////
+
+if (preg_match('/\/api\/order\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
+    $_GET['offset'] = $matches[1];
+    $_GET['limit'] = $matches[2];
+    require __DIR__.'/api/order/fetch.php';
+    exit;
+}
+
+if (preg_match('/\/api\/order\/detail\/(\d+)$/', $uri, $matches)){
+    $_GET['id'] = $matches[1];
+    require __DIR__.'/api/order/detail.php';
+    exit;
+}
+
+if (preg_match('/\/api\/order\/product\/(\d+)\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
+    $_GET['product_id'] = $matches[1];
+    $_GET['offset'] = $matches[2];
+    $_GET['limit'] = $matches[3];
+    require __DIR__.'/api/order/fetchByProductId.php';
+    exit;
+}
+
+
+if (preg_match('/\/api\/order\/user\/(\d+)\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
+    $_GET['customer_id'] = $matches[1];
+    $_GET['offset'] = $matches[2];
+    $_GET['limit'] = $matches[3];
+    require __DIR__.'/api/order/fetchByUserId.php';
+    exit;
+}
+
+if (preg_match('/\/api\/order\/create$/', $uri)){
+    require __DIR__.'/api/order/create.php';
+    exit;
+}
+
+if (preg_match('/\/api\/order\/update\/(\d+)$/', $uri, $matches)){
+    $_GET['id'] = $matches[1];
+    require __DIR__.'/api/order/update.php';
+    exit;
+}
+
+
+
 
 //////////////////////////////////////////////////////////////////////
 

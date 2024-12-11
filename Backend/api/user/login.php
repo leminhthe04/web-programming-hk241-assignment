@@ -16,7 +16,6 @@ if (!$data) {
 }
 
 $password = $data['password'] ?? null;
-
 if (!$password) {
     Util::setStatusCodeAndEchoJson(400, 'Password is required', null);
     exit;
@@ -30,6 +29,8 @@ if (!$email && !$phone) {
     Util::setStatusCodeAndEchoJson(400, 'Email or phone is required', null);
     exit;
 }
+$email = htmlspecialchars($email);
+$phone = htmlspecialchars($phone);
 
 $userController = new UserController();
 $respone = $email ? $userController->authenticateUserByEmail($email, $password)

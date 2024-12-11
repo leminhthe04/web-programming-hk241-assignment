@@ -19,12 +19,14 @@ if (!$id) {
     Util::setStatusCodeAndEchoJson(400, 'User ID is required', null);
     exit;
 }
+$id = intval(htmlspecialchars($id));
 
 $currentPassword = $data['current_password'] ?? null;
 if(!$currentPassword) {
     Util::setStatusCodeAndEchoJson(400, 'Current password is required', null);
     exit;
 }
+
 
 $newPassword = $data['new_password'] ?? null;
 if(!$newPassword) {

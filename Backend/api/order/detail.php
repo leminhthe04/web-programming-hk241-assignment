@@ -1,18 +1,19 @@
 <?php
 
-require_once __DIR__ . '/../../controller/UserController.php';
+require_once __DIR__ . '/../../controller/OrderController.php';
 require_once __DIR__ . '/../../lib/utils.php';
 
 header('Content-Type: application/json');
 
 if (!isset($_GET['id'])) {
-    setStatusCodeAndEchoJson(400, 'User ID is required', null);
+    Util::setStatusCodeAndEchoJson(400, 'Order ID is required', null);
     exit;
 }
+
 $id = intval(htmlspecialchars($_GET['id']));
 
 
-$userController = new UserController();
-$respone = $userController->getById($id);
+$orderController = new OrderController();
+$respone = $orderController->getById($id);
 Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

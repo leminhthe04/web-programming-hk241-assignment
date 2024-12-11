@@ -27,40 +27,39 @@ $responses = [];
 
 $name = $data['name'] ?? null;
 if ($name) {
+    $name = htmlspecialchars($name);
     $responses['name'] = $productController->updateProductName($id, $name);
 }
-$name = htmlspecialchars($name);
 
 $price = $data['price'] ?? null;
 if ($price !== null) {
+    $price = htmlspecialchars($price);
     $responses['price'] = $productController->updateProductPrice($id, $price);
 }
-$price = intval(htmlspecialchars($price));
 
 $quantity = $data['quantity'] ?? null;
 if ($quantity !== null) {
+    $quantity = htmlspecialchars($quantity);
     $responses['quantity'] = $productController->updateProductQuantity($id, $quantity);
 }
-$quantity = intval(htmlspecialchars($quantity));
 
 $description = $data['description'] ?? null;
 if ($description !== null) {
+    $description = htmlspecialchars($description);
     $responses['description'] = $productController->updateProductDescription($id, $description);
 }
-$description = htmlspecialchars($description);
 
 $category_id = $data['category_id'] ?? null;
 if ($category_id) {
+    $category_id = htmlspecialchars($category_id);
     $responses['category_id'] = $productController->updateProductCategory($id, $category_id);
 }
-$category_id = intval(htmlspecialchars($category_id));
 
 $status = $data['status'] ?? null;
 if ($status !== null) {
+    $status = htmlspecialchars($status);
     $responses['status'] = $productController->updateProductStatus($id, $status);
 }
-$status = intval(htmlspecialchars($status));
-
 
 $fields = array_keys($responses);
 $code = 200;
