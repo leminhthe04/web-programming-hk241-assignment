@@ -6,6 +6,30 @@ import { useNavigate } from "react-router-dom";
 export default function ProductCartSmall({prodID, prodName, prodPrice, prodRating}) {
     const navigate = useNavigate();
     const [showBuy, setShowBuy] = useState(false);
+    const formattedPrice = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+    }).format(prodPrice);
+    console.log("CHECK PROD ID: ", prodID);
+
+    const renderStars = (rating) => {
+        const totalStars = 5;
+        const filledStars = Math.floor(rating);
+        const halfStar = rating % 1 !== 0;
+        const emptyStars = totalStars - filledStars - (halfStar ? 1 : 0);
+
+        return (
+            <>
+                {[...Array(filledStars)].map((_, index) => (
+                    <span key={index} className="star filled text-yellow-400">★</span>
+                ))}
+                {halfStar && <span className="star half-filled text-yellow-400">★</span>}
+                {[...Array(emptyStars)].map((_, index) => (
+                    <span key={index} className="star">★</span>
+                ))}
+            </>
+        );
+    };
 
     return (
         <div className="w-48 inline-block justify-center items-center mx-auto">
@@ -30,12 +54,12 @@ export default function ProductCartSmall({prodID, prodName, prodPrice, prodRatin
                 
             </div>
             <div className="w-full pl-2">
-                <h1 className="font-bold text-sm">SamSung Galaxy S24 Plus</h1>
+                <h1 className="font-bold text-sm">{prodName}</h1>
                 <div className="price text-sm">
-                    <span className="text-red-600">21.990.000 VND</span>
-                    <span className="mx-2 line-through">22.000.000</span>
+                    <span className="text-red-600">{formattedPrice}</span>
+                    {/* <span className="mx-2 line-through">22.000.000</span> */}
                 </div>
-                <div class="rating space-x-1 text-sm">
+                {/* <div class="rating space-x-1 text-sm">
                     <span class="star filled text-yellow-400">★</span>
                     <span class="star filled text-yellow-400">★</span>
                     <span class="star filled text-yellow-400">★</span>
@@ -43,7 +67,11 @@ export default function ProductCartSmall({prodID, prodName, prodPrice, prodRatin
                     <span class="star">★</span>
 
                     <span>(88)</span>
-                </div>
+                </div> */}
+                 <div className="rating space-x-1 text-sm">
+                {renderStars(prodRating)}
+                <span>({prodRating})</span>
+            </div>
 
             </div>
         </div>
