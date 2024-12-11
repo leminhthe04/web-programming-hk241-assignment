@@ -13,6 +13,7 @@
 
 -- POST
 DROP PROCEDURE IF EXISTS insertUser;
+DELIMITER // 
 CREATE PROCEDURE insertUser (
     IN _name VARCHAR(50),
     IN _sex ENUM('M', 'F'),
@@ -41,24 +42,28 @@ CREATE PROCEDURE insertUser (
         (_name, _sex, _password, _email, _phone, _role, _avt_url, _address);
 
     SELECT LAST_INSERT_ID() AS id;
-END;
+END // DELIMITER ;
 
 
 
 -- PUT
 DROP PROCEDURE IF EXISTS updateUserName;
-CREATE PROCEDURE updateUserName (IN _id INT, IN _name VARCHAR(50))
-BEGIN CALL updateFieldById('users', _id, 'name', _name); END;
+DELIMITER //
+ CREATE PROCEDURE updateUserName (IN _id INT, IN _name VARCHAR(50))
+BEGIN CALL updateFieldById('users', _id, 'name', _name); END // DELIMITER ;
 
 DROP PROCEDURE IF EXISTS updateUserSex;
+DELIMITER // 
 CREATE PROCEDURE updateUserSex (IN _id INT, IN _sex ENUM('M', 'F'))
-BEGIN CALL updateFieldById('users', _id, 'sex', _sex); END;
+BEGIN CALL updateFieldById('users', _id, 'sex', _sex); END // DELIMITER ;
 
 DROP PROCEDURE IF EXISTS updateUserPassword;
+DELIMITER // 
 CREATE PROCEDURE updateUserPassword (IN _id INT, IN _password VARCHAR(255))
-BEGIN CALL updateFieldById('users', _id, 'password', _password); END;
+BEGIN CALL updateFieldById('users', _id, 'password', _password); END // DELIMITER ;
 
 DROP PROCEDURE IF EXISTS updateUserEmail;
+DELIMITER // 
 CREATE PROCEDURE updateUserEmail (IN _id INT, IN _email VARCHAR(50))
 BEGIN 
     CALL checkUniqueValueForUpdate('users', 'email', _email, _id, @isUniqueEmail);
@@ -68,9 +73,11 @@ BEGIN
     END IF;
 
     CALL updateFieldById('users', _id, 'email', _email); 
-END;
+END // 
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS updateUserPhone;
+DELIMITER // 
 CREATE PROCEDURE updateUserPhone (IN _id INT, IN _phone CHAR(10))
 BEGIN 
     CALL checkUniqueValueForUpdate('users', 'phone', _phone, _id, @isUniquePhone);
@@ -80,22 +87,30 @@ BEGIN
     END IF;
 
     CALL updateFieldById('users', _id, 'phone', _phone); 
-END;
+END // 
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS updateUserRole;
+DELIMITER // 
 CREATE PROCEDURE updateUserRole (IN _id INT, IN _role ENUM('admin', 'customer'))
-BEGIN CALL updateFieldById('users', _id, 'role', _role); END;
+BEGIN CALL updateFieldById('users', _id, 'role', _role); END //
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS updateUserAvtUrl;
+DELIMITER // 
 CREATE PROCEDURE updateUserAvtUrl (IN _id INT, IN _avt_url TEXT)
-BEGIN CALL updateFieldById('users', _id, 'avt_url', _avt_url); END;
+BEGIN CALL updateFieldById('users', _id, 'avt_url', _avt_url); END // 
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS updateUserAddress;
+DELIMITER // 
 CREATE PROCEDURE updateUserAddress (IN _id INT, IN _address TEXT)
-BEGIN CALL updateFieldById('users', _id, 'address', _address); END;
+BEGIN CALL updateFieldById('users', _id, 'address', _address); END // 
+DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS updateUser;
+DELIMITER // 
 CREATE PROCEDURE updateUser (
     IN _id INT,
     IN _name VARCHAR(50),
@@ -116,7 +131,8 @@ BEGIN
     CALL updateUserRole(_id, _role);
     CALL updateUserAvtUrl(_id, _avt_url);
     CALL updateUserAddress(_id, _address);
-END;
+END //
+DELIMITER ;
 
 
 CALL insertUser('Nguyen Van B', 'M', '123456', 'nguyenB@gmail.com', '0123456790', 'admin', 'avt_url', '192 ĐPB, Q.1, TP.HCM');

@@ -13,7 +13,7 @@
 
 -- POST
 DROP PROCEDURE IF EXISTS insertReview;
-CREATE PROCEDURE insertReview (
+DELIMITER // CREATE PROCEDURE insertReview (
     IN _customer_id INT,
     IN _product_id INT,
     IN _rating INT,
@@ -36,26 +36,26 @@ CREATE PROCEDURE insertReview (
         (_customer_id, _product_id, _rating, _comment);
 
     SELECT LAST_INSERT_ID() AS id;
-END;
+END // DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS findAllByProductId;
-CREATE PROCEDURE findAllByProductId (IN _product_id INT) 
-BEGIN CALL findAllByField('reviews', 'product_id', _product_id); END;
+DELIMITER // CREATE PROCEDURE findAllByProductId (IN _product_id INT) 
+BEGIN CALL findAllByField('reviews', 'product_id', _product_id); END // DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS findAllByUserId;
-CREATE PROCEDURE findAllByUserId (IN _user_id INT) 
-BEGIN CALL findAllByField('reviews', 'customer_id', _user_id); END;
+DELIMITER // CREATE PROCEDURE findAllByUserId (IN _user_id INT) 
+BEGIN CALL findAllByField('reviews', 'customer_id', _user_id); END // DELIMITER ;
 
 
 DROP PROCEDURE IF EXISTS updateReviewRating;
-CREATE PROCEDURE updateReviewRating (IN _id INT, IN _rating INT)
-BEGIN CALL updateFieldById('reviews', _id, 'rating', _rating); END;
+DELIMITER // CREATE PROCEDURE updateReviewRating (IN _id INT, IN _rating INT)
+BEGIN CALL updateFieldById('reviews', _id, 'rating', _rating); END // DELIMITER ;
 
 DROP PROCEDURE IF EXISTS updateReviewComment;
-CREATE PROCEDURE updateReviewComment (IN _id INT, IN _comment TEXT)
-BEGIN CALL updateFieldById('reviews', _id, 'comment', _comment); END;
+DELIMITER // CREATE PROCEDURE updateReviewComment (IN _id INT, IN _comment TEXT)
+BEGIN CALL updateFieldById('reviews', _id, 'comment', _comment); END // DELIMITER ;
 
 
 
