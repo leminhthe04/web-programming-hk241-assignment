@@ -8,5 +8,5 @@ header('Content-Type: application/json');
 
 $productController = new ProductController();
 $respone = $productController->deleteAllProducts();
-setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
+Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

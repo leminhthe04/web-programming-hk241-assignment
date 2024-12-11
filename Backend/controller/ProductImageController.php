@@ -18,29 +18,27 @@ class ProductImageController {
         $productImage = new ProductImage();
         $res = $productImage->getAll(); // a fetch array or null
         if ($res){
-            return getResponseArray(200, "Found product images", $res);
+            return Util::getResponseArray(200, "Found product images", $res);
         }
         
-        return getResponseArray(200, "There is no product image in system now", []);
+        return Util::getResponseArray(200, "There is no product image in system now", []);
     }
 
     public function getById($id) {
         $productImage = new ProductImage();
         $res = $productImage->getById($id);
-
-        if ($res) {
-            return getResponseArray(200, "Product image found", $res);
-        }
-        return getResponseArray(404, "Product image not found", null);
+        if (isset($res['code'])) return $res;
+        return Util::getResponseArray(200, "Product image found", $res);
     }
 
     public function getAllByProductId($product_id) {
         $productImage = new ProductImage();
         $res = $productImage->getAllByProductId($product_id);
-        if ($res) {
-            return getResponseArray(200, "Found images of product", $res);
-        }
-        return getResponseArray(200, "There is no image of this product", []);        
+        if (isset($res['code'])) return $res;
+
+        return empty($res) ? 
+            Util::getResponseArray(200, "There is no image of this product", [])
+        :   Util::getResponseArray(200, "Found images of product", $res);
     }
 
     public function insertProductImage($product_id, $url) {
@@ -48,7 +46,7 @@ class ProductImageController {
         // check field is valid in private function, if not return error message
         $validMessage = $this->fieldAreValid($url)['message'];
         if ($validMessage !== "Valid") {
-            return getResponseArray(400, $validMessage, null);
+            return Util::getResponseArray(400, $validMessage, null);
         }
         
         $productImage = new ProductImage();

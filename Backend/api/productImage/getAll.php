@@ -7,5 +7,5 @@ header('Content-Type: application/json');
 
 $productImageController = new ProductImageController();
 $respone = $productImageController->getAll();
-setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
+Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

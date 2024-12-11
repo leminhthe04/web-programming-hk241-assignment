@@ -6,12 +6,13 @@ require_once __DIR__ . '/../../lib/utils.php';
 header('Content-Type: application/json');
 
 if (!isset($_GET['id'])) {
-    setStatusCodeAndEchoJson(400, 'Product ID is required', null);
+    Util::setStatusCodeAndEchoJson(400, 'Product ID is required', null);
     exit;
 }
 
-$id = intval($_GET['id']);
+$id = intval(htmlspecialchars($_GET['id']));
+
 $productController = new ProductController();
 $respone = $productController->getById($id);
-setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
+Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

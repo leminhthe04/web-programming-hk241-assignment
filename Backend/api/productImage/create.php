@@ -10,23 +10,25 @@ $jsonData = file_get_contents('php://input');
 $data = json_decode($jsonData, true);
 
 if (!$data) {
-    setStatusCodeAndEchoJson(400, 'Invalid JSON', null);
+    Util::setStatusCodeAndEchoJson(400, 'Invalid JSON', null);
     exit;
 }
 
 $product_id = $data['product_id'] ?? null;
 if (!$product_id) {
-    setStatusCodeAndEchoJson(400, 'Product ID is required');
+    Util::setStatusCodeAndEchoJson(400, 'Product ID is required');
     exit();
 }
+$product_id = intval(htmlspecialchars($product_id));
 
 $url = $data['url'] ?? null;
 if (!$url) {
-    setStatusCodeAndEchoJson(400, 'URL is required');
+    Util::setStatusCodeAndEchoJson(400, 'URL is required');
     exit();
 }
+$url = htmlspecialchars($url);
 
 $productImageController = new ProductImageController();
 $respone = $productImageController->insertProductImage($product_id, $url);
-setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
+Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

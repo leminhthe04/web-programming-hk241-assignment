@@ -7,5 +7,5 @@ header('Content-Type: application/json');
 
 $categoryController = new CategoryController();
 $respone = $categoryController->deleteAllCategories();
-setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
+Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

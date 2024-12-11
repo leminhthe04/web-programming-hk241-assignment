@@ -12,66 +12,77 @@ class Product {
     }
 
 
-    public function getAll() {
-        $stmt = $this->conn->prepare("CALL findAll('products')");
+    public function getAll($offset, $limit) {
+        $page_count = Util::getPageCount('products', $limit);
+
+        $stmt = $this->conn->prepare("CALL findAll('products', ?, ?)");
+        $stmt->bind_param("ii", $offset, $limit);
         $stmt->execute();
         $table = $stmt->get_result();
-        $arr = fetch($table);
-        if ($table) $table->free();
+        $arr = Util::fetch($table);
         $stmt->close();
-        return $arr;        
+        return [ "page_count" => $page_count, "data" => $arr ];        
     }
 
     public function getById($id) {
-        $stmt = $this->conn->prepare("CALL findById('products', ?)");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $table = $stmt->get_result();
-        $arr = fetch($table);
-        if($table) $table->free();
-        $stmt->close();
-        return $arr;
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+        try {
+            $stmt = $this->conn->prepare("CALL findById('products', ?)");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $table = $stmt->get_result();
+            $arr = Util::fetch($table);
+            if($table) $table->free();
+            $stmt->close();
+            return $arr;
+        } catch (mysqli_sql_exception $e) {
+            return Util::getResponseArray(400, $e->getMessage(), null);
+        }
     }
 
-    public function getAllAvailable() {
-        $stmt = $this->conn->prepare("CALL findAllByField('products', 'status', 'Available')");
+    public function getAllAvailable($offset, $limit) {
+        $page_count = Util::getPageCount('products_available', $limit);
+        $stmt = $this->conn->prepare("CALL findAll('products_available', ?, ?)");
+        $stmt->bind_param("ii", $offset, $limit);
         $stmt->execute();
         $table = $stmt->get_result();
-        $arr = fetch($table);
-        if ($table) $table->free();
+        $arr = Util::fetch($table);
         $stmt->close();
-        return $arr;
+        return [ "page_count" => $page_count, "data" => $arr ];        
     }
 
-    public function getAllStopSelling() {
-        $stmt = $this->conn->prepare("CALL findAllByField('products', 'status', 'Stop Selling')");
+    public function getAllStopSelling($offset, $limit) {
+        $page_count = Util::getPageCount('products_stop_selling', $limit);
+        $stmt = $this->conn->prepare("CALL findAll('products_stop_selling', ?, ?)");
+        $stmt->bind_param("ii", $offset, $limit);
         $stmt->execute();
         $table = $stmt->get_result();
-        $arr = fetch($table);
-        if ($table) $table->free();
+        $arr = Util::fetch($table);
         $stmt->close();
-        return $arr;
+        return [ "page_count" => $page_count, "data" => $arr ];
     }
 
-    public function getAllSoldOut() {
-        $stmt = $this->conn->prepare("CALL findAllByField('products', 'status', 'Sold Out')");
+    public function getAllSoldOut($offset, $limit) {
+        $page_count = Util::getPageCount('products_sold_out', $limit);
+        $stmt = $this->conn->prepare("CALL findAll('products_sold_out', ?, ?)");
+        $stmt->bind_param("ii", $offset, $limit);
         $stmt->execute();
         $table = $stmt->get_result();
-        $arr = fetch($table);
-        if ($table) $table->free();
+        $arr = Util::fetch($table);
         $stmt->close();
-        return $arr;
+        return [ "page_count" => $page_count, "data" => $arr ];
     }
 
-    public function getAllByCategoryId($category_id) {
-        $stmt = $this->conn->prepare("CALL findAllByField('products', 'category_id', ?)");
-        $stmt->bind_param("i", $category_id);
+    public function getAllByCategoryId($category_id, $offset, $limit) {
+        $page_count = Util::getPageCountByField('products', 'category_id', $category_id, $limit);
+        $stmt = $this->conn->prepare("CALL findAllByField('products', 'category_id', ?, ?, ?)");
+        $stmt->bind_param("iii", $category_id, $offset, $limit);
         $stmt->execute();
         $table = $stmt->get_result();
-        $arr = fetch($table);
-        if ($table) $table->free();
+        $arr = Util::fetch($table);
         $stmt->close();
-        return $arr;
+        return [ "page_count" => $page_count, "data" => $arr ];
     }
 
 
@@ -85,12 +96,13 @@ class Product {
             $stmt->bind_param("sdsiis", $name, $price, $description, $quantity, $category_id, $status);
             $stmt->execute();
             $result = $stmt->get_result();
-            $res = getResponseArray(201, "Product created", ["id" => $result->fetch_assoc()['id']]);
+            $res = Util::getResponseArray(201, "Product created", ["id" => $result->fetch_assoc()['id']]);
             $result->free();
             $stmt->close();
             return $res;
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -102,9 +114,10 @@ class Product {
             $stmt->bind_param("is", $id, $name);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Name updated", null);
+            return Util::getResponseArray(200, "Name updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -116,9 +129,10 @@ class Product {
             $stmt->bind_param("id", $id, $price);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Price updated", null);
+            return Util::getResponseArray(200, "Price updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -130,9 +144,10 @@ class Product {
             $stmt->bind_param("is", $id, $description);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Description updated", null);
+            return Util::getResponseArray(200, "Description updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -144,9 +159,10 @@ class Product {
             $stmt->bind_param("ii", $id, $quantity);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Quantity updated", null);
+            return Util::getResponseArray(200, "Quantity updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -158,9 +174,10 @@ class Product {
             $stmt->bind_param("ii", $id, $category_id);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Category ID updated", null);
+            return Util::getResponseArray(200, "Category ID updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -172,9 +189,10 @@ class Product {
             $stmt->bind_param("is", $id, $status);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Status updated", null);
+            return Util::getResponseArray(200, "Status updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -186,16 +204,16 @@ class Product {
             return $updateStatusResponse;
         }
 
-        return getResponseArray(200, "Product soft deleted (by changing status to 'Stop Selling')", null);
+        return Util::getResponseArray(200, "Product soft deleted (by changing status to 'Stop Selling')", null);
 
         // try {
         //     $stmt = $this->conn->prepare("CALL deleteById('products', ?);");
         //     $stmt->bind_param("i", $id);
         //     $stmt->execute();
         //     $stmt->close();
-        //     return getResponseArray(200, "Product deleted", null);
+        //     return Util::getResponseArray(200, "Product deleted", null);
         // } catch (mysqli_sql_exception $e) {
-        //     return getResponseArray(400, $e->getMessage(), null);
+        //     return Util::getResponseArray(400, $e->getMessage(), null);
         // }
     }
 
@@ -207,9 +225,10 @@ class Product {
             $stmt = $this->conn->prepare("CALL updateValueForWholeColumn('products', 'status', 'Stop Selling')");
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "All products soft deleted (by changing status to 'Stop Selling')", null);
+            return Util::getResponseArray(200, "All products soft deleted (by changing status to 'Stop Selling')", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
         
         // mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -218,9 +237,9 @@ class Product {
         //     $stmt = $this->conn->prepare("CALL deleteAll('products')");
         //     $stmt->execute();
         //     $stmt->close();
-        //     return getResponseArray(200, "All products deleted", null);
+        //     return Util::getResponseArray(200, "All products deleted", null);
         // } catch (mysqli_sql_exception $e) {
-        //     return getResponseArray(400, $e->getMessage(), null);
+        //     return Util::getResponseArray(400, $e->getMessage(), null);
         // }
     }
 
@@ -232,12 +251,13 @@ class Product {
             $stmt->bind_param("s", $token);
             $stmt->execute();
             $table = $stmt->get_result();
-            $arr = fetch($table);
+            $arr = Util::fetch($table);
             if ($table) $table->free();
             $stmt->close();
             return $arr;
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 }

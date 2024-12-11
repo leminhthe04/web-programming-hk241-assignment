@@ -13,5 +13,5 @@ if (!isset($_GET['id'])) {
 $id = intval($_GET['id']);
 $userController = new UserController();
 $respone = $userController->getById($id);
-setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
+Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

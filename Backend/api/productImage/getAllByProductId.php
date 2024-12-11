@@ -7,11 +7,12 @@ header('Content-Type: application/json');
 
 $product_id = $_GET['product_id'] ?? null;
 if (!$product_id) {
-    setStatusCodeAndEchoJson(400, 'Product ID is required');
+    Util::setStatusCodeAndEchoJson(400, 'Product ID is required');
     exit();
 }
+$product_id = intval(htmlspecialchars($product_id));
 
 $productImageController = new ProductImageController();
 $respone = $productImageController->getAllByProductId($product_id);
-setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
+Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

@@ -13,32 +13,28 @@ class CategoryController {
         return ["message" => "Valid"];
     }
 
-    public function getAll() {
+    public function fetch($offset, $limit) {
         $category = new Category();
-        $res = $category->getAll(); // a fetch array or null
-        if ($res){
-            return getResponseArray(200, "Found categories", $res);
-        }
-        
-        return getResponseArray(200, "There is no category in system now", []);
+        $res = $category->getAll($offset, $limit); // a fetch array or null
+        if (isset($res['code'])) return $res;
+
+        return empty($res['data']) ? 
+            Util::getResponseArray(200, "There is no category in system now", []) 
+        :   Util::getResponseArray(200, "Found categories", $res);
     }
 
     public function getById($id) {
         $category = new Category();
         $res = $category->getById($id);
-
-        if ($res) {
-            return getResponseArray(200, "Category found", $res);
-        }
-        return getResponseArray(404, "Category not found", null);
+        if (isset($res['code'])) return $res;
+        return Util::getResponseArray(200, "Category found", $res);
     }
 
     public function insertCategory($name) {
-        
         // check name are valid in private function, if not return error message
         $validMessage = $this->fieldAreValid($name)['message'];
         if ($validMessage !== "Valid") {
-            return getResponseArray(400, $validMessage, null);
+            return Util::getResponseArray(400, $validMessage, null);
         }
         
         $category = new Category();
@@ -47,7 +43,7 @@ class CategoryController {
 
     public function updateCategoryName($id, $name) {
         if (!$this->nameIsValidFormat($name)) {
-            return getResponseArray(400, "Name must be between 5 and 50 characters", null);
+            return Util::getResponseArray(400, "Name must be between 5 and 50 characters", null);
         }
         $category = new Category();
         return $category->updateName($id, $name);

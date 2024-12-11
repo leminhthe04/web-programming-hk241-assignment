@@ -7,11 +7,12 @@ header('Content-Type: application/json');
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 if (!$id) {
-    setStatusCodeAndEchoJson(400, 'Product image ID is required', null);
+    Util::setStatusCodeAndEchoJson(400, 'Product image ID is required', null);
     exit;
 }
+$id = intval(htmlspecialchars($id));
 
 $productImageController = new ProductImageController();
 $respone = $productImageController->deleteProductImage($id);
-setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
+Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>
