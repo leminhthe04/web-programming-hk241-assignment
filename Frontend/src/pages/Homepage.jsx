@@ -3,6 +3,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMobile } from "@fortawesome/free-solid-svg-icons";
+import Slider from "../components/Slider";
 
 
 export default function Homepage() {
@@ -38,9 +39,10 @@ export default function Homepage() {
                             </ul>
 
                         </div>
-                        <div className="">
+                        {/* <div className="">
                             <img src="../../public/banner1.jpg" alt="" width="900px" h="400px" />
-                        </div>
+                        </div> */}
+                        <Slider />
                     </div>
 
                     <div className="h-20"></div>
@@ -79,27 +81,27 @@ export default function Homepage() {
                     </div>
 
                     {/* Danh mục sản phẩm */}
-                    <div className="w-10/12 mx-auto bg-product">
+                    {/* <div className="w-10/12 mx-auto bg-product">
                         <div className="font-bold text-red-500 flex flex-row items-center ">
                             <span className="w-4 h-8 bg-red-600 inline-block"></span>
                             <span className="px-4 text-red-600">Danh mục</span>
                         </div>
                         <div className="w-11/12 mx-auto grid grid-cols-5 gap-6">
                             <div className="border border-black  ">
-                                <div className="">
+                                <div className="flex justify-center items-center">
                                     <img src="../../public/mobile.jpg" alt="" className="" />
                                 </div>
                                 <div>Điện thoại </div>
                             </div>
-                            <div className="border border-black ">
-                                <div className=" ">
-                                    <img src="../../public/laptop.jpg" alt="" className="" />
+                            <div className="border border-black border-yellow-300">
+                                <div className="h-3/4 flex justify-center items-center border border-green-500">
+                                    <img src="../../public/laptop.jpg" alt="" className="border border-red-600  w-auto" />
                                 </div>
-                                <div>Điện thoại </div>
+                                <div className="h-1/4 border border-orange-800">Điện thoại </div>
                             </div>
 
                             <div className="border border-black ">
-                                <div className="">
+                                <div className="flex justify-center items-center">
                                     <img src="../../public/tablet.jpg" alt="" className="" />
                                 </div>
                                 <div>Điện thoại </div>
@@ -122,9 +124,46 @@ export default function Homepage() {
                             
 
                         </div>
-                    </div>
-
-
+                    </div> */}
+        
+        <div className="w-10/12 mx-auto bg-product py-8">
+    <div className="font-bold text-red-500 flex flex-row items-center mb-6">
+        <span className="w-4 h-8 bg-red-600 inline-block"></span>
+        <span className="px-4 text-red-600">Danh mục</span>
+    </div>
+    <div className="w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        <div className="border rounded-lg overflow-hidden bg-white pt-2 hover:shadow-md transition-shadow duration-300">
+            <div className="flex justify-center items-center h-48">
+                <img src="../../public/mobile.jpg" alt="Điện thoại" className="max-w-full max-h-full" />
+            </div>
+            <div className="text-center py-2 font-semibold">Điện thoại</div>
+        </div>
+        <div className="border rounded-lg overflow-hidden bg-white pt-2 hover:shadow-md transition-shadow duration-300">
+            <div className="flex justify-center items-center h-48">
+                <img src="../../public/laptop.jpg" alt="Laptop" className="max-w-full max-h-full" />
+            </div>
+            <div className="text-center py-2 font-semibold">Laptop</div>
+        </div>
+        <div className="border rounded-lg overflow-hidden bg-white pt-2 hover:shadow-md transition-shadow duration-300">
+            <div className="flex justify-center items-center h-48">
+                <img src="../../public/tablet.jpg" alt="Tablet" className="max-w-full max-h-full" />
+            </div>
+            <div className="text-center py-2 font-semibold">Tablet</div>
+        </div>
+        <div className="border rounded-lg overflow-hidden bg-white pt-2 hover:shadow-md transition-shadow duration-300">
+            <div className="flex justify-center items-center h-48">
+                <img src="../../public/watch.png" alt="Watch" className="max-w-full max-h-full" />
+            </div>
+            <div className="text-center py-2 font-semibold">Watch</div>
+        </div>
+        <div className="border border-gray-300 rounded-lg overflow-hidden bg-white pt-2 hover:shadow-md transition-shadow duration-300">
+            <div className="flex justify-center items-center h-48">
+                <img src="../../public/mobile.jpg" alt="Điện thoại" className="max-w-full max-h-full" />
+            </div>
+            <div className="text-center py-2 font-semibold">Điện thoại</div>
+        </div>
+    </div>
+</div>
 
                     <div className="h-60"></div>
                 </main>
