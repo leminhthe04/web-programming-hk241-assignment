@@ -56,9 +56,9 @@ export default function ProductCard({ prodID, prodName, prodPrice, prodRating })
                     onClick={() => navigate(`/customer/productDetail/${prodID}`)}
                 >
                     <img src="https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/xiaomi_14t_black_1_bb226cd286.png" alt="" className="w-auto h-40" />
-                    <div className="cart-icon absolute right-2 top-2  rounded-full p-2 bg-indigo-300 hover:bg-indigo-400 ">
+                    {/* <div className="cart-icon absolute right-2 top-2  rounded-full p-2 bg-indigo-300 hover:bg-indigo-400 ">
                         <FontAwesomeIcon icon={faCartShopping} />
-                    </div>
+                    </div> */}
                     {showBuy ?
                         <div className="buy-now absolute bottom-0 bg-black text-white w-full text-center p-1"
                             onClick={(e) => {

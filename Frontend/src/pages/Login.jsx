@@ -11,16 +11,10 @@ export default function Login() {
   const [mode, setMode] = useState("login");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
+  const [name, setName] = useState("");
   const [phone, setPhone] = useState(null);
   const [gender, setGender] = useState(null);
-  const [role, setRole] = useState("customer");
-  const [dateOfBirth, setDateOfBirth] = useState({
-    day: "",
-    month: "",
-    year: "",
-  });
+  const [address, setAddress] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -65,11 +59,9 @@ export default function Login() {
       email: email,
         password: pass,
         confirmPassword: pass,
-        fname: fname,
-        lname: lname,
+        name: name,
         gender: gender,
-        userType: role,
-        birthday: `${day}-${month}-${year}`
+
     })
       .then((response) => {
         if (response.status == 200) {
@@ -184,31 +176,16 @@ export default function Login() {
 
                 <div className="space-y-6 w-full">
 
-                  <div className="mb- flex items-end w-full">
-                    <div className="w-1/2">
-                      <div>Họ</div>
+                  <div className="items-end w-full">
+                      <div>Họ và tên</div>
                       <input
                         type="text"
                         id="name"
                         name="firstName"
-                        className={`mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 ${name != "" ? 'bg-blue-100' : null}`}
-                        placeholder="Huỳnh Bảo"
-                        onChange={(e) => setLname(e.target.value)}
+                        className={`outline-none mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 ${name != "" ? 'bg-blue-100' : null}`}
+                        placeholder="Huỳnh Bảo Ngọc"
+                        onChange={(e) => setName(e.target.value)}
                       />
-                    </div>
-
-                    <div className="w-1/2">
-                      <div>Tên</div>
-                      <input
-                        type="text"
-                        id="name"
-                        name="lastName"
-                        className={`mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 ${name != "" ? 'bg-blue-100' : null}`}
-                        placeholder="Ngọc"
-                        onChange={(e) => setFname(e.target.value)}
-                      />
-                    </div>
-
                   </div>
                   <div className="mb-4">
                     <div>Email</div>
@@ -236,6 +213,19 @@ export default function Login() {
 
                   </div>
 
+                  <div>
+                    <div>Địa chỉ</div>
+                    <input
+                      type="text"
+                      id="address"
+                      name="address"
+                      className={`mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 ${phone != "" ? 'bg-blue-100' : null}`}
+                      placeholder="100, Ly Thuong Kiet, Quan 10, TP.HCM"
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+
+                  </div>
+
                   <div className="mb-4">
                     <div>Mật khẩu</div>
                     <input
@@ -254,58 +244,17 @@ export default function Login() {
                     <label htmlFor="male">Nam</label>
                     <input type="radio" id="female" value="female" name="gender" onClick={() => {setGender("female")}} />
                     <label htmlFor="female">Nữ</label>
-                    <input type="radio" id="null" value="null" name="gender" onClick={() => {setGender(null)}} />
-                    <label htmlFor="null">Khác</label>
                   </div>
 
-                  <div className="dob-container">
-                    <div className="flex items-center">
-                      <span className="pr-4">Ngày sinh:</span>
-                      <div className="flex">
-                      <span className="inline-block w-10">
-                        <input
-                          type="number"
-                          min={0}
-                          max={31}
-                          name="day"
-                          value={day}
-                          onChange={handleInputChange}
-                          placeholder="DD"
-                          className="border-b text-center inline-block w-10"
-                        />
-                      </span>/
-                      <span className="inline-block w-10">
-                        <input
-                          type="number"
-                          name="month"
-                          value={month}
-                          onChange={handleInputChange}
-                          placeholder="MM"
-                          className="border-b text-center inline-block w-10"
-                        />
-                      </span>/
-                      <span className="inline-block w-10">
-                        <input
-                          type="number"
-                          name="year"
-                          value={year}
-                          onChange={handleInputChange}
-                          placeholder="YYYY"
-                          className="border-b text-center inline-block w-10"
-                        />
-                      </span>
-                      </div>
+                 
 
-                    </div>
-                  </div>
-
-                  <div className="role flex space-x-2">
+                  {/* <div className="role flex space-x-2">
                       <div>Bạn là nhân viên ? </div>
                       <input type="radio" value="admin" name="role" onClick={() => {setRole("admin")}} />
                       <label htmlFor="role">Đúng</label>
                       <input type="radio" value="customer" name="role" onClick={() => {setRole("customer")}} />
                       <label htmlFor="role">Không</label>
-                  </div>
+                  </div> */}
                 </div>
 
 

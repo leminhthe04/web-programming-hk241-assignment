@@ -5,6 +5,11 @@ export default function Header({ page, role }) {
     const [displayCat, setDisplayCat] = useState(false);
     const [displayAccount, setDisplayAccount] = useState(false);
     
+    function handleLogout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        navigate("/");
+    }   
     
     if (role == "admin") {
         return (
@@ -133,7 +138,9 @@ export default function Header({ page, role }) {
                             <li className="p-2 border-b-2 hover:font-semibold"
                                 onClick={() => navigate("/customer/history/1")}
                             >Lịch sử mua hàng</li>
-                            <li className="p-2 border-b-2 hover:font-semibold">Đăng xuất</li>
+                            <li className="p-2 border-b-2 hover:font-semibold"
+                                onClick={handleLogout}
+                            >Đăng xuất</li>
                         </ul>
                   
                 </div>
