@@ -24,7 +24,9 @@ export default function Shopping() {
                                     <span className="px-4 text-red-500 font-bold ">Điện thoại</span>
                                 </div>
                                 <div>
-                                    <button className=" bg-red-500 text-white p-2 rounded-lg m-2 hover:bg-red-700 ">Xem tất cả</button>
+                                    <button className=" bg-red-500 text-white p-2 rounded-lg m-2 hover:bg-red-700 "
+                                        
+                                    >Xem tất cả</button>
                                 </div>
                             </div>
 

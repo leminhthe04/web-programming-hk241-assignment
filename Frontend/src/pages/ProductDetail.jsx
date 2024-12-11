@@ -89,7 +89,7 @@ export default function ProductDetail() {
                 {/* Element chứ thông tin chi tiết của sản phẩm */}
                 <div className="mt-10 w-10/12 mx-auto">
                     <h2 className="text-2xl text-red-500 text-center font-semibold">Thông tin chi tiết</h2>
-                    <p className="font-serif tracking-wide leading-relaxed p-6 text-justify">
+                    <p className="font-serif tracking-wide leading-relaxed p-6 text-justify" style={{ fontFamily: 'Lora, serif' }}>
 
                         Vẻ ngoài cao cấp, thanh lịch từng đường nét
                         Về thiết kế, điện thoại OPPO Find X8 mang dáng vẻ hiện đại với kiểu dáng khá vuông vức cùng các góc được bo cong nhẹ nhàng, tạo cảm giác mạnh mẽ nhưng không quá cứng nhắc. Phần khung viền máy được làm từ chất liệu nhôm siêu nhẹ, tăng thêm sự cao cấp của tổng thể sản phẩm, thu hút người dùng ngay từ ánh nhìn đầu tiên.

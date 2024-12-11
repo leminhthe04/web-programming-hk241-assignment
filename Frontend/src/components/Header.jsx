@@ -127,9 +127,13 @@ export default function Header({ page, role }) {
                         </div>
                         
                         <ul className={`absolute bg-black mt-2 min-w-48 ${displayAccount ? "block" : "hidden"}`}>
-                            <li className="p-2 border-b-2 hover:font-semibold"><a href="">Thông tin cá nhân</a></li>
-                            <li className="p-2 border-b-2 hover:font-semibold"><a href="">Lịch sử mua hàng</a></li>
-                            <li className="p-2 border-b-2 hover:font-semibold"><a href="">Đăng xuất</a></li>
+                            <li className="p-2 border-b-2 hover:font-semibold"
+                                onClick={() => navigate("/customer/account/1")}
+                            >Thông tin cá nhân</li>
+                            <li className="p-2 border-b-2 hover:font-semibold"
+                                onClick={() => navigate("/customer/history/1")}
+                            >Lịch sử mua hàng</li>
+                            <li className="p-2 border-b-2 hover:font-semibold">Đăng xuất</li>
                         </ul>
                   
                 </div>

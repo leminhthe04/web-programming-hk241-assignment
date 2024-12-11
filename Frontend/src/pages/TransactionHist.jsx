@@ -27,7 +27,7 @@ export default function TransactionHist() {
 
     return (
         <>
-            <Header role="admin" page="user-manage" />
+            <Header />
 
             <div className="m-4 mb-10 pl-6">
                 <span className="text-grey-500">User / </span>
