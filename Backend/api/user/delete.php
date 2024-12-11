@@ -10,6 +10,7 @@ if (!$id) {
     Util::setStatusCodeAndEchoJson(400, 'User ID is required', null);
     exit;
 }
+$id = intval(htmlspecialchars($id));
 
 $userController = new UserController();
 $respone = $userController->deleteUser($id);

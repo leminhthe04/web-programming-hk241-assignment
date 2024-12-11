@@ -55,6 +55,16 @@ class UserController {
         return Util::getResponseArray(200, "User found", $res);
     }
 
+    public function getHistory($id, $offset, $limit) {
+        $user = new User();
+        $res = $user->getHistory($id, $offset, $limit); // a fetch array or null
+        if (isset($res['code'])) return $res;
+
+        return empty($res) ?
+            Util::getResponseArray(200, "There is no order history for this user", [])
+        :   Util::getResponseArray(200, "Found order history", $res);
+    }
+
     public function insertUser($name, $sex, $password, $email, $phone, $role, $avatar, $address) {
         // check some field are valid in private functions, if not return error message for the first invalid field
         $validMessage = $this->fieldAreValid($name, $sex, $password, $email, $phone, $role)['message'];

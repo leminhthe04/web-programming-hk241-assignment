@@ -37,6 +37,15 @@ CREATE PROCEDURE insertReview (
     INSERT INTO reviews(customer_id, product_id, rating, comment) VALUES
         (_customer_id, _product_id, _rating, _comment);
 
+    SET @current_rating_count = (SELECT rating_count FROM products WHERE id = _product_id);
+    SET @current_rating = (SELECT rating FROM products WHERE id = _product_id);
+    SET @new_rating = (@current_rating * @current_rating_count + _rating) / (@current_rating_count + 1);
+    UPDATE products
+    SET rating = @new_rating,
+        rating_count = @current_rating_count + 1
+    WHERE id = _product_id;
+
+
     SELECT LAST_INSERT_ID() AS id;
 END;
 

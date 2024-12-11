@@ -22,7 +22,7 @@ class ProductController {
         return !isset($res['code']) ? true : false;
     }
     private function quantityIsValidValue($quantity) {
-        return is_numeric($quantity) && $quantity >= 0;
+        return filter_var($quantity, FILTER_VALIDATE_INT) && $quantity >= 0;
     }
 
     private function fieldAreValid($name, $price, $quantity, $category_id) {

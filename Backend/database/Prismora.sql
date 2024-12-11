@@ -31,6 +31,7 @@ CREATE TABLE products (
     description             TEXT,
     category_id             INT,
     buy_count               INT                         DEFAULT 0                       NOT NULL,
+    rating_count            INT                         DEFAULT 0                       NOT NULL,
     avg_rating              DECIMAL(2, 1)               DEFAULT 0.0                     NOT NULL,
     creation_date           TIMESTAMP                   DEFAULT CURRENT_TIMESTAMP       NOT NULL,
     status                  ENUM('Available', 'Stop Selling', 'Sold Out')
@@ -65,12 +66,12 @@ CREATE TABLE orders (
     customer_id             INT                                                         NOT NULL,
     total_price             INT                         DEFAULT 0                       NOT NULL,
     creation_date           TIMESTAMP                   DEFAULT CURRENT_TIMESTAMP       NOT NULL,
+    shipping_address        TEXT                                                        NOT NULL,
     status                  ENUM('pending', 'shipping', 'completed') 
                                                         DEFAULT 'pending'               NOT NULL,
     CONSTRAINT FK_orders__users
     FOREIGN KEY (customer_id) REFERENCES users(id)
 );
-
 
 CREATE TABLE product_in_orders (
     id                      INT                         AUTO_INCREMENT                  PRIMARY KEY,
@@ -78,6 +79,8 @@ CREATE TABLE product_in_orders (
     product_id              INT                                                         NOT NULL,
     quantity                INT                                                         NOT NULL,
     subtotal_price          INT                         DEFAULT 0                       NOT NULL,
+
+    UNIQUE(order_id, product_id),
 
     CONSTRAINT FK_product_in_orders__orders
     FOREIGN KEY (order_id) REFERENCES orders(id),

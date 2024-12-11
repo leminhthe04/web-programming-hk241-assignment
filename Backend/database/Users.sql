@@ -32,6 +32,20 @@ CREATE PROCEDURE insertUser (
 END;
 
 
+DROP PROCEDURE IF EXISTS findUserHistory;
+CREATE PROCEDURE findUserHistory (
+    IN _user_id INT
+) BEGIN
+    CALL checkExist('users', 'id', _user_id, @isExistUser);
+    IF NOT @isExistUser THEN
+        SIGNAL SQLSTATE '45404'
+            SET MESSAGE_TEXT = 'User not found';
+    END IF;
+
+    -- CALL findAllByField('user_histories', 'user_id', _user_id, 0, 9999);
+    SELECT * FROM user_histories WHERE user_id = _user_id;
+END;
+
 
 -- PUT
 DROP PROCEDURE IF EXISTS updateUserName;

@@ -1,5 +1,26 @@
 USE prismora;
 
+DROP PROCEDURE IF EXISTS clearData;
+CREATE PROCEDURE clearData()
+BEGIN
+    SET FOREIGN_KEY_CHECKS = 0;
+    
+    DELETE FROM users;
+    DELETE FROM categories;
+    DELETE FROM products;
+    DELETE FROM product_images;
+    DELETE FROM reviews;
+    DELETE FROM product_in_orders;
+    DELETE FROM orders;
+
+    SET FOREIGN_KEY_CHECKS = 1;
+END;
+
+CALL clearData();
+
+-- SELECT * FROM users;
+
+
 INSERT INTO categories (id, name) VALUES
 (1, 'Điện thoại'),
 (2, 'Laptop'),
@@ -346,22 +367,38 @@ INSERT INTO users (id, name, sex, avt_url, address, email, password, phone, role
 -- SELECT * FROM users;
 
 DELETE FROM orders;
-INSERT INTO orders (id, customer_id) VALUES
-(1, 1), (2, 2), (3, 3), (4, 4), (5, 5),
-(6, 1), (7, 3), (8, 5), (9, 2), (10, 4);
+INSERT INTO orders (id, customer_id, shipping_address) VALUES
+(1, 1, 'Shipping Address'), (2, 2, 'Shipping Address'), (3, 3, 'Shipping Address'), 
+(4, 4, 'Shipping Address'), (5, 5, 'Shipping Address'), (6, 1, 'Shipping Address'), 
+(7, 3, 'Shipping Address'), (8, 5, 'Shipping Address'), (9, 2, 'Shipping Address'),
+(10, 4, 'Shipping Address'),
+(11, 1, 'Q. 12, TP. HCM'), (12, 1, 'Ba Đình. Hà Nội'), (13, 1, 'Hải Phòng');
 
-
+DELETE FROM product_in_orders;
 INSERT INTO product_in_orders (id, order_id, product_id, quantity) VALUES
-(1, 1, 1, 5), (2, 1, 5, 1), (3, 1, 9, 2), (4, 1, 13, 1), (5, 1, 17, 3),
-(6, 2, 2, 1), (7, 2, 6, 1), (8, 2, 10, 1), (9, 2, 14, 1), (10, 2, 18, 1),
-(11, 3, 3, 1),
-(16, 4, 4, 1), (17, 4, 8, 1), (18, 4, 12, 1), (19, 4, 16, 1), (20, 4, 20, 1),
-(21, 5, 5, 1), (24, 5, 17, 1), (25, 5, 21, 1),
-(26, 6, 6, 1), (27, 6, 10, 1), (28, 6, 14, 1), (29, 6, 18, 1), (30, 6, 22, 1),
-(31, 7, 7, 1), (32, 7, 11, 1), (34, 7, 19, 1), (35, 7, 23, 1),
-(36, 8, 8, 1), (37, 8, 12, 1), (38, 8, 16, 1), (39, 8, 20, 1), (40, 8, 24, 1),
-(12, 9, 9, 1), (13, 9, 13, 1), (14, 9, 17, 1), (15, 9, 21, 1),
-(22, 10, 2, 1), (23, 10, 6, 1), (33, 10, 10, 1), (41, 10, 14, 1), (42, 10, 18, 1);
+(1, 1, 2, 2),
+(2, 2, 6, 1),
+(3, 3, 19, 1),
+(4, 4, 23, 1),
+(5, 5, 25, 1),
+(6, 6, 1, 1),
+(7, 7, 5, 1),
+(8, 8, 9, 1),
+(9, 9, 13, 1),
+(10, 10, 17, 1),
+(11, 11, 21, 1),
+(12, 12, 25, 1),
+(13, 13, 22, 1);
+
+
+-- SELECT * FROM product_in_orders;
+-- (16, 4, 4, 1), (17, 4, 8, 1), (18, 4, 12, 1), (19, 4, 16, 1), (20, 4, 20, 1),
+-- (21, 5, 5, 1), (24, 5, 17, 1), (25, 5, 21, 1),
+-- (26, 6, 6, 1), (27, 6, 10, 1), (28, 6, 14, 1), (29, 6, 18, 1), (30, 6, 22, 1),
+-- (31, 7, 7, 1), (32, 7, 11, 1), (34, 7, 19, 1), (35, 7, 23, 1),
+-- (36, 8, 8, 1), (37, 8, 12, 1), (38, 8, 16, 1), (39, 8, 20, 1), (40, 8, 24, 1),
+-- (12, 9, 9, 1), (13, 9, 13, 1), (14, 9, 17, 1), (15, 9, 21, 1),
+-- (22, 10, 2, 1), (23, 10, 6, 1), (33, 10, 10, 1), (41, 10, 14, 1), (42, 10, 18, 1);
 
 
 INSERT INTO reviews (id, customer_id, product_id, rating, comment) VALUES
