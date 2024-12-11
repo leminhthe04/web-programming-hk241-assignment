@@ -7,11 +7,12 @@ header('Content-Type: application/json');
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 if (!$id) {
-    setStatusCodeAndEchoJson(400, 'Category ID is required', null);
+    Util::setStatusCodeAndEchoJson(400, 'Category ID is required', null);
     exit;
 }
+$id = intval(htmlspecialchars($id));
 
 $categoryController = new CategoryController();
 $respone = $categoryController->deleteCategory($id);
-setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
+Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

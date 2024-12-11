@@ -15,47 +15,67 @@ class User {
     }
 
 
-    public function getAll() {
-        $stmt = $this->conn->prepare("CALL findAll('users')");
+    public function fetch($offset, $limit) {
+        $page_count = Util::getPageCount('users', $limit);
+
+        $stmt = $this->conn->prepare("CALL findAll('users', ?, ?)");
+        $stmt->bind_param("ii", $offset, $limit);
         $stmt->execute();
         $table = $stmt->get_result();
-        $arr = fetch($table);
-        if ($table) $table->free();
+        $arr = Util::fetch($table);
         $stmt->close();
         return $arr;        
     }
 
     public function getById($id) {
-        $stmt = $this->conn->prepare("CALL findById('users', ?)");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $table = $stmt->get_result();
-        $arr = fetch($table);
-        if($table) $table->free();
-        $stmt->close();
-        return $arr;
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+        try {
+            $stmt = $this->conn->prepare("CALL findById('users', ?)");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $table = $stmt->get_result();
+            $arr = Util::fetch($table);
+            $stmt->close();
+            return $arr;
+        } catch (mysqli_sql_exception $e) {
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
+        }
     }
 
     public function getByEmail($email) {
-        $stmt = $this->conn->prepare("CALL findByUniqueField('users', 'email', ?)");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $table = $stmt->get_result();
-        $arr = fetch($table);
-        if($table) $table->free();
-        $stmt->close();
-        return $arr;
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+        try {
+            $stmt = $this->conn->prepare("CALL findByUniqueField('users', 'email', ?)");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $table = $stmt->get_result();
+            $arr = Util::fetch($table);
+            $stmt->close();
+            return $arr;
+        } catch (mysqli_sql_exception $e) {
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
+        }
     }
 
     public function getByPhone($phone) {
-        $stmt = $this->conn->prepare("CALL findByUniqueField('users', 'phone', ?)");
-        $stmt->bind_param("s", $phone);
-        $stmt->execute();
-        $table = $stmt->get_result();
-        $arr = fetch($table);
-        if($table) $table->free();
-        $stmt->close();
-        return $arr;
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+        try{
+            $stmt = $this->conn->prepare("CALL findByUniqueField('users', 'phone', ?)");
+            $stmt->bind_param("s", $phone);
+            $stmt->execute();
+            $table = $stmt->get_result();
+            $arr = Util::fetch($table);
+            $stmt->close();
+            return $arr;
+        } catch (mysqli_sql_exception $e) {
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
+        }
     }
 
     // CALL insertUser('Nguyen Van B', 'M', '123456', 'nguyenB@gmail.com', '0123456790', 'admin', 'avt_url', '192 ĐPB, Q.1, TP.HCM');
@@ -67,12 +87,11 @@ class User {
             $stmt->bind_param("ssssssss", $name, $sex, $password, $email, $phone, $role, $avatar, $address);
             $stmt->execute();
             $result = $stmt->get_result();
-            $res = getResponseArray(201, "User created", ["id" => $result->fetch_assoc()['id']]);
-            $result->free();
             $stmt->close();
-            return $res;
+            return Util::getResponseArray(201, "User created", ["id" => $result->fetch_assoc()['id']]);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -84,9 +103,10 @@ class User {
             $stmt->bind_param("is", $id, $password);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Password updated", null);
+            return Util::getResponseArray(200, "Password updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -98,9 +118,10 @@ class User {
             $stmt->bind_param("is", $id, $name);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Name updated", null);
+            return Util::getResponseArray(200, "Name updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -112,9 +133,10 @@ class User {
             $stmt->bind_param("is", $id, $sex);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Sex updated", null);
+            return Util::getResponseArray(200, "Sex updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -126,9 +148,10 @@ class User {
             $stmt->bind_param("is", $id, $email);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Email updated", null);
+            return Util::getResponseArray(200, "Email updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -140,9 +163,10 @@ class User {
             $stmt->bind_param("is", $id, $phone);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Phone updated", null);
+            return Util::getResponseArray(200, "Phone updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -154,9 +178,10 @@ class User {
             $stmt->bind_param("is", $id, $role);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Role updated", null);
+            return Util::getResponseArray(200, "Role updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -168,9 +193,10 @@ class User {
             $stmt->bind_param("is", $id, $avt_url);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Avatar updated", null);
+            return Util::getResponseArray(200, "Avatar updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -182,9 +208,10 @@ class User {
             $stmt->bind_param("is", $id, $address);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "Address updated", null);
+            return Util::getResponseArray(200, "Address updated", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -196,9 +223,10 @@ class User {
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "User deleted", null);
+            return Util::getResponseArray(200, "User deleted", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 
@@ -209,9 +237,10 @@ class User {
             $stmt = $this->conn->prepare("CALL deleteAll('users')");
             $stmt->execute();
             $stmt->close();
-            return getResponseArray(200, "All users deleted", null);
+            return Util::getResponseArray(200, "All users deleted", null);
         } catch (mysqli_sql_exception $e) {
-            return getResponseArray(400, $e->getMessage(), null);
+            
+            return Util::getResponseArray(400, $e->getMessage(), null);
         }
     }
 }

@@ -10,13 +10,13 @@ $jsonData = file_get_contents('php://input');
 $data = json_decode($jsonData, true);
 
 if (!$data) {
-    setStatusCodeAndEchoJson(400, 'Invalid JSON', null);
+    Util::setStatusCodeAndEchoJson(400, 'Invalid JSON', null);
     exit;
 }
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 if (!$id) {
-    setStatusCodeAndEchoJson(400, 'User ID is required', null);
+    Util::setStatusCodeAndEchoJson(400, 'User ID is required', null);
     exit;
 }
 
@@ -69,5 +69,5 @@ foreach ($fields as $field) {
     $message .= $responses[$field]['message'] . "\n";
 }
 
-setStatusCodeAndEchoJson($code, $message, null);
+Util::setStatusCodeAndEchoJson($code, $message, null);
 ?>

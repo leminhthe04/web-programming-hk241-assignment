@@ -8,5 +8,5 @@ header('Content-Type: application/json');
 
 $userController = new UserController();
 $respone = $userController->deleteAllUsers();
-setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
+Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

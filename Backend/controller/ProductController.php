@@ -19,10 +19,10 @@ class ProductController {
         if (!$category_id) return true;
         $category = new Category();
         $res = $category->getById($category_id);
-        return $res ? true : false;
+        return !isset($res['code']) ? true : false;
     }
     private function quantityIsValidValue($quantity) {
-        return is_int($quantity) && $quantity >= 0;
+        return is_numeric($quantity) && $quantity >= 0;
     }
 
     private function fieldAreValid($name, $price, $quantity, $category_id) {
@@ -37,60 +37,57 @@ class ProductController {
         return ["message" => "Valid"];
     }
 
-    public function getAll() {
+    public function fetch($offset, $limit) {
         $product = new Product();
-        $res = $product->getAll(); // a fetch array or null
-        if ($res){
-            return getResponseArray(200, "Found products", $res);
-        }
+        $res = $product->getAll($offset, $limit); // a fetch array or null
+        if (isset($res['code'])) return $res;
         
-        return getResponseArray(200, "There is no product in system now", []);
+        return empty($res['data']) ? 
+            Util::getResponseArray(200, "There is no product in system now", [])
+        :   Util::getResponseArray(200, "Found products", $res);
     }
 
     public function getById($id) {
         $product = new Product();
         $res = $product->getById($id);
-
-        if ($res) {
-            return getResponseArray(200, "Product found", $res);
-        }
-        return getResponseArray(404, "Product not found", null);
+        if (isset($res['code'])) return $res;
+        return Util::getResponseArray(200, "Product found", $res);
     }
 
-    public function getAllAvailable() {
+    public function fetchAvailable($offset, $limit) {
         $product = new Product();
-        $res = $product->getAllAvailable();
-        if ($res) {
-            return getResponseArray(200, "Found available products", $res);
-        }
-        return getResponseArray(200, "There is no available product now", []);
+        $res = $product->getAllAvailable($offset, $limit);
+        if (isset($res['code'])) return $res;
+        return empty($res['data']) ? 
+            Util::getResponseArray(200, "There is no available product now", [])
+        :   Util::getResponseArray(200, "Found available products", $res);
     }
 
-    public function getAllStopSelling() {
+    public function fetchStopSelling($offset, $limit) {
         $product = new Product();
-        $res = $product->getAllStopSelling();
-        if ($res) {
-            return getResponseArray(200, "Found stop selling products", $res);
-        }
-        return getResponseArray(200, "There is no stop selling product now", []);
+        $res = $product->getAllStopSelling($offset, $limit);
+        if (isset($res['code'])) return $res;
+        return empty($res['data']) ? 
+            Util::getResponseArray(200, "There is no stop selling product now", [])
+        :   Util::getResponseArray(200, "Found stop selling products", $res);
     }
 
-    public function getAllSoldOut() {
+    public function fetchSoldOut($offset, $limit) {
         $product = new Product();
-        $res = $product->getAllSoldOut();
-        if ($res) {
-            return getResponseArray(200, "Found sold out products", $res);
-        }
-        return getResponseArray(200, "There is no sold out product now", []);
+        $res = $product->getAllSoldOut($offset, $limit);
+        if (isset($res['code'])) return $res;
+        return empty($res['data']) ? 
+            Util::getResponseArray(200, "There is no sold out product now", [])
+        :   Util::getResponseArray(200, "Found sold out products", $res);
     }
 
-    public function getAllByCategory($category_id) {
+    public function fetchByCategory($category_id, $offset, $limit) {
         $product = new Product();
-        $res = $product->getAllByCategoryId($category_id);
-        if ($res) {
-            return getResponseArray(200, "Found products in category", $res);
-        }
-        return getResponseArray(200, "There is no product in this category now", []);
+        $res = $product->getAllByCategoryId($category_id, $offset, $limit);
+        if (isset($res['code'])) return $res;
+        return empty($res['data']) ? 
+            Util::getResponseArray(200, "There is no product in this category now", [])
+        :   Util::getResponseArray(200, "Found products in category", $res);
     }
 
 
@@ -99,7 +96,7 @@ class ProductController {
         // check some field are valid in private functions, if not return error message for the first invalid field
         $validMessage = $this->fieldAreValid($name, $price, $quantity, $category_id, $status)['message'];
         if ($validMessage !== "Valid") {
-            return getResponseArray(400, $validMessage, null);
+            return Util::getResponseArray(400, $validMessage, null);
         }
         
         if (!$status) {
@@ -107,18 +104,23 @@ class ProductController {
         }
 
         if ($status === "Sold Out"  &&  $quantity > 0) {
-            return getResponseArray(400, "Quantity and status 'Sold Out' are unreasonable", null);
+            return Util::getResponseArray(400, "Quantity and status 'Sold Out' are unreasonable", null);
         }
 
         if ($status === "Available" && $quantity == 0) {
-            return getResponseArray(400, "Quantity and status 'Available' are unreasonable", null);
+            return Util::getResponseArray(400, "Quantity and status 'Available' are unreasonable", null);
         }
 
         $product = new Product();
         $respone = $product->insertProduct($name, $price, $description, $quantity, $category_id, $status);
 
+        // print_r($respone);
+
+        if ($respone['code'] != 201) return $respone;
+
         $product_id = $respone['data']['id'];
 
+        // print_r($image_urls);
         if ($image_urls) {
             $productImageController = new ProductImageController();
             foreach ($image_urls as $url) {
@@ -132,7 +134,7 @@ class ProductController {
 
     public function updateProductName($id, $name) {
         if (!$this->nameIsValidFormat($name)) {
-            return getResponseArray(400, "Name must be between 5 and 50 characters", null);
+            return Util::getResponseArray(400, "Name must be between 5 and 50 characters", null);
         }
 
         $product = new Product();
@@ -141,7 +143,7 @@ class ProductController {
 
     public function updateProductPrice($id, $price) {
         if (!$this->priceIsValidValue($price)) {
-            return getResponseArray(400, "Price must be a positive number", null);
+            return Util::getResponseArray(400, "Price must be a positive number", null);
         }
 
         $product = new Product();
@@ -150,7 +152,7 @@ class ProductController {
 
     public function updateProductQuantity($id, $quantity) {
         if (!$this->quantityIsValidValue($quantity)) {
-            return getResponseArray(400, "Quantity must be a non-negative integer", null);
+            return Util::getResponseArray(400, "Quantity must be a non-negative integer", null);
         }
 
         $product = new Product();
@@ -171,7 +173,7 @@ class ProductController {
 
     public function updateProductStatus($id, $status) {
         if (!$this->statusIsValidValue($status)) {
-            return getResponseArray(400, "Status must be 'Available', 'Stop Selling' or 'Sold Out'", null);
+            return Util::getResponseArray(400, "Status must be 'Available', 'Stop Selling' or 'Sold Out'", null);
         }
         
         $product = new Product();
@@ -179,9 +181,9 @@ class ProductController {
         $currentProductQuantity = $product->getById($id)[0]['quantity'];
 
         if ($status == 'Sold Out' && $currentProductQuantity > 0) {
-            return getResponseArray(400, "Current quantity of this product is greater than 0, cannot set status to 'Sold Out'", null);
+            return Util::getResponseArray(400, "Current quantity of this product is greater than 0, cannot set status to 'Sold Out'", null);
         } else if($status == 'Available' && $currentProductQuantity == 0) {
-            return getResponseArray(400, "Current quantity of this product is 0, cannot set status to 'Available'", null);
+            return Util::getResponseArray(400, "Current quantity of this product is 0, cannot set status to 'Available'", null);
         }
 
         return $product->updateStatus($id, $status);
@@ -190,7 +192,7 @@ class ProductController {
 
     public function updateProductCategory($id, $category_id) {
         // if (!$this->categoryIdIsValidValue($category_id)) {
-        //     return getResponseArray(400, "Category not exist", null);
+        //     return Util::getResponseArray(400, "Category not exist", null);
         // }
 
         $product = new Product();
@@ -208,7 +210,7 @@ class ProductController {
         return $product->deleteAll();
     }
 
-    public function searchProducts($key){
+    public function searchProducts($key, $offset, $limit) {
 
         $tokens = array_filter(explode(' ', trim($key)));
 
@@ -217,18 +219,29 @@ class ProductController {
         $res = [];
         foreach ($tokens as $_ => $token) {
             $thisTokenProducts = $product->searchProductByToken($token);
+            if (isset($thisTokenProducts['code'])) return $thisTokenProducts;
+
             $existedProductIds = array_column($res, 'id');
             foreach ($thisTokenProducts as $p) {
                 if (!in_array($p['id'], $existedProductIds)) {
-                    $res[]  = $p;
+                    $res[$p['id']]  = $p;
                 }
             }
         }
 
-        if ($res){
-            return getResponseArray(200, "Found products", $res);
+        // print_r($res);
+        if (empty($res)) {
+            return Util::getResponseArray(200, "There is no product match your search", []);
         }
-        return getResponseArray(200, "There is no product match your search", []);
+
+        ksort($res);
+        $page_count = ceil(count($res) / $limit);
+        $res = array_slice($res, $offset, $limit);
+        $data = [
+            "page_count" => $page_count,
+            "data" => $res
+        ];
+        return Util::getResponseArray(200, "Found products", $data);
     }
 
 }

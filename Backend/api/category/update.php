@@ -10,24 +10,26 @@ $jsonData = file_get_contents('php://input');
 $data = json_decode($jsonData, true);
 
 if (!$data) {
-    setStatusCodeAndEchoJson(400, 'Invalid JSON', null);
+    Util::setStatusCodeAndEchoJson(400, 'Invalid JSON', null);
     exit;
 }
 
-$id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$id = isset($_GET['id']) ? intval(htmlspecialchars($_GET['id'])) : null;
 if (!$id) {
-    setStatusCodeAndEchoJson(400, 'Category ID is required', null);
+    Util::setStatusCodeAndEchoJson(400, 'Category ID is required', null);
     exit;
 }
 
 
-$name = $data['new_name'] ?? null;
-if(!$name){
-    setStatusCodeAndEchoJson(400, 'New name is required', null);
+$name = $data['new_name'];
+if(!isset($name)){
+    Util::setStatusCodeAndEchoJson(400, 'New name is required', null);
     exit;
 }
+$name = htmlspecialchars($name);
+
 
 $categoryController = new CategoryController();
 $response = $categoryController->updateCategoryName($id, $name);
-setStatusCodeAndEchoJson($response['code'], $response['message'], $response['data']);
+Util::setStatusCodeAndEchoJson($response['code'], $response['message'], $response['data']);
 ?>

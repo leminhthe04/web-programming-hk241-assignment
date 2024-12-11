@@ -5,7 +5,8 @@ require_once __DIR__ . '/../model/Review.php';
 class ReviewController {
 
     private function ratingIsValidValue($rating) {
-        return is_int($rating) && $rating > 0 && $rating <= 5;
+        return filter_var($rating, FILTER_VALIDATE_INT) && 
+               $rating > 0 && $rating <= 5;
     }
     private function commentIsValidValue($comment) {
         return $comment === null || strlen($comment) <= 1000;
@@ -19,42 +20,38 @@ class ReviewController {
         return ["message" => "Valid"];
     }
 
-    public function getAll() {
+    public function fetch($offset, $limit) {
         $review = new Review();
-        $res = $review->getAll(); // a fetch array or null
-        if ($res){
-            return getResponseArray(200, "Found all reviews", $res);
-        }
-        
-        return getResponseArray(200, "There is no review in system now", []);
+        $res = $review->getAll($offset, $limit); // a fetch array or null
+        if (isset($res['code'])) return $res;
+        return empty($res['data']) ? 
+            Util::getResponseArray(200, "There is no review in system now", [])
+        :   Util::getResponseArray(200, "Found all reviews", $res);
     }
 
     public function getById($id) {
         $review = new Review();
         $res = $review->getById($id);
-
-        if ($res) {
-            return getResponseArray(200, "Review found", $res);
-        }
-        return getResponseArray(404, "Review not found", null);
+        if (isset($res['code'])) return $res;
+        return Util::getResponseArray(200, "Review found", $res);
     }
 
-    public function getAllByProductId($product_id) {
+    public function fetchByProductId($product_id, $offset, $limit) {
         $review = new Review();
-        $res = $review->getAllByProductId($product_id);
-        if ($res) {
-            return getResponseArray(200, "Found reviews of product", $res);
-        }
-        return getResponseArray(200, "There is no review of this product", []);
+        $res = $review->getAllByProductId($product_id, $offset, $limit);
+        if (isset($res['code'])) return $res;
+        return empty($res['data']) ? 
+            Util::getResponseArray(200, "There is no review of this product", [])
+        :   Util::getResponseArray(200, "Found reviews of product", $res);
     }
 
-    public function getAllByUserId($user_id) {
+    public function fetchByUserId($user_id, $offset, $limit) {
         $review = new Review();
-        $res = $review->getAllByUserId($user_id);
-        if ($res) {
-            return getResponseArray(200, "Found reviews of user", $res);
-        }
-        return getResponseArray(200, "There is no review of this user", []);
+        $res = $review->getAllByUserId($user_id, $offset, $limit);
+        if (isset($res['code'])) return $res;
+        return empty($res['data']) ? 
+            Util::getResponseArray(200, "There is no review of this user", [])
+        :   Util::getResponseArray(200, "Found reviews of user", $res);
     }
 
 
@@ -63,7 +60,7 @@ class ReviewController {
         // check some field are valid in private functions, if not return error message for the first invalid field
         $validMessage = $this->fieldAreValid($rating, $comment)['message'];
         if ($validMessage !== "Valid") {
-            return getResponseArray(400, $validMessage, null);
+            return Util::getResponseArray(400, $validMessage, null);
         }
         
         $review = new Review();
@@ -72,7 +69,7 @@ class ReviewController {
 
     public function updateReviewRating($id, $rating) {
         if (!$this->ratingIsValidValue($rating)) {
-            return getResponseArray(400, "Rating must be an integer between 1 and 5", null);
+            return Util::getResponseArray(400, "Rating must be an integer between 1 and 5", null);
         }
 
         $review = new Review();
@@ -81,7 +78,7 @@ class ReviewController {
 
     public function updateReviewComment($id, $comment) {
         if (!$this->commentIsValidValue($comment)) {
-            return getResponseArray(400, "Comment must be less than 1000 characters", null);
+            return Util::getResponseArray(400, "Comment must be less than 1000 characters", null);
         }
 
         $review = new Review();

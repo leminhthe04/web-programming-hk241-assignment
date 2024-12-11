@@ -10,17 +10,18 @@ $jsonData = file_get_contents('php://input');
 $data = json_decode($jsonData, true);
 
 if (!$data) {
-    setStatusCodeAndEchoJson(400, 'Invalid JSON', null);
+    Util::setStatusCodeAndEchoJson(400, 'Invalid JSON', null);
     exit;
 }
 
 $name = $data['name'] ?? null;
 if (!$name) {
-    setStatusCodeAndEchoJson(400, 'Name is required', null);
+    Util::setStatusCodeAndEchoJson(400, 'Name is required', null);
     exit;
 }
+$name = htmlspecialchars($name);
 
 $categoryController = new CategoryController();
 $respone = $categoryController->insertCategory($name);
-setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
+Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

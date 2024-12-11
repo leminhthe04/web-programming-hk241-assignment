@@ -10,13 +10,13 @@ $jsonData = file_get_contents('php://input');
 $data = json_decode($jsonData, true);
 
 if (!$data) {
-    setStatusCodeAndEchoJson(400, 'Invalid JSON', null);
+    Util::setStatusCodeAndEchoJson(400, 'Invalid JSON', null);
     exit;
 }
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 if (!$id) {
-    setStatusCodeAndEchoJson(400, 'Review ID is required', null);
+    Util::setStatusCodeAndEchoJson(400, 'Review ID is required', null);
     exit;
 }
 
@@ -28,11 +28,15 @@ $rating = $data['rating'] ?? null;
 if ($rating !== null) {
     $responses['rating'] = $reviewController->updateReviewRating($id, $rating);
 }
+$rating = htmlspecialchars($rating);
 
 $comment = $data['comment'] ?? null;
 if ($comment !== null) {
     $responses['comment'] = $reviewController->updateReviewComment($id, $comment);
 }
+$comment = htmlspecialchars($comment);
+
+
 
 $fields = array_keys($responses);
 $code = 200;
@@ -44,5 +48,5 @@ foreach ($fields as $field) {
     $message .= $responses[$field]['message'] . "\n";
 }
 
-setStatusCodeAndEchoJson($code, $message, null);
+Util::setStatusCodeAndEchoJson($code, $message, null);
 ?>

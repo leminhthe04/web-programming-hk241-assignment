@@ -10,8 +10,8 @@ $uri = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
 
 
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Methods: POST, GET, PUT, OPTIONS"); 
+// header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE, OPTIONS"); 
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 // header("Access-Control-Allow-Credentials: true");
 
@@ -26,13 +26,15 @@ if ($method == 'OPTIONS') {
 }
 
 
-if (preg_match('/\/api\/hi$/', $uri)){
-    require __DIR__.'/api/hi.php';
-    exit;
-} 
+// if (preg_match('/\/api\/hi$/', $uri)){
+//     require __DIR__.'/api/hi.php';
+//     exit;
+// } 
 
-if (preg_match('/\/api\/user\/all$/', $uri)){
-    require __DIR__.'/api/user/getAll.php';
+if (preg_match('/\/api\/user\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
+    $_GET['offset'] = $matches[1];
+    $_GET['limit'] = $matches[2];
+    require __DIR__.'/api/user/fetch.php';
     exit;
 }
 
@@ -79,8 +81,10 @@ if (preg_match('/\/api\/user\/delete\/all$/', $uri)){
 
 ////////////////////// CATEGORY APIs //////////////////////
 
-if (preg_match('/\/api\/category\/all$/', $uri)){
-    require __DIR__.'/api/category/getAll.php';
+if (preg_match('/\/api\/category\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
+    $_GET['offset'] = $matches[1];
+    $_GET['limit'] = $matches[2];
+    require __DIR__.'/api/category/fetch.php';
     exit;
 }
 
@@ -115,8 +119,10 @@ if (preg_match('/\/api\/category\/delete\/all$/', $uri)){
 
 ///////////////////////////// PRODUCT APIs /////////////////////////////
 
-if (preg_match('/\/api\/product\/all$/', $uri)){
-    require __DIR__.'/api/product/getAll.php';
+if (preg_match('/\/api\/product\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
+    $_GET['offset'] = $matches[1];
+    $_GET['limit'] = $matches[2];
+    require __DIR__.'/api/product/fetch.php';
     exit;
 }
 
@@ -126,24 +132,32 @@ if (preg_match('/\/api\/product\/detail\/(\d+)$/', $uri, $matches)){
     exit;
 }
 
-if (preg_match('/\/api\/product\/available$/', $uri)){
-    require __DIR__.'/api/product/getAllAvailable.php';
+if (preg_match('/\/api\/product\/available\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
+    $_GET['offset'] = $matches[1];
+    $_GET['limit'] = $matches[2];
+    require __DIR__.'/api/product/fetchAvailable.php';
     exit;
 }
 
-if (preg_match('/\/api\/product\/stopselling$/', $uri)){
-    require __DIR__.'/api/product/getAllStopSelling.php';
+if (preg_match('/\/api\/product\/stopselling\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
+    $_GET['offset'] = $matches[1];
+    $_GET['limit'] = $matches[2];
+    require __DIR__.'/api/product/fetchStopSelling.php';
     exit;
 }
 
-if (preg_match('/\/api\/product\/soldout$/', $uri)){
-    require __DIR__.'/api/product/getAllSoldOut.php';
+if (preg_match('/\/api\/product\/soldout\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
+    $_GET['offset'] = $matches;
+    $_GET['limit'] = $matches[2];
+    require __DIR__.'/api/product/fetchSoldOut.php';
     exit;
 }
 
-if (preg_match('/\/api\/product\/category\/(\d+)$/', $uri, $matches)){
+if (preg_match('/\/api\/product\/category\/(\d+)\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
     $_GET['category_id'] = $matches[1];
-    require __DIR__.'/api/product/getAllByCategory.php';
+    $_GET['offset'] = $matches[2];
+    $_GET['limit'] = $matches[3];
+    require __DIR__.'/api/product/fetchByCategory.php';
     exit;
 }
 
@@ -171,7 +185,9 @@ if (preg_match('/\/api\/product\/delete\/all$/', $uri)){
 }
 
 
-if (preg_match('/\/api\/product\/search$/', $uri)){
+if (preg_match('/\/api\/product\/search\/(\d+)\/(\d+)$/', $uri, $matches)){
+    $_GET['offset'] = $matches[1];
+    $_GET['limit'] = $matches[2];
     require __DIR__.'/api/product/search.php';
     exit;
 }
@@ -216,8 +232,10 @@ if (preg_match('/\/api\/product-image\/delete\/(\d+)$/', $uri, $matches)){
 
 ///////////////////////////// REVIEW APIs /////////////////////////////
 
-if (preg_match('/\/api\/review\/all$/', $uri)){
-    require __DIR__.'/api/review/getAll.php';
+if (preg_match('/\/api\/review\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
+    $_GET['offset'] = $matches[1];
+    $_GET['limit'] = $matches[2];
+    require __DIR__.'/api/review/fetch.php';
     exit;
 }
 
@@ -227,15 +245,19 @@ if (preg_match('/\/api\/review\/detail\/(\d+)$/', $uri, $matches)){
     exit;
 }
 
-if (preg_match('/\/api\/review\/product\/(\d+)$/', $uri, $matches)){
+if (preg_match('/\/api\/review\/product\/(\d+)\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
     $_GET['product_id'] = $matches[1];
-    require __DIR__.'/api/review/getAllByProductId.php';
+    $_GET['offset'] = $matches[2];
+    $_GET['limit'] = $matches[3];
+    require __DIR__.'/api/review/fetchByProductId.php';
     exit;
 }
 
-if (preg_match('/\/api\/review\/user\/(\d+)$/', $uri, $matches)){
+if (preg_match('/\/api\/review\/user\/(\d+)\/fetch\/(\d+)\/(\d+)$/', $uri, $matches)){
     $_GET['user_id'] = $matches[1];
-    require __DIR__.'/api/review/getAllByUserId.php';
+    $_GET['offset'] = $matches[2];
+    $_GET['limit'] = $matches[3];
+    require __DIR__.'/api/review/fetchByUserId.php';
     exit;
 }
 
@@ -250,8 +272,14 @@ if (preg_match('/\/api\/review\/update\/(\d+)$/', $uri, $matches)){
     exit;
 }
 
+//////////////////////////////////////////////////////////////////////
+
+// if (preg_match('/\/database\/database.php$/', $uri)){
+//     require __DIR__.'/database/database.php';
+//     exit;
+// }
 
 // echo $uri;
 
-setStatusCodeAndEchoJson(404, 'Endpoint not found', null);
+Util::setStatusCodeAndEchoJson(404, 'Endpoint not found', null);
 ?>

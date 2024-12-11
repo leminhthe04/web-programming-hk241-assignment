@@ -5,13 +5,19 @@ require_once __DIR__ . '/../../lib/utils.php';
 
 header('Content-Type: application/json');
 
-$id = isset($_GET['id']) ? intval($_GET['id']) : null;
-if (!$id) {
-    Util::setStatusCodeAndEchoJson(400, 'User ID is required', null);
+$offset = $_GET['offset'];
+if ($offset == null) {
+    Util::setStatusCodeAndEchoJson(400, 'Offset is required', null);
+    exit;
+}
+
+$limit = $_GET['limit'];
+if ($limit == null) {
+    Util::setStatusCodeAndEchoJson(400, 'Limit is required', null);
     exit;
 }
 
 $userController = new UserController();
-$respone = $userController->deleteUser($id);
+$respone = $userController->fetch($offset, $limit);
 Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 ?>

@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS prismora_tmp;
-CREATE DATABASE prismora_tmp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+DROP DATABASE IF EXISTS prismora;
+CREATE DATABASE prismora CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE prismora_tmp;
+USE prismora;
 
 
 
@@ -25,8 +25,8 @@ CREATE TABLE categories (
 
 CREATE TABLE products (
     id                      INT                         AUTO_INCREMENT                  PRIMARY KEY,
-    name                    VARCHAR(50)                 UNIQUE                          NOT NULL,
-    price                   DECIMAL(10, 2)                                              NOT NULL,
+    name                    VARCHAR(255)                 UNIQUE                         NOT NULL,
+    price                   INT                                             NOT NULL,
     quantity                INT                                                         NOT NULL,
     description             TEXT,
     category_id             INT,
@@ -47,30 +47,37 @@ CREATE TABLE product_images (
     url                     VARCHAR(255)                                                NOT NULL,
 
     CONSTRAINT FK_product_images__products
-    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
 
     UNIQUE(product_id, url)
 );
 
 
+-- SELECT * FROM products;
+
+-- DELETE FROM products WHERE id > 25;
+
+-- SELECT * FROM product_images;
+
+
 CREATE TABLE orders (
     id                      INT                         AUTO_INCREMENT                  PRIMARY KEY,
     customer_id             INT                                                         NOT NULL,
-    total_price             DECIMAL(10, 2)                                              NOT NULL,
+    total_price             INT                         DEFAULT 0                       NOT NULL,
     creation_date           TIMESTAMP                   DEFAULT CURRENT_TIMESTAMP       NOT NULL,
     status                  ENUM('pending', 'shipping', 'completed') 
                                                         DEFAULT 'pending'               NOT NULL,
-
     CONSTRAINT FK_orders__users
     FOREIGN KEY (customer_id) REFERENCES users(id)
 );
+
 
 CREATE TABLE product_in_orders (
     id                      INT                         AUTO_INCREMENT                  PRIMARY KEY,
     order_id                INT                                                         NOT NULL,
     product_id              INT                                                         NOT NULL,
     quantity                INT                                                         NOT NULL,
-    subtotal_price          DECIMAL(10, 2)                                              NOT NULL,
+    subtotal_price          INT                         DEFAULT 0                       NOT NULL,
 
     CONSTRAINT FK_product_in_orders__orders
     FOREIGN KEY (order_id) REFERENCES orders(id),
@@ -87,5 +94,11 @@ CREATE TABLE reviews (
     comment                 TEXT,
     time                    TIMESTAMP                   DEFAULT CURRENT_TIMESTAMP       NOT NULL,
 
-    CHECK (rating >= 1 AND rating <= 5)
+    CHECK (rating >= 1 AND rating <= 5),
+
+    CONSTRAINT FK_reviews__product_in_orders
+    FOREIGN KEY (product_id) REFERENCES product_in_orders(product_id),
+
+    CONSTRAINT FK_reviews__orders
+    FOREIGN KEY (customer_id) REFERENCES orders(customer_id)
 );

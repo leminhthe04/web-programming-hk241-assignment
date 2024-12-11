@@ -37,32 +37,29 @@ class UserController {
         return ["message" => "Valid"];
     }
 
-    public function getAll() {
+    public function fetch($offset, $limit) {
         $user = new User();
-        $res = $user->getAll(); // a fetch array or null
-        if ($res){
-            return getResponseArray(200, "Found users", $res);
-        }
-        
-        return getResponseArray(200, "There is no user in system now", []);
+        $res = $user->fetch($offset, $limit); // a fetch array or null
+        if (isset($res['code'])) return $res;
+
+        return empty($res) ?
+            Util::getResponseArray(200, "There is no user in system now", [])
+        :   Util::getResponseArray(200, "Found users", $res);
     }
 
     public function getById($id) {
         $user = new User();
         $res = $user->getById($id);
+        if (isset($res['code'])) return $res;
 
-        if ($res) {
-            return getResponseArray(200, "User found", $res);
-        }
-        return getResponseArray(404, "User not found", null);
+        return Util::getResponseArray(200, "User found", $res);
     }
 
     public function insertUser($name, $sex, $password, $email, $phone, $role, $avatar, $address) {
-        
         // check some field are valid in private functions, if not return error message for the first invalid field
         $validMessage = $this->fieldAreValid($name, $sex, $password, $email, $phone, $role)['message'];
         if ($validMessage !== "Valid") {
-            return getResponseArray(400, $validMessage, null);
+            return Util::getResponseArray(400, $validMessage, null);
         }
         
         // hash password:
@@ -76,48 +73,40 @@ class UserController {
         $user = new User();
         $res = $user->getByEmail($email);
 
-        if (!$res) {
-            return getResponseArray(401, "Email not exist", null);
-        }
-    
+        if (isset($res['code'])) return $res;
+
         // because res is 2D array and phone is unique, so res[0] is the only record
         if (password_verify($password, $res[0]['password'])) {
-            return getResponseArray(200, "Login successfully", $res);
+            return Util::getResponseArray(200, "Login successfully", $res);
         }
-
-        return getResponseArray(401, "Password is incorrect", null);
+        return Util::getResponseArray(401, "Password is incorrect", null);
     }
 
     public function authenticateUserByPhone($phone, $password) {
         $user = new User();
         $res = $user->getByPhone($phone);
 
-        if (!$res) {
-            return getResponseArray(401, "Phone not exist", null);
-        }
+        if (isset($res['code'])) return $res;
     
         // because res is 2D array and phone is unique, so res[0] is the only record
-        if (password_verify($password, $res[0]['password'])) {
-            return getResponseArray(200, "Login successfully", $res);
-        }
-
-        return getResponseArray(401, "Password is incorrect", null);
+        return password_verify($password, $res[0]['password']) ?
+            Util::getResponseArray(200, "Login successfully", $res)
+        :   Util::getResponseArray(401, "Password is incorrect", null);
     }
 
 
     public function changeUserPassword($id, $currentPassword, $newPassword) {
         $user = new User();
         $res = $user->getById($id);
-        if (!$res) {
-            return getResponseArray(404, "User not found", null);
-        }
+
+        if (isset($res['code'])) return $res;
 
         if (!password_verify($currentPassword, $res[0]['password'])) {
-            return getResponseArray(401, "Current password is incorrect", null);
+            return Util::getResponseArray(401, "Current password is incorrect", null);
         }
 
         if (!$this->passwordIsValidFormat($newPassword)) {
-            return getResponseArray(400, "New password must be between 8 and 30 characters", null);
+            return Util::getResponseArray(400, "New password must be between 8 and 30 characters", null);
         }
 
         $newPassword = password_hash($newPassword, PASSWORD_ARGON2ID);
@@ -126,7 +115,7 @@ class UserController {
 
     public function updateUserName($id, $name) {
         if (!$this->nameIsValidFormat($name)) {
-            return getResponseArray(400, "Name must be between 5 and 50 characters", null);
+            return Util::getResponseArray(400, "Name must be between 5 and 50 characters", null);
         }
         $user = new User();
         return $user->updateName($id, $name);
@@ -134,7 +123,7 @@ class UserController {
 
     public function updateUserEmail($id, $email) {
         if (!$this->emailIsValidFormat($email)) {
-            return getResponseArray(400, "Email is invalid", null);
+            return Util::getResponseArray(400, "Email is invalid", null);
         }
         $user = new User();
         return $user->updateEmail($id, $email);
@@ -142,7 +131,7 @@ class UserController {
 
     public function updateUserPhone($id, $phone) {
         if (!$this->phoneNumberIsValidFormat($phone)) {
-            return getResponseArray(400, "Phone is invalid", null);
+            return Util::getResponseArray(400, "Phone is invalid", null);
         }
         $user = new User();
         return $user->updatePhone($id, $phone);
@@ -150,7 +139,7 @@ class UserController {
 
     public function updateUserSex($id, $sex) {
         if (!$this->sexIsValidValue($sex)) {
-            return getResponseArray(400, "Sex must be 'M' or 'F'", null);
+            return Util::getResponseArray(400, "Sex must be 'M' or 'F'", null);
         }
         $user = new User();
         return $user->updateSex($id, $sex);
@@ -158,7 +147,7 @@ class UserController {
 
     public function updateUserRole($id, $role) {
         if (!$this->roleIsValidValue($role)) {
-            return getResponseArray(400, "Role is invalid", null);
+            return Util::getResponseArray(400, "Role is invalid", null);
         }
         $user = new User();
         return $user->updateRole($id, $role);

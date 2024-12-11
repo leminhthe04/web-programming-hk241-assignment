@@ -10,32 +10,36 @@ $jsonData = file_get_contents('php://input');
 $data = json_decode($jsonData, true);
 
 if (!$data) {
-    setStatusCodeAndEchoJson(400, 'Invalid JSON', null);
+    Util::setStatusCodeAndEchoJson(400, 'Invalid JSON', null);
     exit;
 }
 
 $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : null;
 if (!$product_id) {
-    setStatusCodeAndEchoJson(400, 'Product ID is requireddddd', null);
+    Util::setStatusCodeAndEchoJson(400, 'Product ID is requireddddd', null);
     exit;
 }
+$product_id = intval(htmlspecialchars($product_id));
 
 
 $user_id = $data['user_id'] ?? null;
 if (!$user_id) {
-    setStatusCodeAndEchoJson(400, 'User ID is required', null);
+    Util::setStatusCodeAndEchoJson(400, 'User ID is required', null);
     exit;
 }
+$user_id = intval(htmlspecialchars($user_id));
 
 $rating = $data['rating'] ?? null;
 if ($rating === null) {
-    setStatusCodeAndEchoJson(400, 'Rating is required', null);
+    Util::setStatusCodeAndEchoJson(400, 'Rating is required', null);
     exit;
 }
+$rating = intval(htmlspecialchars($rating));
 
 $comment = $data['comment'] ?? null;
+$comment = htmlspecialchars($comment);
 
 $reviewController = new ReviewController();
 $response = $reviewController->insertReview($user_id, $product_id, $rating, $comment);
-setStatusCodeAndEchoJson($response['code'], $response['message'], $response['data']);
+Util::setStatusCodeAndEchoJson($response['code'], $response['message'], $response['data']);
 ?>
