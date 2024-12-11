@@ -272,6 +272,12 @@ if (preg_match('/\/api\/review\/update\/(\d+)$/', $uri, $matches)){
     exit;
 }
 
+//////////////////////////////////////////////////////////////////////
+
+// if (preg_match('/\/database\/database.php$/', $uri)){
+//     require __DIR__.'/database/database.php';
+//     exit;
+// }
 
 // echo $uri;
 

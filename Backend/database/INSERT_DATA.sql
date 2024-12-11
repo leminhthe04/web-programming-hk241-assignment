@@ -343,7 +343,7 @@ INSERT INTO users (id, name, sex, avt_url, address, email, password, phone, role
 (10, 'Nguyễn Văn Nguyễn', 'M', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPc2cV5ODgkjEDqRmUJrnA-r85XCQ1hif8rQ&s',
  '85 Hai Bà Trưng, Phường 6, Quận 3, TP.HCM', 'nguyenadmin@prismora.com', 'aksjdfioa93i293uksnkdvjiou192u4i2r', '0948274622', 'admin');
 
-SELECT * FROM users;
+-- SELECT * FROM users;
 
 DELETE FROM orders;
 INSERT INTO orders (id, customer_id) VALUES

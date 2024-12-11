@@ -46,7 +46,7 @@ END;
 
 -- CALL insertCategory('Seafood');
 
-CALL findAll('categories', 0, 10);
+-- CALL findAll('categories', 0, 10);
 
 -- CALL updateCategoryName(1, 'Mangoes');
 

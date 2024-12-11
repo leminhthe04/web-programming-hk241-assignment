@@ -53,11 +53,11 @@ CREATE TABLE product_images (
 );
 
 
-SELECT * FROM products;
+-- SELECT * FROM products;
 
-DELETE FROM products WHERE id > 25;
+-- DELETE FROM products WHERE id > 25;
 
-SELECT * FROM product_images;
+-- SELECT * FROM product_images;
 
 
 CREATE TABLE orders (
