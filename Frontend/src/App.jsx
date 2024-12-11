@@ -6,10 +6,14 @@ import NewProduct from "./pages/NewProduct";
 import ProductUpdate from "./pages/ProductUpdate";
 import Homepage from "./pages/Homepage";
 import TransactionHist from "./pages/TransactionHist";
-import Test from "./pages/Test";
-import NewPromotion from "./pages/NewPromotion";
+import Shopping from "./pages/Shopping";
+import Account from "./pages/Account";
+import ProductDetail from "./pages/ProductDetail";
+import ProductByCat from "./pages/ProductByCat";
+import About from "./pages/About";
+import News from "./pages/News";
+
 import UsersManagement from "./pages/UsersManagement";
-import AllPromotion from "./pages/AllPromotion";
 import Checkout from "./pages/Checkout";
 import Dashboard from "./pages/Dashboard";
 
@@ -23,22 +27,28 @@ function App() {
     >
       <AuthProvider >
         <Routes>
-          <Route path="/test" element={<Test />} />
           <Route path="/" element={<Login />} />
 
           
           <Route path="/customer/pay" element={<Checkout />} />
           <Route path="/customer/homepage" element={<Homepage />} />
+          <Route path="/customer/shopping" element={<Shopping />} />
+          <Route path="/customer/about" element={<About />} />
+          <Route path="/customer/news" element={<News />} />
+          <Route path="/customer/shopping" element={<Shopping />} />
+          <Route path="/customer/category/:catName" element={<ProductByCat />} />
+          <Route path="/customer/productDetail/:prodID" element={<ProductDetail />} />
+          <Route path="/customer/pay/:prodID" element={<Checkout />} />
+          <Route path="/customer/account/:userID" element={<Account />} />
+          <Route path="/customer/history/:userID" element={<TransactionHist />} />
  
           <Route path="/admin/history/:id" element={<TransactionHist />} />
           <Route path="/admin/product-manage" element={<ProductsManagement />} />
           <Route path="/admin/product-new" element={<NewProduct />} />
-          <Route path="/admin//product-update" element={<ProductUpdate />} />
           <Route path="/admin/edit-product/:id" element={<ProductUpdate />} />
-          <Route path="/admin/new-promotion" element={<NewPromotion />} />
+  
           <Route path="/admin/user-management" element={<UsersManagement />} />
-          <Route path="/admin/all-promo" element={<AllPromotion />} />
-          <Route path="/admin/dashboard" element={<Dashboard />} />
+
           
         </Routes>
       </AuthProvider>
