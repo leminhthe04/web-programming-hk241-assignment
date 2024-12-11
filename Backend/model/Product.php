@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../database/database.php';
 require_once __DIR__ . '/../lib/utils.php';
+require_once __DIR__ . '/ProductImage.php';
 
 class Product {
 
@@ -20,6 +21,14 @@ class Product {
         $stmt->execute();
         $table = $stmt->get_result();
         $arr = Util::fetch($table);
+
+        // Get image for each product
+        $productImage = new ProductImage();
+        foreach ($arr as $key => $product) {
+            $product['image'] = $productImage->getAllByProductId($product['id']);
+            $arr[$key] = $product;
+        }
+        
         $stmt->close();
         return [ "page_count" => $page_count, "data" => $arr ];        
     }
@@ -82,6 +91,15 @@ class Product {
         $table = $stmt->get_result();
         $arr = Util::fetch($table);
         $stmt->close();
+
+        // Get image for each product
+        $productImage = new ProductImage();
+        foreach ($arr as $key => $product) {
+            $product['image'] = $productImage->getAllByProductId($product['id']);
+            $arr[$key] = $product;
+        }
+
+
         return [ "page_count" => $page_count, "data" => $arr ];
     }
 
