@@ -51,27 +51,52 @@ END;
 
 
 DROP PROCEDURE IF EXISTS findAllReviewByProductId;
-CREATE PROCEDURE findAllReviewByProductId (IN _product_id INT, IN _offset INT, IN _limit INT) 
-BEGIN
+CREATE PROCEDURE findAllReviewByProductId (
+    IN _product_id INT, 
+    IN _offset INT, 
+    IN _limit INT
+) BEGIN
 
     CALL checkExist('products', 'id', _product_id, @isExistProduct);
     IF NOT @isExistProduct THEN
         SIGNAL SQLSTATE '45404'
             SET MESSAGE_TEXT = 'Product not found';
     END IF;
-    CALL findAllByField('reviews', 'product_id', _product_id, _offset, _limit); 
+    -- CALL findAllByField('reviews', 'product_id', _product_id, _offset, _limit); 
+    SELECT R.id AS review_id, R.product_id, U.id AS customer_id, U.name AS customer_name, R.rating, R.comment, R.time
+    FROM reviews R, users U
+    WHERE R.customer_id = U.id AND R.product_id = _product_id;
 END;
 
 DROP PROCEDURE IF EXISTS findAllReviewByUserId;
-CREATE PROCEDURE findAllReviewByUserId (IN _user_id INT, IN _offset INT, IN _limit INT) 
-BEGIN 
+CREATE PROCEDURE findAllReviewByUserId (
+    IN _user_id INT, 
+    IN _offset INT, 
+    IN _limit INT
+) BEGIN 
     CALL checkExist('users', 'id', _user_id, @isExistUser);
     IF NOT @isExistUser THEN
         SIGNAL SQLSTATE '45404'
             SET MESSAGE_TEXT = 'User not found';
     END IF;
-    CALL findAllByField('reviews', 'customer_id', _user_id, _offset, _limit); 
+    -- CALL findAllByField('reviews', 'customer_id', _user_id, _offset, _limit); 
+    SELECT R.id AS review_id, R.product_id, U.id AS customer_id, U.name AS customer_name, R.rating, R.comment, R.time
+    FROM reviews R, users U
+    WHERE R.customer_id = U.id AND R.customer_id = _user_id;
 END;
+
+-- INSERT INTO reviews(customer_id, product_id, rating, comment) VALUES
+--     (1, 1, 3, 'Điện thoại Iphone 17 này thật tuyệt!');
+-- INSERT INTO reviews(customer_id, product_id, rating, comment) VALUES
+--     (1, 1, 4, 'Sản phẩm này rất tốt');
+-- INSERT INTO reviews(customer_id, product_id, rating, comment) VALUES
+--     (2, 1, 4, 'Thật tuyệt!');
+
+
+-- CALL findAllReviewByProductId(1, 0, 10);
+-- CALL findAllReviewByUserId(1, 0, 10);
+
+SELECT * FROM reviews;
 
 DROP PROCEDURE IF EXISTS updateReviewRating;
 CREATE PROCEDURE updateReviewRating (IN _id INT, IN _rating INT)
