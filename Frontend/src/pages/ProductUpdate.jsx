@@ -1,125 +1,67 @@
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { Cloudinary } from '@cloudinary/url-gen';
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+const catList = [
+    {
+        id: 1,
+        name: "Smartphone"
+    },
+    {
+        id:2 ,
+        name: "Laptop"
+    },
+    {
+        id:3,
+        name: "tablet"
+    },
+    {
+        id:4,
+        name: "watch"
+    },
+    {
+        id:5,
+        name: "other"
+    }
 
+]
 export default function ProductUpdate() {
-    const { id } = useParams();
-    // alert(id);
+    const { prodID } = useParams();
     const navigate = useNavigate();
     // IMAGE
     const [fileImg, setFileImg] = useState([
         null, null, null, null, null, null
     ])
-    const [img1, setImg1] = useState("");
-    const [img2, setImg2] = useState("");
-    const [img3, setImg3] = useState("");
-    const [img4, setImg4] = useState("");
-    const [img5, setImg5] = useState("");
-    const [img6, setImg6] = useState("");
+    const [file1, setFile1] = useState(null);
+    const [file2, setFile2] = useState(null);
+    const [file3, setFile3] = useState(null);
+    const [urls, setUrls] = useState([]);
+    const [img1, setImg1] = useState(null);
+    const [img2, setImg2] = useState(null);
+    const [img3, setImg3] = useState(null);
+
+    const cld = new Cloudinary({ cloud: { cloudName: 'da4spnmln' } });
 
     // PRODUCT VALUE
     const [productName, setProductName] = useState("");
     const [selectCat, setSelectCat] = useState(false);
     const [brand, setBrand] = useState("");
-    const [description, setDiscription] = useState(false);
+    const [description, setDescription] = useState(null);
     const [price, setPrice] = useState(null);
     const [quantity, setQuantity] = useState(null);
+    const [status, setStatus] = useState(null);
 
     // FUNCTION
-    // useEffect(() => {
-    //     axios.get(`http://localhost:8000/api/product/get-detail/${id}`)
-    //         .then((reponse) => {
-    //             const prodDetail = reponse.data.data;
-    //             // alert("sfasfdsa");
-    //             console.log(prodDetail);
-    //             setProductName(prodDetail.pname)
-    //             setBrand(prodDetail.brand)
-    //             setPrice(prodDetail.price)
-    //             setDiscription(prodDetail.description);
-    //             setQuantity(prodDetail.quantity);
-    //         })
-    //         .then(() => {
-    //             axios.get(`http://localhost:8000/api/product/GetImageByProduct/${id}`)
-    //                 .then((reponse) => {
-    //                     const prodArray = reponse.data.data;
-
-    //                     prodArray.forEach((prod, index) => {
-    //                         if (index == 1) {
-    //                             setImg1(prod.image_url);
-    //                         } else if (index == 2) {
-    //                             setImg2(prod.image_url);
-    //                         } else if (index == 3) {
-    //                             setImg3(prod.image_url);
-    //                         } else if (index == 4) {
-    //                             setImg4(prod.image_url);
-    //                         } else if (index == 5) {
-    //                             setImg5(prod.image_url);
-    //                         } else if (index == 6) {
-    //                             setImg6(prod.image_url);
-    //                         }
-    //                     })
-    //                     // setImg1(prodDetail.image[0]);
-    //                     // setImg2(prodDetail.image[1]);
-    //                     // setImg3(prodDetail.image[2]);
-    //                     // setImg4(prodDetail.image[3]);
-    //                     // setImg5(prodDetail.image[4]);
-    //                     // setImg6(prodDetail.image[5]);
-    //                 })
-    //         })
-
-
-    // }, [])
-    useEffect(() => {
-        // Sử dụng Promise.all để gọi nhiều request đồng thời
-        Promise.all([
-            axios.get(`http://localhost:8000/api/product/get-detail/${id}`),
-            axios.get(`http://localhost:8000/api/product/GetImageByProduct/${id}`)
-        ])
-            .then(([prodDetailResponse, prodImagesResponse]) => {
-                const prodDetail = prodDetailResponse.data.data;
-                const prodArray = prodImagesResponse.data.data;
-
-                // Set thông tin sản phẩm
-                setProductName(prodDetail.pname);
-                setBrand(prodDetail.brand);
-                setPrice(prodDetail.price);
-                setDiscription(prodDetail.description);
-                setQuantity(prodDetail.quantity);
-
-                // Set hình ảnh
-                prodArray.forEach((prod, index) => {
-                    if (index === 1) setImg1(prod.image_url);
-                    else if (index === 2) setImg2(prod.image_url);
-                    else if (index === 3) setImg3(prod.image_url);
-                    else if (index === 4) setImg4(prod.image_url);
-                    else if (index === 5) setImg5(prod.image_url);
-                    else if (index === 6) setImg6(prod.image_url);
-                });
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
-    }, []);
-
-
-
-    function handleChangeImg1() {
-        document.getElementById('img1').click();
-    }
-    function handleChangeImg(index) {
-        document.getElementById(`img${index}`).click();
-    }
-
     function onChangeImg(e, index) {
         const file = e.target.files[0];
+
         let base64String;
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 base64String = reader.result;
-                // setImg1(base64String);
                 setFileImg((prev) => {
                     if (Array.isArray(prev)) {
                         const updatedFileImg = [...prev];
@@ -130,25 +72,24 @@ export default function ProductUpdate() {
                 });
                 if (index == 1) {
                     setImg1(base64String);
+                    setFile1(file);
+                    uploadFile(file);
                 }
                 else if (index == 2) {
                     setImg2(base64String);
+                    setFile2(file);
+                    uploadFile(file);
                 }
                 else if (index == 3) {
                     setImg3(base64String);
+                    setFile3(file);
+                    uploadFile(file);
 
-                } else if (index == 4) {
-                    setImg4(base64String);
-                } else if (index == 5) {
-                    setImg5(base64String);
-                } else if (index == 6) {
-                    setImg6(base64String);
                 }
                 localStorage.setItem(`img${index}`, base64String);
             };
             setFileImg((prevFile) => ({ ...prevFile, i1: file }));
             reader.readAsDataURL(file);
-
         }
     }
 
@@ -177,40 +118,113 @@ export default function ProductUpdate() {
         else setDiscription(false);
     }
 
-    function hanldeUpdateProduct() {
-        const updateProd = {
-            "brand": brand,
+    function handleCreateProduct() {
+        const newProduct = {
+            "name": productName,
             "price": price,
+            "quantity": Number(quantity),
             "description": description,
-            "quantity": quantity,
-            "cate_id": selectCat
+            "category_id": Number(selectCat),
+            "status": status,
+            "image_urls": urls
         }
 
-        console.log(updateProd);
+        console.log("Check: ", newProduct);
 
-
-        axios.put(`http://localhost:8000/api/product/UpdateProduct/${id}`, updateProd, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            })
+        axios.post(`http://localhost/Assignment/Backend/api/product/create`, newProduct)
             .then((response) => {
-                // console.log("Check tên sp: ", productName);
-                // console.log(response);
-                alert("Cập nhật sản phẩm thành công!");
-                navigate("/admin/product-manage")
+                if (response.status === 201) {
+                    alert("Tạo sản phẩm thành công");
+                    navigate("/admin/product-manage");
+                }
             })
             .catch((error) => {
-                console.log(error);
-                navigate("/admin/product-manage")
-                // if (error.response) {
-                //     alert(error.response.data.msg);
-                // } else {
-                //     console.error('Error:', error.message);
-                // }
+                if (error.response.data) {
+                    alert(error.response.data.msg);
+                } else {
+                    console.error('Error:', error.message);
+                }
             })
+    }
+
+    async function uploadFile() {
+        alert("I'm here");
+        const url = 'https://api.cloudinary.com/v1_1/da4spnmln/image/upload';
+        const formData = new FormData();
+        if (file1) {
+            formData.append('file', file1);
+            formData.append('upload_preset', 'LTWPrismora');
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                });
+                const data = await response.json();
+                setUrls((prev) => [...prev, data.secure_url]);
+                console.log(data);
+            } catch (error) {
+                console.error('Error uploading image:', error);
+            }
+        }
+
+        if (file2) {
+            formData.append('file', file2);
+            formData.append('upload_preset', 'LTWPrismora');
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                });
+                const data = await response.json();
+                setUrls((prev) => [...prev, data.secure_url]);
+                console.log(data);
+            } catch (error) {
+                console.error('Error uploading image:', error);
+            }
+        }
+
+        if (file3) {
+            formData.append('file', file3);
+            formData.append('upload_preset', 'LTWPrismora');
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                });
+                const data = await response.json();
+                setUrls((prev) => [...prev, data.secure_url]);
+                console.log(data);
+            } catch (error) {
+                console.error('Error uploading image:', error);
+            }
+        }
+
+
 
     }
+
+    useEffect(() => {
+        axios.get(`http://localhost/Assignment/Backend/api/product/detail/${prodID}`)
+            .then((response) => {
+                const resultData = response.data.data[0];
+                console.log(resultData);
+                setProductName(resultData.name);
+                setSelectCat(resultData.category_id);
+                setPrice(resultData.price);
+                setStatus(resultData.status);
+                setDescription(resultData.description);
+                setQuantity(resultData.quantity);
+            })
+            .catch((error) => {
+                if (error.response.data) {
+                    alert(error.response.data.msg);
+                } else {
+                    console.error('Error:', error.message);
+                }
+            })
+
+    })
+
 
     return (
         <>
@@ -222,45 +236,47 @@ export default function ProductUpdate() {
 
                 <div className="grid grid-cols-2">
                     <div className="mx-auto w-4/5">
-                        <h2 className="font-medium text-3xl" >Chỉnh sửa sản phẩm</h2>
+                        <h2 className="font-medium text-3xl" >Thêm sản phẩm mới</h2>
                         <div className="my-6">
                             <label>Tên sản phẩm <span className="text-red-600">*</span></label>
                             <input type="text" name="pname" className={`pl-4 bg-gray-100 block w-4/5 h-8 my-2 rounded-md `}
-                                disabled
+                                onChange={(e) => { setProductName(e.target.value) }}
                                 value={productName}
                             />
                         </div>
 
 
                         <div className="my-6">
-                            <label>Phân loại<span className="text-red-600">*</span></label>
-                            <select name="category" 
-                                    className={`block w-4/5 h-8 my-2 rounded-md hover:bg-blue-100 ${selectCat ? 'bg-blue-100' : 'bg-gray-100'} `} 
-                                    onChange={(e) => handleSelectCat(e)}
-                                    value={selectCat}    
+                            <label>Danh mục<span className="text-red-600">*</span></label>
+                            <select name="category" className={`px-2 block w-4/5 h-8 my-2 rounded-md hover:bg-blue-100 ${selectCat ? 'bg-blue-100' : 'bg-gray-100'} `}
+                                onChange={(e) => setCategory(e.target.value)}
+                                value={selectCat}
                             >
-                                <option value="" disabled>Chọn loại sản phẩm</option>
-                                <option value="c01" onClick={(e) => { setSelectCat("c01") }}>Điện thoại</option>
-                                <option value="c02" onClick={(e) => { setSelectCat("c02") }}>Laptop</option>
-                                <option value="c03" onClick={(e) => { setSelectCat("c03") }}>Máy tính bảng</option>
-                                <option value="c04" onClick={(e) => { setSelectCat("c04") }}>Đồng hồ</option>
-                                <option value="c05" onClick={(e) => { setSelectCat("c05") }}>Phụ kiện</option>
+                                <option value="">Chọn loại sản phẩm</option>
+                                {catList.length > 0 && catList.map((cat) => (
+                                    <option value={cat.id} key={cat.id} >{cat.name}</option>
+                                ))}
                             </select>
                         </div>
 
                         <div className="my-6">
-                            <label>Hãng sản xuất<span className="text-red-600">*</span></label>
-                            <input type="text" name="brand" className="pl-4 bg-gray-100 block w-4/5 h-8 my-2 rounded-md hover:bg-blue-100"
-                                onChange={(e) => setBrand(e.target.value)}
-                                value={brand}
-                            />
+                            <label>Trạng thái<span className="text-red-600">*</span></label>
+                            <select name="category" className={`block w-4/5 h-8 my-2 rounded-md hover:bg-blue-100 ${selectCat ? 'bg-blue-100' : 'bg-gray-100'} `} 
+                              
+                            onChange={(e) => handleSelectCat(e)}>
+                                <option value="" disabled>Chọn loại trạng thái</option>
+                                <option value="smartphone" onClick={(e) => { setStatus("Available") }}>Available</option>
+                                <option value="laptop" onClick={(e) => { setStatus("Sold Out") }}>Sold Out</option>
+                                <option value="tablet" onClick={(e) => { setStatus("Stop Selling") }}>Stop Selling</option>
+                            </select>
                         </div>
+
+
 
                         <div className="my-6">
                             <label>Giá thành<span className="text-red-600">*</span></label>
                             <input type="number" name="price" className="pl-4 bg-gray-100 block w-4/5 h-8 my-2 rounded-md"
                                 onChange={(e) => setPrice(e.target.value)}
-                                value={price}
                             />
                         </div>
 
@@ -268,21 +284,18 @@ export default function ProductUpdate() {
                             <label>Số lượng trong kho<span className="text-red-600">*</span></label>
                             <input type="number" name="quantity" className="pl-4 bg-gray-100 block w-4/5 h-8 my-2 rounded-md"
                                 onChange={(e) => setQuantity(e.target.value)}
-                                value={quantity}
                             />
                         </div>
 
                         <div className="my-6">
                             <label>Mô tả sản phẩm<span className="text-red-600">*</span></label>
                             <textarea name="price" className={`p-4 block w-4/5 h-36 my-2 rounded-md hover:bg-blue-100 ${description ? "bg-blue-100" : "bg-gray-100"}`}
-                                onChange={(e) => handleChangeDescription(e)} 
-                                value={description}
-                            />
+                                onChange={(e) => handleChangeDescription(e)} />
                         </div>
                     </div>
 
                     <div>
-                        <h2 className="font-medium text-3xl pb-4" >Chỉnh sửa hình ảnh</h2>
+                        <h2 className="font-medium text-3xl pb-4" >Thêm hình ảnh</h2>
 
                         <div class="grid grid-cols-3 gap-2 mr-8">
                             <div>
@@ -321,48 +334,10 @@ export default function ProductUpdate() {
                                 </div>
                                 <input id="img3" type="file" accept="image/*" className="hidden" onChange={(e) => { onChangeImg(e, 3) }} />
                             </div>
-                            <div>
-                                <div className="relative block m-auto h-auto rounded-lg justify-center">
-                                    <img src={img4 ? img4 : "../../public/img_upload.svg"} alt="" name="img4" onClick={() => { document.getElementById('img4').click() }} className="w-72 h-80 block object-contain rounded-lg" />
-                                    <button
-                                        onClick={() => { handleDeleteImage(4) }}
-                                        className={`${img4 ? "" : "hidden"}  absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 items-center justify-center hover:bg-red-800 `}
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                                <input id="img4" type="file" accept="image/*" className="hidden" onChange={(e) => { onChangeImg(e, 4) }} />
-                            </div>
-
-                            <div>
-                                <div className="relative block m-auto h-auto rounded-lg justify-center">
-                                    <img src={img5 ? img5 : "../../public/img_upload.svg"} alt="" name="img5" onClick={() => { document.getElementById('img5').click() }} className="w-72 h-80 block object-contain rounded-lg" />
-                                    <button
-                                        onClick={() => { handleDeleteImage(5) }}
-                                        className={`${img5 ? "" : "hidden"}  absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 items-center justify-center hover:bg-red-800 `}
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                                <input id="img5" type="file" accept="image/*" className="hidden" onChange={(e) => { onChangeImg(e, 5) }} />
-                            </div>
-
-                            <div>
-                                <div className="relative block m-auto h-auto rounded-lg justify-center">
-                                    <img src={img6 ? img6 : "../../public/img_upload.svg"} alt="" name="img6" onClick={() => { document.getElementById('img6').click() }} className="w-72 h-80 block object-contain rounded-lg" />
-                                    <button
-                                        onClick={() => { handleDeleteImage(6) }}
-                                        className={`${img6 ? "" : "hidden"}  absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 items-center justify-center hover:bg-red-800 `}
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                                <input id="img6" type="file" accept="image/*" className="hidden" onChange={(e) => { onChangeImg(e, 6) }} />
-                            </div>
                         </div>
 
                         <div className="flex justify-end mr-20 mb-10">
-                            <div className="bg-red-500 text-white w-44 p-4 text-center rounded-md ml-8" onClick={hanldeUpdateProduct} >Cập nhật sản phẩm</div>
+                            <div className="bg-red-500 text-white w-44 p-4 text-center rounded-md ml-8" onClick={handleCreateProduct} >Tạo sản phẩm  mới</div>
                         </div>
 
                     </div>

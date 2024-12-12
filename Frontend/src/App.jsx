@@ -43,12 +43,13 @@ function App() {
           <Route path="/customer/account/:userID" element={<Account />} />
           <Route path="/customer/history/:userID" element={<TransactionHist />} />
  
-          <Route path="/admin/history/:id" element={<TransactionHist />} />
+          
           <Route path="/admin/product-manage" element={<ProductsManagement />} />
           <Route path="/admin/product-new" element={<NewProduct />} />
-          <Route path="/admin/edit-product/:id" element={<ProductUpdate />} />
+          <Route path="/admin/edit-product/:prodID" element={<ProductUpdate />} />
   
           <Route path="/admin/user-management" element={<UsersManagement />} />
+          <Route path="/admin/history/:userID" element={<TransactionHist />} />
 
           
         </Routes>

@@ -228,11 +228,11 @@ export default function ProductsManagement() {
                                         </td>
                                         <td>
                                             <div className="flex justify-center items-center">
-                                                <button onClick={() => handleUpdateProduct(prod.product_id)} className="bg-green-600 px-4 rounded-md font-bold text-white uppercase">
+                                                <button onClick={() => window.location.href= `/admin/edit-product/${prod.id}`} className="bg-green-600 px-4 rounded-md font-bold text-white uppercase">
                                                     Sửa
                                                 </button>
                                                 <div className="w-2"></div>
-                                                <div className="bg-red-600 px-4 rounded-md font-bold text-white uppercase " onClick={() => handleDeleteProduct(prod.product_id)} >
+                                                <div className="bg-red-600 px-4 rounded-md font-bold text-white uppercase " onClick={() => handleDeleteProduct(prod.id)} >
                                                     Xóa
                                                 </div>
                                             </div>
