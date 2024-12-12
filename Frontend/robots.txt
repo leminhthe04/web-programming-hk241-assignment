@@ -1,0 +1,16 @@
+# robots.txt for http://localhost:5173/
+
+User-agent: *
+Disallow: /admin/
+Disallow: /customer/pay/
+Disallow: /customer/account/
+Disallow: /customer/history/
+Disallow: /customer/productDetail/
+Disallow: /customer/category/
+
+# Allow the crawlers to access the shopping and about pages
+Allow: /customer/shopping
+Allow: /customer/about
+Allow: /customer/news
+
+Sitemap: http://localhost:5173/sitemap.xml
