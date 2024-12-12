@@ -28,21 +28,18 @@ if ($price === null) {
 }
 $price = intval(htmlspecialchars($price));
 
-$description = $data['description'] ?? null;
-$description = htmlspecialchars($description);
+$description = $data['description'] ? htmlspecialchars($data['description']) : null;
 
 $quantity = $data['quantity'] ?? null;
 if ($quantity === null) {
     Util::setStatusCodeAndEchoJson(400, 'Quantity is required', null);
     exit;
 }
-$quantity = intval(htmlspecialchars($quantity));
+$quantity = htmlspecialchars($quantity);
 
-$category_id = $data['category_id'] ?? null;
-$category_id = intval(htmlspecialchars($category_id));
+$category_id = $data['category_id'] ? htmlspecialchars($data['category_id']) : null;
 
-$status = $data['status'] ?? null;
-$status = intval(htmlspecialchars($status));
+$status = $data['status'] ? htmlspecialchars($data['status']) : null;
 
 
 $image_urls = $data['image_urls'] ?? null;

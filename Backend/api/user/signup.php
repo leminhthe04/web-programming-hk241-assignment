@@ -49,8 +49,7 @@ $phone = htmlspecialchars($phone);
 
 $role = $data['role'] ?? 'customer';
 $role = htmlspecialchars($role);
-$avatar = $data['avt_url'] ?? null;
-$avatar = htmlspecialchars($avatar);
+$avatar = $data['avt_url'] ? htmlspecialchars($data['avt_url']) : null;
 
 $address = $data['address'];
 if (!$address) {

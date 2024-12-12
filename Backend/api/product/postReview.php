@@ -29,15 +29,13 @@ if (!$user_id) {
 }
 $user_id = intval(htmlspecialchars($user_id));
 
-$rating = $data['rating'] ?? null;
+$rating = $data['rating'] ? htmlspecialchars($data['rating']) : null;
 if ($rating === null) {
     Util::setStatusCodeAndEchoJson(400, 'Rating is required', null);
     exit;
 }
-$rating = intval(htmlspecialchars($rating));
 
-$comment = $data['comment'] ?? null;
-$comment = htmlspecialchars($comment);
+$comment = $data['comment'] ? htmlspecialchars($data['comment']) : null;
 
 $reviewController = new ReviewController();
 $response = $reviewController->insertReview($user_id, $product_id, $rating, $comment);

@@ -14,7 +14,7 @@ if (!$data) {
     exit;
 }
 
-$id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$id = isset($_GET['id']) ? intval(htmlspecialchars($_GET['id'])) : null;
 if (!$id) {
     Util::setStatusCodeAndEchoJson(400, 'Review ID is required', null);
     exit;
