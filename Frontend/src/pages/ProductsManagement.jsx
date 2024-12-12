@@ -7,6 +7,7 @@ import ProductUpdate from "./ProductUpdate";
 import { useNavigate } from "react-router-dom";
 import { PuffLoader } from "react-spinners";
 import Modal from "react-modal";
+import { mode } from "@cloudinary/url-gen/actions/rotate";
 
 export default function ProductsManagement() {
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function ProductsManagement() {
     const [page, setPage] = useState(null);
     const [count, setCount] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [modeSearch, setModeSearch] = useState(false);    
 
     useEffect(() => {
         axios.get("http://localhost/Assignment/Backend/api/product/fetch/0/10",)
@@ -23,6 +25,7 @@ export default function ProductsManagement() {
                 const responseData = response.data.data;
                 setProductList(responseData.data);
                 setPage(responseData.page_count);
+                setCurrentPage(0);
             })
             .catch((error) => {
                 if (error.response) {
@@ -34,9 +37,9 @@ export default function ProductsManagement() {
     }, [count])
 
 
-    function disableEditMode() {
-        setEditMode(false);
-    }
+    // function disableEditMode() {
+    //     setEditMode(false);
+    // }
 
     function handleUpdateProduct(prodID) {
         navigate(`/admin/edit-product/${prodID}`);
@@ -46,8 +49,12 @@ export default function ProductsManagement() {
         const index = Number(pageNum);
         const offset = index * 10;
         setLoading(true);
-
-        axios.get(`http://localhost/Assignment/Backend/api/product/fetch/${offset}/10`,)
+        
+        if(modeSearch) {
+            
+        }
+        else {
+            axios.get(`http://localhost/Assignment/Backend/api/product/fetch/${offset}/10`,)
             .then((response) => {
                 setCurrentPage(pageNum)
                 const newresponseData = response.data.data;
@@ -63,6 +70,8 @@ export default function ProductsManagement() {
             .finally(() => {
                 setLoading(false);
             })
+        }
+        
     }
 
     function handleSearch() {
@@ -90,23 +99,23 @@ export default function ProductsManagement() {
     }
 
     function handleDeleteProduct(prodID) {
-        // axios.delete(`http://localhost:8000/api/product/DeleteProduct/${prodID}`, null, {
-        //     headers: {
-        //         Authorization: `Bearer ${token}`, // Replace <your-auth-token> with the actual token
-        //     },
-        // })
-        //     .then((response) => {
-        //         alert(response.data.msg);
-        //         setCount((pre) => pre + 1);
-        //     })
-        //     .catch((error) => {
-        //         if (error.response) {
-        //             alert(error.response.data.msg);
-        //         } else {
-        //             console.error('Error:', error.message);
-        //         }
-        //     })
-
+        const userConfirmed = window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?");
+        if (userConfirmed) { 
+            axios.delete(`http://localhost/Assignment/Backend/api/product/delete/${prodID}`)
+            .then((response) => {
+                if(response.status === 200) {
+                    alert("Xóa sản phẩm thành công");
+                    setCount(count + 1);
+                }
+            })
+            .catch((error) => {
+                if (error.response.data) {
+                  alert(error.response.data.msg);
+                } else {
+                  console.error('Error:', error.message);
+                }
+              })
+        }   
     }
 
 

@@ -29,17 +29,13 @@ export default function Header({ page }) {
                     <div className={"w-1/6 text-2xl font-bold tex-white flex justify-start pl-20"}>EXCLUSIVE</div>
                     <div className="menu w-4/6 justify-center text-center flex flex-row">
                         <ul className="flex flex-row space-x-9 text-lg items-center">
-                            <li className={`${page === "product-manage" ? "border-b" : null} w-20`}>
+                            <li className={`${page === "product-manage" ? "border-b" : null} `}>
                                 <a href="/admin/product-manage">Quản lý sản phẩm</a>
                             </li>
                             
-                            <li className={`${page === "user-manage" ? "border-b" : null} w-24`}>
+                            <li className={`${page === "user-manage" ? "border-b" : null} `}>
                                 
                                 <a href="/admin/user-management">Quản lý người dùng</a>    
-                            </li>
-
-                            <li className={`${page === "promotion-manage" ? "border-b" : null} w-24`}>
-                                <a href="/admin/all-promo">Quản lý đơn hàng</a>
                             </li>
                         </ul>
                     </div>
