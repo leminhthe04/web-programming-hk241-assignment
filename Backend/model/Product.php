@@ -45,7 +45,7 @@ class Product {
             if($table) $table->free();
             $stmt->close();
 
-            Get image for this product
+            // Get image for this product
             $productImage = new ProductImage();
             $arr[0]['image'] = $productImage->getAllByProductId($id);
 

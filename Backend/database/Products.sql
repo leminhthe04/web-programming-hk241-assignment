@@ -97,6 +97,9 @@ CREATE PROCEDURE findByNameHasToken (IN _token VARCHAR(255))
 BEGIN CALL findByFieldHasToken('products', 'name', _token); END;
 
 
+CALL findbyNameHasToken('iphone');
+
+
 
 
 -- -- SELECT * FROM products;

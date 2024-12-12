@@ -5,7 +5,7 @@ USE prismora;
 DROP PROCEDURE IF EXISTS insertProductImage;
 CREATE PROCEDURE insertProductImage (
     IN _product_id INT,
-    IN _url VARCHAR(255)
+    IN _url TEXT
 ) BEGIN
     CALL checkExist('products', 'id', _product_id, @isExistProduct);
     IF NOT @isExistProduct THEN

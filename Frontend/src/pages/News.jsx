@@ -43,35 +43,36 @@ export default function News() {
     const news = [
         {
             id: 1,
-            title: "Cập nhật xu hướng công nghệ 2024",
-            summary: "Năm 2024 hứa hẹn sẽ có những thay đổi lớn trong ngành công nghệ với các xu hướng mới như AI, Blockchain và IoT.",
-            image: "https://elcom.com.vn/storage/uploads/images/Fnju1yIhX4xswktmP8boatuF3SYRU1ElmPs1hMAF.jpg",
+            title: "Đánh giá Asus ExpertBook P5: Laptop doanh nhân mạnh mẽ",
+            summary: "Asus ExpertBook P5 là dòng laptop doanh nhân được thiết kế để đáp ứng nhu cầu công việc, đi kèm hiệu năng mạnh mẽ và thiết kế gọn nhẹ.Trong bài viết này, chúng tôi sẽ đánh giá chi tiết chiếc laptop này, từ thiết kế, hiệu năng, màn hình cho đến thời lượng pin.",
+            image: "https://dlcdnwebimgs.asus.com/gain/382ede99-e7e7-4496-9fce-e83d6f957dc1/",
         },
         {
             id: 2,
-            title: "Kinh tế toàn cầu năm 2024: Triển vọng và thách thức",
-            summary: "Năm 2024, kinh tế toàn cầu đối mặt với nhiều thách thức, nhưng cũng mở ra cơ hội mới trong các lĩnh vực đầu tư và phát triển.",
-            image: "https://static.tapchimattran.vn/Uploaded/htnhung/2024_02_05/116vtqf_OHOR.jpg",
+            title: "MacBook Pro M1 2023: Hiệu suất vượt trội cho dân sáng tạo",
+            summary: "MacBook Pro M1 2023 là chiếc laptop được thiết kế để phục vụ các nhà sáng tạo nội dung, với chip M1 mạnh mẽ, màn hình Retina tuyệt đẹp và thời lượng pin bền bỉ. Hãy cùng tìm hiểu chi tiết về dòng sản phẩm này.",
+            image: "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:0/q:90/plain/https://cellphones.com.vn/media/wysiwyg/laptop/macbook/cate-macbook-pro-9.jpg",
         },
         {
             id: 3,
-            title: "Đánh giá ASUS ExpertBook P5: Làm việc mượt hơn với trợ lý AI, pin 14 tiếng, business laptop nhưng hiệu năng gaming?",
-            summary: "Không chỉ có ngoại hình nhỏ nhẹ, mềm mại và chuyên nghiệp, ASUS ExpertBook P5 sở hữu tất cả những tố chất, sức mạnh và tiềm năng cho tương lai để đảm đương mọi công việc một cách tròn vai, chu đáo miễn chê.",
-            image: "https://cdn-media.sforum.vn/storage/app/media/nhatquang519/danh-gia-asus-expertbook-p5/danh-gia-asus-expertbook-p5-2024-cover.jpg",
+            title: "Dell XPS 13: Laptop siêu di động cho doanh nhân",
+            summary: "Dell XPS 13 là dòng laptop siêu di động với thiết kế tinh tế, hiệu năng mạnh mẽ và màn hình sắc nét. Hãy cùng khám phá tại sao nó lại là lựa chọn hàng đầu của nhiều doanh nhân.",
+            image: "https://laptopre.vn/upload/picture/picture-31618558877.jpg",
         },
         {
             id: 4,
-            title: "Những thay đổi trong luật Công nghiệp công nghệ số",
-            summary: "Các quốc gia sẽ điều chỉnh và áp dụng các chính sách Công nghiệp công nghệ số để thích nghi với những thay đổi trong năm 2024.",
-            image: "https://media.vneconomy.vn/640x360/images/upload/2021/08/26/luat-cong-nghe-so.jpg",
+            title: "HP Spectre x360: Laptop đa chế độ với thiết kế tinh tế",
+            summary: "HP Spectre x360 là dòng laptop 2-trong-1 với khả năng xoay 360 độ, cho phép sử dụng ở nhiều chế độ khác nhau. Với thiết kế đẹp mắt và hiệu năng ổn định, đây là một lựa chọn hàng đầu cho những người cần sự linh hoạt trong công việc.",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTi74Ef3P6SecmDBVgDTWkPO85z8MkeejTvEA&s",
         },
         {
             id: 5,
-            title: "Giới thiệu sản phẩm công nghệ mới của năm 2024",
-            summary: "Năm 2024 sẽ là năm phát triển của các sản phẩm công nghệ, từ điện thoại thông minh đến các thiết bị thông minh khác.",
-            image: "https://cdnphoto.dantri.com.vn/nDP3y18deL8bVOlQ50OgOYZSnZE=/2024/02/29/laptop-man-hinh-trong-suot-1-1709142433023.png",
+            title: "Lenovo ThinkPad X1 Carbon Gen 10: Sự lựa chọn cho doanh nhân",
+            summary: "ThinkPad X1 Carbon Gen 10 của Lenovo tiếp tục giữ vững vị thế là chiếc laptop doanh nhân đỉnh cao với trọng lượng nhẹ, độ bền cao và hiệu năng mạnh mẽ. Đây là lựa chọn hoàn hảo cho những người dùng cần sự di động và đáng tin cậy.",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL9S_sbEuhZFlIADQSmEzF2f4Aw5pcTFatHg&s",
         }
     ];
+
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -92,7 +93,7 @@ export default function News() {
                                 <img src={item.image} alt={item.title} className="w-full h-48 object-cover rounded-md mb-4" />
                                 <h2 className="text-xl font-bold mb-2">{item.title}</h2>
                                 <p className="text-gray-600 mb-4">{item.summary}</p>
-                                <Link to={`/news/${item.id}`} className="text-blue-600 hover:underline">Xem thêm</Link>
+                                <Link to={`/customer/news/${item.id}`} className="text-blue-600 hover:underline">Xem thêm</Link>
                             </div>
                         ))}
                     </div>

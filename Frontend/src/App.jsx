@@ -12,6 +12,7 @@ import ProductDetail from "./pages/ProductDetail";
 import ProductByCat from "./pages/ProductByCat";
 import About from "./pages/About";
 import News from "./pages/News";
+import NewsDetail from "./pages/NewsDetail";
 
 import UsersManagement from "./pages/UsersManagement";
 import Checkout from "./pages/Checkout";
@@ -36,8 +37,8 @@ function App() {
           <Route path="/customer/shopping" element={<Shopping />} />
           <Route path="/customer/about" element={<About />} />
           <Route path="/customer/news" element={<News />} />
-          
-          <Route path="/customer/news/:id" element={<NewsDetail />} />
+
+          <Route path="/customer/news/:id" element={<NewsDetail />} /> {/* Route cho trang chi tiết tin tức */}
 
           <Route path="/customer/shopping" element={<Shopping />} />
           <Route path="/customer/category/:catName" element={<ProductByCat />} />
