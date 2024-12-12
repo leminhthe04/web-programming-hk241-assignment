@@ -44,6 +44,11 @@ class Product {
             $arr = Util::fetch($table);
             if($table) $table->free();
             $stmt->close();
+
+            Get image for this product
+            $productImage = new ProductImage();
+            $arr[0]['image'] = $productImage->getAllByProductId($id);
+
             return $arr;
         } catch (mysqli_sql_exception $e) {
             return Util::getResponseArray(400, $e->getMessage(), null);
