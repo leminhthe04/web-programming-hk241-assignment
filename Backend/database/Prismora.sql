@@ -25,8 +25,8 @@ CREATE TABLE categories (
 
 CREATE TABLE products (
     id                      INT                         AUTO_INCREMENT                  PRIMARY KEY,
-    name                    VARCHAR(255)                 UNIQUE                         NOT NULL,
-    price                   INT                                             NOT NULL,
+    name                    VARCHAR(255)                UNIQUE                          NOT NULL,
+    price                   INT                                                         NOT NULL,
     quantity                INT                                                         NOT NULL,
     description             TEXT,
     category_id             INT,
@@ -40,7 +40,6 @@ CREATE TABLE products (
     CONSTRAINT FK_products__categories
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
 );
-
 
 CREATE TABLE product_images (
     id                      INT                         AUTO_INCREMENT                  PRIMARY KEY,

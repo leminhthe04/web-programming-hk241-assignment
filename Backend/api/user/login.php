@@ -23,16 +23,18 @@ if (!$password) {
 
 
 $email = $data['email'] ? htmlspecialchars($data['email']) : null;
-$phone = $data['phone'] ? htmlspecialchars($data['phone']) : null;
+// $phone = $data['phone'] ? htmlspecialchars($data['phone']) : null;
 
-if (!$email && !$phone) {
-    Util::setStatusCodeAndEchoJson(400, 'Email or phone is required', null);
+
+if ($email === null) {
+    Util::setStatusCodeAndEchoJson(400, 'Email is required', null);
     exit;
 }
 
 $userController = new UserController();
-$respone = $email ? $userController->authenticateUserByEmail($email, $password)
-    : $userController->authenticateUserByPhone($phone, $password);
+// $respone = $email ? $userController->authenticateUserByEmail($email, $password)
+    // : $userController->authenticateUserByPhone($phone, $password);
+$respone = $userController->authenticateUserByEmail($email, $password);
 Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
 
 

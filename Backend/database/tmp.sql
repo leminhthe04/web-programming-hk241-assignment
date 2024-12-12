@@ -1,4 +1,7 @@
 USE prismora;
 
-SELECT COUNT(*) FROM products
-GROUP BY category_id;
+MYSQLDUMP -u lemin -p prismora > tmp1.sql
+
+CREATE DATABASE exclusive;
+
+MYSQL -u lemin -p exclusive < tmp.sql
