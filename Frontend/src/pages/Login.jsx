@@ -43,13 +43,13 @@ export default function Login() {
       .then((response) => {
         console.log(response);
         if (response.status == 200) {
-          const token = response.data.data.token;
-          const userType = response.data.data.userType;
-          console.log(response, "token: ", token);
-          localStorage.setItem("token", token);
-          localStorage.setItem("role", userType);
-          if(userType == "customer") navigate("/customer/homepage")
-          else navigate("/admin/product-manage")
+          console.log("Check response: ", response.data.data[0]);
+          const userData = response.data.data[0];
+          localStorage.setItem("userID", userData.id);
+          
+          
+          alert("Đăng nhập thành công");
+          
         }
       })
       .catch((error) => {
@@ -111,7 +111,7 @@ export default function Login() {
                     type="email"
                     id="email"
                     name="email"
-                    className={`mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 ${email != "" ? 'bg-blue-100' : null}`}
+                    className={`mt-1 p-2 outline-none  w-4/5 border-b border-black hover:bg-blue-100 ${email != "" ? 'bg-blue-100' : null}`}
                     placeholder="Email"
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -122,7 +122,7 @@ export default function Login() {
                     type="password"
                     id="password"
                     name="password"
-                    className={`mt-1 p-2 w-4/5 border-b border-black hover:bg-blue-100 ${pass != "" ? "bg-blue-100" : null}`}
+                    className={`mt-1 p-2 w-4/5 outline-none border-b border-black hover:bg-blue-100 ${pass != "" ? "bg-blue-100" : null}`}
                     placeholder="Mật khẩu"
                     onChange={(e) => setPass(e.target.value)}
                   />
