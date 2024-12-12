@@ -6,8 +6,8 @@ require_once __DIR__ . '/../../lib/utils.php';
 header('Content-Type: application/json');
 
 $customer_id = $_GET['customer_id'] ?? null;
-if (!$product_id) {
-    Util::setStatusCodeAndEchoJson(400, 'Customer ID is required');
+if (!$customer_id) {
+    Util::setStatusCodeAndEchoJson(400, 'Customer ID is required', null);
     exit();
 }
 $customer_id = intval(htmlspecialchars($customer_id));
@@ -29,6 +29,6 @@ $limit = intval(htmlspecialchars($limit));
 
 
 $orderController = new OrderController();
-$response = $orderController->findByUserId($customer_id, $offset, $limit);
-Util::setStatusCodeAndEchoJson($respone['code'], $respone['message'], $respone['data']);
+$response = $orderController->fetchByUserId($customer_id, $offset, $limit);
+Util::setStatusCodeAndEchoJson($response['code'], $response['message'], $response['data']);
 ?>

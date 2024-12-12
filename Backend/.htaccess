@@ -1,7 +1,7 @@
 RewriteEngine On
 
-# Nếu URL chứa 'database/database.php', chuyển tới tệp đó
-RewriteRule ^database/database.php$ database/database.php [L]
+# Prevent the website from being embedded in any iframe
+Header always set X-Frame-Options "DENY"
 
-# Nếu không, chuyển vào index.php
+# Trasfer all uri into index.php for controlling
 RewriteRule ^(.*)$ index.php [L,QSA]

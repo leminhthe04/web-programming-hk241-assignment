@@ -60,17 +60,19 @@ class User {
 
             $order = new Order();
             $orders = [];
+            $sum_orders_price = 0;
             foreach ($history as $h) {
                 $order_id = $h['order_id'];
                 $order_detail = $order->getById($order_id);
                 if (isset($order_detail['code'])) return $order_detail;
                 $orders[$order_id] = $order_detail;
+                $sum_orders_price += $order_detail['total_price'];
             }   
 
             $page_count = ceil(count($orders) / $limit);
             sort($orders);
             $orders = array_slice($orders, $offset, $limit);
-            $data = ["page_count" => $page_count, "data" => $orders];
+            $data = ["page_count" => $page_count, "sum_orders_price" => $sum_orders_price, "data" => $orders];
             return $data;
         } catch (mysqli_sql_exception $e) {
             return Util::getResponseArray(400, $e->getMessage(), null);

@@ -1,7 +1,15 @@
 <?php
-// Enable error reporting
+// Enable error reporting - only use for development
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+
+// // should disable error reporting in production
+// ini_set('display_errors', 0);
+// error_reporting(0);
+
+// // log errors to a file
+// ini_set('log_errors', 1);
+// ini_set('error_log', __DIR__.'/error.log');
 
 
 require_once __DIR__.'/lib/utils.php';
@@ -9,28 +17,17 @@ require_once __DIR__.'/lib/utils.php';
 $uri = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
 
-
+// determine the request origin is allowed. it is our client server
 header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE, OPTIONS"); 
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 // header("Access-Control-Allow-Credentials: true");
-
-
-
-// $uri = str_replace('/Assignment/Backend', '', $uri);
-
 
 if ($method == 'OPTIONS') {
     // CORS preflight request
     http_response_code(200);
     exit;
 }
-
-
-// if (preg_match('/\/api\/hi$/', $uri)){
-//     require __DIR__.'/api/hi.php';
-//     exit;
-// } 
 
 ////////////////////// USER APIs //////////////////////
 
@@ -329,16 +326,14 @@ if (preg_match('/\/api\/order\/update\/(\d+)$/', $uri, $matches)){
 }
 
 
-
-
 //////////////////////////////////////////////////////////////////////
 
-// if (preg_match('/\/database\/database.php$/', $uri)){
-//     require __DIR__.'/database/database.php';
-//     exit;
-// }
+// used for developers to check database connection
+if (preg_match('/\/database\/database.php$/', $uri)){
+    require_once __DIR__.'/database/database.php';
+    exit;
+}
 
-// echo $uri;
 
 Util::setStatusCodeAndEchoJson(404, 'Endpoint not found', null);
 ?>
