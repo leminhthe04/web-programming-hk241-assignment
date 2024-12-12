@@ -54,7 +54,7 @@ export default function ProductUpdate() {
     const [status, setStatus] = useState(null);
 
     // FUNCTION
-    function onChangeImg(e, index) {
+    async function onChangeImg(e, index) {
         const file = e.target.files[0];
 
         let base64String;
@@ -62,14 +62,7 @@ export default function ProductUpdate() {
             const reader = new FileReader();
             reader.onloadend = () => {
                 base64String = reader.result;
-                setFileImg((prev) => {
-                    if (Array.isArray(prev)) {
-                        const updatedFileImg = [...prev];
-                        updatedFileImg[index - 1] = file;
-                        return updatedFileImg;
-                    }
-                    return [file];
-                });
+               
                 if (index == 1) {
                     setImg1(base64String);
                     setFile1(file);
@@ -118,23 +111,22 @@ export default function ProductUpdate() {
         else setDiscription(false);
     }
 
-    function handleCreateProduct() {
-        const newProduct = {
+    function hanldeUpdateProduct() {
+        const updateProd = {
             "name": productName,
             "price": price,
             "quantity": Number(quantity),
             "description": description,
             "category_id": Number(selectCat),
             "status": status,
-            "image_urls": urls
         }
 
-        console.log("Check: ", newProduct);
+        console.log("Check: ", updateProd);
 
-        axios.post(`http://localhost/Assignment/Backend/api/product/create`, newProduct)
+        axios.post(`http://localhost/Assignment/Backend/api/product/update/${prodID}`, updateProd)
             .then((response) => {
-                if (response.status === 201) {
-                    alert("Tạo sản phẩm thành công");
+                if (response.status === 200) {
+                    alert("Cập nhật sản phẩm thành công");
                     navigate("/admin/product-manage");
                 }
             })
@@ -148,7 +140,6 @@ export default function ProductUpdate() {
     }
 
     async function uploadFile() {
-        alert("I'm here");
         const url = 'https://api.cloudinary.com/v1_1/da4spnmln/image/upload';
         const formData = new FormData();
         if (file1) {
@@ -214,7 +205,13 @@ export default function ProductUpdate() {
                 setStatus(resultData.status);
                 setDescription(resultData.description);
                 setQuantity(resultData.quantity);
-                
+                const imgArray = resultData.image;
+
+                imgArray.forEach((item, index) => {
+                    if (index === 1) setImg1(item.url);
+                    else if (index === 2) setImg2(item.url);
+                    else if (index === 3) setImg3(item.url);
+                })
             })
             .catch((error) => {
                 if (error.response.data) {
@@ -269,9 +266,9 @@ export default function ProductUpdate() {
                                 onChange={(e) => setStatus(e.target.value) }
                             >
                                 <option value="" disabled>Chọn loại trạng thái</option>
-                                <option value="smartphone">Available</option>
-                                <option value="laptop">Sold Out</option>
-                                <option value="tablet">Stop Selling</option>
+                                <option value="Available">Available</option>
+                                <option value="Sold Out">Sold Out</option>
+                                <option value="Stop Selling">Stop Selling</option>
                             </select>
                         </div>
 
@@ -345,7 +342,7 @@ export default function ProductUpdate() {
                         </div>
 
                         <div className="flex justify-end mr-20 mb-10 mt-20">
-                            <div className="bg-red-500 text-white w-44 p-4 text-center rounded-md ml-8" onClick={handleCreateProduct} >Cập nhật sản phẩm</div>
+                            <div className="bg-red-500 text-white w-44 p-4 text-center rounded-md ml-8" onClick={hanldeUpdateProduct} >Cập nhật sản phẩm</div>
                         </div>
 
                     </div>
