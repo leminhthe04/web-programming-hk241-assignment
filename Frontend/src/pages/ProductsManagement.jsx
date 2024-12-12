@@ -25,7 +25,7 @@ export default function ProductsManagement() {
 
 
     useEffect(() => {
-        axios.get("http://localhost/Assignment/Backend//api/product/fetch/0/10",)
+        axios.get("http://localhost/Assignment/Backend/api/product/fetch/0/10",)
             .then((response) => {
                 const responseData = response.data.data;
                 setProductList(responseData.data);
@@ -54,7 +54,7 @@ export default function ProductsManagement() {
         const offset = index * 10;
         setLoading(true);
 
-        axios.get(`http://localhost/Assignment/Backend//api/product/fetch/${offset}/10`,)
+        axios.get(`http://localhost/Assignment/Backend/api/product/fetch/${offset}/10`,)
             .then((response) => {
                 setCurrentPage(pageNum)
                 const newresponseData = response.data.data;
