@@ -35,8 +35,7 @@ if ($rating === null) {
 }
 $rating = htmlspecialchars($rating);
 
-$comment = $data['comment'] ?? null;
-$comment = htmlspecialchars($comment);
+$comment = $data['comment'] ? htmlspecialchars($data['comment']) : null;
 
 
 $reviewController = new ReviewController();

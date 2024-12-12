@@ -247,10 +247,10 @@ INSERT INTO product_images (id, product_id, url) VALUES
 (27, 7,  'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/p/apple-watch-series-9-45mm-_1_.png'),
 (28, 7,  'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/p/apple_lte_3__1.png'),
 
-(29, 8,  'https://cdn2.cellphones.com.vn/358x/media/catalog/product/g/a/galaxy-s24-plus-tim_2.png2'),
-(30, 8,  'https://cdn2.cellphones.com.vn/358x/media/catalog/product/g/a/galaxy-s24-plus-vang_2.png2'),
-(31, 8,  'https://cdn2.cellphones.com.vn/358x/media/catalog/product/g/a/galaxy-s24-plus-xam_2.png2'),
-(32, 8,  'https://cdn2.cellphones.com.vn/x/media/catalog/product/g/a/galaxy-s24-plus-xam.png2'),
+(29, 8,  'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQo4o-BsKvAxtD_QToHfZpRnMrDXjrCpdrhjI_1Z6pv8_cjJ7IqGzx1AS74s10gx6um5haqVHIlD_oYvAnOEtZGVKdIE_MxB6X-u1v1vkCMKFcbttSQo0LO&usqp=CAE'),
+(30, 8,  'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTX--8xl6Z6Yyn2tmFesGFJDNgyD7tW_fZM9GRzh-dxUnKh1odKV4RIx3srA8MCTRmXOonQr2-W5pwZ5zGgssmxTAAsz6FoUooweoeUKtU&usqp=CAE'),
+(31, 8,  'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQU8TIZxNAyDtpcsmO9oZ8APwJFtPSzGfAYjMIeOZb3OyFEiCLHI-gFMMCLA6D46UmR6e3F8JzelMTUNbzi8ZcBU45S8cX7kZryOv7_bKEcMMkoOREq93sCBw&usqp=CAE'),
+(32, 8,  'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSXavjQZt3emCstMhz12lOCITaMgYD1xMadGNov8OK0HPTxGUifbeyj_-io7Vdnmf5CUptyHsW1GlqclbO1J3SqcPsMLVHMyvNeDNBKB_wEXbKyfn6AzKbnSw&usqp=CAE'),
 
 (33, 9,  'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/_/m_y_t_nh_b_ng_lenovo_tab_m11_4gb_128gb_zadb0066vn_1.png'),
 (34, 9,  'https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/m/a/may-tinh-bang-lenovo-tab-m11-8gb-128gb.png'),

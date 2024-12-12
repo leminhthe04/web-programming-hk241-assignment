@@ -9,7 +9,6 @@ if (!isset($_GET['id'])) {
     Util::setStatusCodeAndEchoJson(400, 'Product ID is required', null);
     exit;
 }
-
 $id = intval(htmlspecialchars($_GET['id']));
 
 $productController = new ProductController();
