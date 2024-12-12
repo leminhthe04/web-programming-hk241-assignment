@@ -252,7 +252,7 @@ CREATE PROCEDURE updateFieldById (
     IN _tableName VARCHAR(255),
     IN _id INT,
     IN _columnName VARCHAR(255),
-    IN _value VARCHAR(255)
+    IN _value TEXT
 )
 BEGIN
 
@@ -342,7 +342,7 @@ BEGIN
     SET @columnName = _columnName;
     SET @token = _token;
 
-    SET @query = CONCAT("SELECT * FROM ", @tableName, " WHERE ", @columnName, " LIKE '%", @token, "%';");
+    SET @query = CONCAT('SELECT * FROM ', @tableName, ' WHERE ', @columnName, ' LIKE \'%', @token, '%\';');
     PREPARE stmt FROM @query;
     EXECUTE stmt;
 
