@@ -2,22 +2,44 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import RenderStars from "../components/RenderStart";
 import axios from "axios";
+import Reviews from "../components/Reviews";
+import NewReview from "../components/newReview";
+
+const categoryMap = {
+    1: "Smartphone",
+    2: "Tablet",
+    3: "Laptop",
+    4: "Smartwatch"
+}
 
 export default function ProductDetail() {
-    const {prodID} = useParams();
+    const { prodID } = useParams();
+    const [quantity, setQuantity] = useState(1);
+
+    function formatPrice(price) {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(price);
+    }
 
     // ### PRODUCT INFO
     const [prodName, setProdName] = useState(null);
     const [prodPrice, setProdPrice] = useState(null);
-    const [prodQuantity, ssetProdQuantity] = useState(null);
+
+    const [inStock, setInStock] = useState(null);
     const [prodDescript, setProdDescript] = useState(null);
-    const [prodAvgRating, setProdAvgRating] = useState(0);   
+    const [prodAvgRating, setProdAvgRating] = useState(0);
     const [prodBuyCount, setProdBuyCount] = useState(0);
-    const [prodStatus, setProdStatus]  = useState("Available")
+    const [prodStatus, setProdStatus] = useState("Available")
+    const [prodCatID, setProdCatID] = useState(null);
+
 
     // ### IMAGE LIST
     const [imgList, setImgList] = useState([]);
+    const [displayImg, setDisplayImg] = useState(null);
 
     // ### REVIEW
     const [reviewList, setReviewList] = useState([]);
@@ -27,78 +49,85 @@ export default function ProductDetail() {
     const decreaseQuantity = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
     useEffect(() => {
-        const fetchProductDetail = axios.get(`http://localhost/Assignment/Backend/api/product/detail/${prodID}`)
-        const fetchImgList = axios.get(`http://localhost/Assignment/Backend/api/product-image/product/${prodID}`)
-        const fetchReviewList = axios.get(`http://localhost/Assignment/Backend/api/review/product/${prodID}/fetch/0/10`)    
-       
-        Promise.all([fetchProductDetail, fetchImgList, fetchReviewList])
-            .then((response) => {
-                const [productListResponse, imgListResponse, reviewListResponse] = response;    
-                console.log("PRODUCT LIST: ", ProductDetail.data.data);
-                console.log("IMG LIST: ", imgListResponse.data.data);
-                console.log("REVIEW LIST: ", reviewListResponse.data.data);
+        
 
-                if(productListResponse.status === 200) {
-                    const {name , price, quantity, description, buy_count, avg_rating, status} = productListResponse.data.data;
-                    setProdName(name);
-                    setProdPrice(price);
-                    ssetProdQuantity(quantity);
-                    setProdDescript(description);
-                    setProdBuyCount(buy_count);
-                    setProdAvgRating(avg_rating);
-                    setProdStatus(status);
+        const fetchData = async () => {
+            try {
+                const fetchProductDetails = axios.get(`http://localhost/Assignment/Backend/api/product/detail/${prodID}`);
+                const fetchImgList = axios.get(`http://localhost/Assignment/Backend/api/product-image/product/${prodID}`)
+                const [productResponse, imgListResponse] = await Promise.all([fetchProductDetails, fetchImgList]);
+
+                if (productResponse.status === 200) {
+                    console.log(productResponse.data.data[0]);
+                    const prodData = productResponse.data.data[0];
+                    setProdName(prodData.name);
+                    setProdPrice(prodData.price);
+                    setInStock(prodData.quantity);
+                    setProdDescript(prodData.description);
+                    setProdCatID(prodData.category_id);
+                    setProdBuyCount(prodData.buy_count);
+                    setProdAvgRating(prodData.avg_rating);
+                    setProdStatus(prodData.status);
                 }
-
-                if(imgListResponse.status === 200) {    
+                if (imgListResponse.status === 200) {
+                    console.log(imgListResponse.data.data);
                     setImgList(imgListResponse.data.data);
+                    setDisplayImg(imgListResponse.data.data[0].url);
+                    console.log("CHECK IMG LIST: ", imgList);
                 }
-
-                if(reviewListResponse.status === 200) {
-                    
-                }
-            })
-            .catch((error) => {
+            } catch (error) {
                 if (error.response) {
                     alert(error.response.data.msg);
                 } else {
                     console.error('Error:', error.message);
                 }
-            });
-    }, [prodID])
+            }
+        };
+
+        fetchData();
+    }, [])
+
+    // FUNTION
+    function handleDisplayImg(index) {
+        setDisplayImg(imgList[index].url);
+    }
+
 
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow mt-6">
-                {/* CHECK ID */} 
-                <div className="bg-red-500">{prodID}</div>
-            
-                <div className="w-10/12 mx-auto h-10 justify-center">
+                {/* CHECK ID */}
+
+                <div className="w-10/12 mx-auto h-12 justify-center">
                     <span><a href="customer/shopping">
                         Mua sắm
                     </a></span> /
-                    <span><a href="customer/shopping">
-                        ... Danh mục
-                    </a></span> /
-                    <span>
-                        <a href="customer/shopping" className="font-bold "> ... tên sp </a>
+                    {<span className="mx-2"><a href="customer/shopping">
+                        {categoryMap[prodCatID]}
+                    </a></span>
+                    }
+                    /<span>
+                        <a href="customer/shopping" className="font-bold "> {prodName ? prodName : null} </a>
                     </span>
                 </div>
 
                 <div className="prod-info w-10/12 mx-auto flex flex-row">
                     <div className="w-full flex flex-row">
                         <div className="col-1 w-1/5 flex flex-col">
-                            <div className="bg-gray-200 py-2 mb-2 rounded-md"><img src="https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/xiaomi_14t_black_1_bb226cd286.png" alt="" className="w-3/5 mx-auto" /></div>
-                            <div className="bg-gray-200 py-2 mb-2 rounded-md"><img src="https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/xiaomi_14t_black_1_bb226cd286.png" alt="" className="w-3/5 mx-auto" /></div>
-                            <div className="bg-gray-200 py-2 mb-2 rounded-md"><img src="https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/xiaomi_14t_black_1_bb226cd286.png" alt="" className="w-3/5 mx-auto" /></div>
-                            <div className="bg-gray-200 py-2 mb-2 rounded-md"><img src="https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/xiaomi_14t_black_1_bb226cd286.png" alt="" className="w-3/5 mx-auto" /></div>
+                            {imgList.length > 0 ? imgList.map((item, index) => (
+                                <div className="bg-gray-200 py-2 mb-2 rounded-md"
+                                    onClick={() => handleDisplayImg(index)}
+                                >
+                                    <img key={index} src={item.url} alt="" className="w-3/5 mx-auto" />
+                                </div>)) : null}
                         </div>
                         <div className="w-4/5 ml-2">
                             <div className=" h-full flex items-center justify-center bg-gray-200">
                                 <img
-                                    src="https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/xiaomi_14t_black_1_bb226cd286.png"
+                                    src={displayImg ? displayImg : null}
                                     alt=""
-                                    className="block w-3/5 h-auto"
+                                    className="block w-3/5 max-h-full"
                                 />
                             </div>
                         </div>
@@ -106,17 +135,9 @@ export default function ProductDetail() {
 
                     {/* Element chứu thông tin cơ bản của prodct */}
                     <div className="w-full space-y-1 ml-6">
-                        <div className="text-left font-bold text-2xl">PS5 Wireless Controller</div>
-                        <div class="rating space-x-1 ">
-                            <span class="star filled text-yellow-400">★</span>
-                            <span class="star filled text-yellow-400">★</span>
-                            <span class="star filled text-yellow-400">★</span>
-                            <span class="star text-yellow-400">★</span>
-                            <span class="star">★</span>
-                        </div>
-                        <div className="price text-lg font-bold">192.000.000 VND</div>
-                        {/* <div className="short-descript w-10/12">Sản phẩm chính hãng, được cung cấp bởi.... Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit officia ut tempora, laboriosam, doloribus provident voluptate, cum aliquid delectus temporibus nostrum iure veniam quidem necessitatibus sed quasi. Perspiciatis, eveniet laudantium?</div> */}
-
+                        <div className="text-left font-bold text-2xl">{prodName}</div>
+                        {/* <RenderStars rating={prodAvgRating} /> */}
+                        <div className="price text-lg font-bold">{formatPrice(prodPrice)}</div>
 
                         <div className="border border-b-1 w-10/12 "></div>
                         <div className="h-6"></div>
@@ -149,52 +170,16 @@ export default function ProductDetail() {
                 </div>
 
                 {/* Element chứ thông tin chi tiết của sản phẩm */}
-                <div className="mt-10 w-10/12 mx-auto">
+                <div className="mt-10 w-10/12 mx-auto border p-2">
                     <h2 className="text-2xl text-red-500 text-center font-semibold">Thông tin chi tiết</h2>
-                    <p className="font-serif tracking-wide leading-relaxed p-6 text-justify" style={{ fontFamily: 'Lora, serif' }}>
-
-                        Vẻ ngoài cao cấp, thanh lịch từng đường nét
-                        Về thiết kế, điện thoại OPPO Find X8 mang dáng vẻ hiện đại với kiểu dáng khá vuông vức cùng các góc được bo cong nhẹ nhàng, tạo cảm giác mạnh mẽ nhưng không quá cứng nhắc. Phần khung viền máy được làm từ chất liệu nhôm siêu nhẹ, tăng thêm sự cao cấp của tổng thể sản phẩm, thu hút người dùng ngay từ ánh nhìn đầu tiên.
-
-
-
-                        Bên cạnh đó, thiết bị chỉ nặng 193 gram, một con số hợp lý để bạn cầm lâu mà không bị mỏi tay. Điều này khiến điện thoại trở thành một lựa chọn hấp dẫn với những ai yêu thích sự nhẹ nhàng và thường có thói quen sử dụng liên tục.
-
-
-
-                        Với tiêu chuẩn IP69 và IP68 cùng chứng nhận 5 sao SGS về khả năng chống rơi vỡ, mang đến cho người dùng sự yên tâm tuyệt đối. Bạn có thể thoải mái tận hưởng những trải nghiệm giải trí, làm việc mà không lo lắng về các tác động từ môi trường bên ngoài.
-
-
-
-                        Công nghệ màn hình sắc nét, chân thực
-                        Màn hình của máy có kích thước 6.59 inch, khá lý tưởng cho nhu cầu giải trí hay làm việc hằng ngày. Điều đáng chú ý là phần viền sản phẩm được thiết kế siêu mỏng, chỉ 1.45 mm, nhỏ hơn hẳn so với người anh em tiền nhiệm Find X7, vốn dày 1.94 mm, cho phép người dùng đắm chìm hơn vào các nội dung được hiển thị.
-
-                        Với độ phân giải 1.5K+, điện thoại OPPO Find X8 mang đến hình ảnh sắc nét, sống động. Mỗi khung hình đều rõ ràng và chân thực, tạo cảm giác cuốn hút, giúp người dùng thưởng thức nội dung một cách trọn vẹn nhất.
-
-
+                    <p className="font-serif tracking-wide leading-relaxed p-6 text-justify" style={{ fontFamily: 'Lora, serif' }} dangerouslySetInnerHTML={{ __html: prodDescript }} >
                     </p>
                 </div>
 
-                <div className="w-10/12 mx-auto">
-                    <div className="text-2xl text-red-500 text-center font-semibold mb-4">Đánh giá và nhận xét</div>
-                    <div className="review border border-black rounded-md  p-2">
-                        <div className="flex flex-row space-x-2 items-baseline">
-                            <span className="font-semibold mr-2">Bảo Ngọc</span>
-                            <div className=" text-gray-500 italic text-sm">12-02-2024</div>
-                           
-                            
-                        </div>
-                        <div class="inline-block rating space-x-1 ">
-                                <span class="star filled text-yellow-400">★</span>
-                                <span class="star filled text-yellow-400">★</span>
-                                <span class="star filled text-yellow-400">★</span>
-                                <span class="star text-yellow-400">★</span>
-                                <span class="star">★</span>
-                            </div>
-                            <div className="comment">
-                                <p className="pl-6">Sản phẩm chất lượng, đúng mô tả,...</p>
-                            </div>
-                    </div>
+                <div className="w-10/12 mx-auto space-y-4">
+                    <div className="text-2xl text-red-500 text-center font-semibold mb-4 mt-10">Đánh giá và nhận xét</div>
+                    <NewReview />
+                    {Array.from({ length: 3 }).map((item, index) => (   <Reviews rating={Number(2)} />))}               
                 </div>
             </main>
             <div className="h-60"></div>

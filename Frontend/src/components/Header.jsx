@@ -59,7 +59,7 @@ export default function Header({ page, role }) {
     return (
         <header className="h-16 bg-black text-white w-full">
             <div className="w-full h-full flex items-center">
-                <div className="w-1/6 text-2xl font-bold tex-white flex justify-start pl-20">EXCLUSIVE</div>
+                <div className="w-1/6 text-2xl font-bold tex-white flex justify-start pl-20">PRISMORA</div>
                 <div className="menu w-4/6 justify-center text-center flex flex-row">
                     <ul className="grid grid-cols-4 gap-4 text-lg items-center">
                         <li className=" p-2" onClick={() => navigate("/customer/homepage")} >Trang chủ</li>
@@ -97,7 +97,7 @@ export default function Header({ page, role }) {
                                     <li className="border-b p-2 hover:font-bold" 
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            window.location.href = (`/customer/category/swatch`)
+                                            window.location.href = (`/customer/category/watch`)
                                         }}
                                     >Đồng hồ thông minh  </li>
                                     <li className="p-2 hover:font-bold"

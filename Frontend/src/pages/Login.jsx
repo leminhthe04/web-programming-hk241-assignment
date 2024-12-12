@@ -122,7 +122,7 @@ export default function Login() {
                     type="password"
                     id="password"
                     name="password"
-                    className={`mt-1 p-2 w-4/5 border-b border-black  ${pass != "" ? "bg-blue-100" : null}`}
+                    className={`mt-1 p-2 w-4/5 border-b border-black hover:bg-blue-100 ${pass != "" ? "bg-blue-100" : null}`}
                     placeholder="Mật khẩu"
                     onChange={(e) => setPass(e.target.value)}
                   />
