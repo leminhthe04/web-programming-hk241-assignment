@@ -64,7 +64,7 @@ class Order {
             $table = $stmt->get_result();
             $arr = Util::fetch($table);
             $stmt->close();
-            return $arr;
+            return [ "page_count" => $page_count, "data" => $arr ];
         } catch (mysqli_sql_exception $e) {   
             return Util::getResponseArray(400, $e->getMessage(), null);
         }
@@ -82,7 +82,7 @@ class Order {
             $table = $stmt->get_result();
             $arr = Util::fetch($table);
             $stmt->close();
-            return $arr;
+            return [ "page_count" => $page_count, "data" => $arr ];
         } catch (mysqli_sql_exception $e) {   
             return Util::getResponseArray(400, $e->getMessage(), null);
         }

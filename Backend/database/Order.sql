@@ -23,6 +23,8 @@ CREATE PROCEDURE findDetailOrder (
 END;
 
 
+
+
 DROP PROCEDURE IF EXISTS insertOrder;
 CREATE PROCEDURE insertOrder (
     IN _customer_id INT,
