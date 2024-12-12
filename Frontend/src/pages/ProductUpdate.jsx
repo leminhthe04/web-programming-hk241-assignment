@@ -46,7 +46,7 @@ export default function ProductUpdate() {
 
     // PRODUCT VALUE
     const [productName, setProductName] = useState("");
-    const [selectCat, setSelectCat] = useState(false);
+    const [selectCat, setSelectCat] = useState(null);
     const [brand, setBrand] = useState("");
     const [description, setDescription] = useState(null);
     const [price, setPrice] = useState(null);
@@ -214,6 +214,7 @@ export default function ProductUpdate() {
                 setStatus(resultData.status);
                 setDescription(resultData.description);
                 setQuantity(resultData.quantity);
+                
             })
             .catch((error) => {
                 if (error.response.data) {
@@ -223,7 +224,7 @@ export default function ProductUpdate() {
                 }
             })
 
-    })
+    }, [])
 
 
     return (
@@ -236,7 +237,7 @@ export default function ProductUpdate() {
 
                 <div className="grid grid-cols-2">
                     <div className="mx-auto w-4/5">
-                        <h2 className="font-medium text-3xl" >Thêm sản phẩm mới</h2>
+                        <h2 className="font-medium text-3xl" >Chỉnh sửa sản phẩm</h2>
                         <div className="my-6">
                             <label>Tên sản phẩm <span className="text-red-600">*</span></label>
                             <input type="text" name="pname" className={`pl-4 bg-gray-100 block w-4/5 h-8 my-2 rounded-md `}
@@ -248,26 +249,29 @@ export default function ProductUpdate() {
 
                         <div className="my-6">
                             <label>Danh mục<span className="text-red-600">*</span></label>
-                            <select name="category" className={`px-2 block w-4/5 h-8 my-2 rounded-md hover:bg-blue-100 ${selectCat ? 'bg-blue-100' : 'bg-gray-100'} `}
-                                onChange={(e) => setCategory(e.target.value)}
+                            <select name="category" className={`block w-4/5 h-8 my-2 rounded-md hover:bg-blue-100 ${selectCat ? 'bg-blue-100' : 'bg-gray-100'} `} 
                                 value={selectCat}
+                                onChange={(e) => setSelectCat(e.target.value) }
                             >
-                                <option value="">Chọn loại sản phẩm</option>
-                                {catList.length > 0 && catList.map((cat) => (
-                                    <option value={cat.id} key={cat.id} >{cat.name}</option>
-                                ))}
+                                <option value="" disabled>Chọn danh mục</option>
+                                <option value="1">Điện thoại</option>
+                                <option value="2" >Laptop</option>
+                                <option value="3" >Máy tính bảng</option>
+                                <option value="4" >Đồng hồ thông minh</option>
+                                <option value="5" >Phụ kiện</option>
                             </select>
                         </div>
 
                         <div className="my-6">
                             <label>Trạng thái<span className="text-red-600">*</span></label>
-                            <select name="category" className={`block w-4/5 h-8 my-2 rounded-md hover:bg-blue-100 ${selectCat ? 'bg-blue-100' : 'bg-gray-100'} `} 
-                              
-                            onChange={(e) => handleSelectCat(e)}>
+                            <select name="stauts" className={`block w-4/5 h-8 my-2 rounded-md hover:bg-blue-100 ${selectCat ? 'bg-blue-100' : 'bg-gray-100'} `} 
+                                value={status}
+                                onChange={(e) => setStatus(e.target.value) }
+                            >
                                 <option value="" disabled>Chọn loại trạng thái</option>
-                                <option value="smartphone" onClick={(e) => { setStatus("Available") }}>Available</option>
-                                <option value="laptop" onClick={(e) => { setStatus("Sold Out") }}>Sold Out</option>
-                                <option value="tablet" onClick={(e) => { setStatus("Stop Selling") }}>Stop Selling</option>
+                                <option value="smartphone">Available</option>
+                                <option value="laptop">Sold Out</option>
+                                <option value="tablet">Stop Selling</option>
                             </select>
                         </div>
 
@@ -275,8 +279,9 @@ export default function ProductUpdate() {
 
                         <div className="my-6">
                             <label>Giá thành<span className="text-red-600">*</span></label>
-                            <input type="number" name="price" className="pl-4 bg-gray-100 block w-4/5 h-8 my-2 rounded-md"
+                            <input type="number" name="price" className="pl-4 bg-gray-100 block w-4/5 h-8 my-2 rounded-md" min={1} 
                                 onChange={(e) => setPrice(e.target.value)}
+                                value={price}
                             />
                         </div>
 
@@ -284,18 +289,21 @@ export default function ProductUpdate() {
                             <label>Số lượng trong kho<span className="text-red-600">*</span></label>
                             <input type="number" name="quantity" className="pl-4 bg-gray-100 block w-4/5 h-8 my-2 rounded-md"
                                 onChange={(e) => setQuantity(e.target.value)}
+                                value={quantity}
                             />
                         </div>
 
                         <div className="my-6">
                             <label>Mô tả sản phẩm<span className="text-red-600">*</span></label>
                             <textarea name="price" className={`p-4 block w-4/5 h-36 my-2 rounded-md hover:bg-blue-100 ${description ? "bg-blue-100" : "bg-gray-100"}`}
-                                onChange={(e) => handleChangeDescription(e)} />
+                                onChange={(e) => handleChangeDescription(e)} 
+                                value={description}
+                            />
                         </div>
                     </div>
 
                     <div>
-                        <h2 className="font-medium text-3xl pb-4" >Thêm hình ảnh</h2>
+                        <h2 className="font-medium text-3xl pb-4" >Chỉnh sửa hình ảnh</h2>
 
                         <div class="grid grid-cols-3 gap-2 mr-8">
                             <div>
@@ -336,8 +344,8 @@ export default function ProductUpdate() {
                             </div>
                         </div>
 
-                        <div className="flex justify-end mr-20 mb-10">
-                            <div className="bg-red-500 text-white w-44 p-4 text-center rounded-md ml-8" onClick={handleCreateProduct} >Tạo sản phẩm  mới</div>
+                        <div className="flex justify-end mr-20 mb-10 mt-20">
+                            <div className="bg-red-500 text-white w-44 p-4 text-center rounded-md ml-8" onClick={handleCreateProduct} >Cập nhật sản phẩm</div>
                         </div>
 
                     </div>

@@ -97,23 +97,22 @@ export default function ProductsManagement() {
     }
 
     function handleDeleteProduct(prodID) {
-        // alert(prodID + token);
-        axios.delete(`http://localhost:8000/api/product/DeleteProduct/${prodID}`, null, {
-            headers: {
-                Authorization: `Bearer ${token}`, // Replace <your-auth-token> with the actual token
-            },
-        })
-            .then((response) => {
-                alert(response.data.msg);
-                setCount((pre) => pre + 1);
-            })
-            .catch((error) => {
-                if (error.response) {
-                    alert(error.response.data.msg);
-                } else {
-                    console.error('Error:', error.message);
-                }
-            })
+        // axios.delete(`http://localhost:8000/api/product/DeleteProduct/${prodID}`, null, {
+        //     headers: {
+        //         Authorization: `Bearer ${token}`, // Replace <your-auth-token> with the actual token
+        //     },
+        // })
+        //     .then((response) => {
+        //         alert(response.data.msg);
+        //         setCount((pre) => pre + 1);
+        //     })
+        //     .catch((error) => {
+        //         if (error.response) {
+        //             alert(error.response.data.msg);
+        //         } else {
+        //             console.error('Error:', error.message);
+        //         }
+        //     })
 
     }
 
