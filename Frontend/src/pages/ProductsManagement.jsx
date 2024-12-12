@@ -17,7 +17,8 @@ export default function ProductsManagement() {
     const [page, setPage] = useState(null);
     const [count, setCount] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [modeSearch, setModeSearch] = useState(false);    
+    const [modeSearch, setModeSearch] = useState(false);   
+    const [keyword, setKeyword] = useState(null);
 
     useEffect(() => {
         axios.get("http://localhost/Assignment/Backend/api/product/fetch/0/10",)
@@ -36,22 +37,27 @@ export default function ProductsManagement() {
             })
     }, [count])
 
-
-    // function disableEditMode() {
-    //     setEditMode(false);
-    // }
-
-    function handleUpdateProduct(prodID) {
-        navigate(`/admin/edit-product/${prodID}`);
-    }
-
     function handlePageClick(pageNum) {
         const index = Number(pageNum);
         const offset = index * 10;
         setLoading(true);
         
         if(modeSearch) {
-            
+            axios.get(`http://localhost/Assignment/Backend/api/product/search/${offset}/10`,)
+            .then((response) => {
+                console.log(response);
+                const products = response.data.data;
+                const pageNum = response.data.totalPage;
+                setPage(pageNum);
+                setProductList(products);
+            })
+            .catch((error) => {
+                if (error.response) {
+                    alert(error.response.data.msg);
+                } else {
+                    console.error('Error:', error.message);
+                }
+            })
         }
         else {
             axios.get(`http://localhost/Assignment/Backend/api/product/fetch/${offset}/10`,)
@@ -75,18 +81,17 @@ export default function ProductsManagement() {
     }
 
     function handleSearch() {
-        alert("Search");
         if (keyword == null) {
             alert("Hãy điền từ khóa để tìm kiếm")
         }
-        axios.get(`http://localhost:8000/api/product/getAll?page=0&limit=5&filter=${keyword}`,)
+
+        axios.post(`http://localhost/Assignment/Backend/api/product/search/0/10`, {key: keyword})
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 const products = response.data.data;
-                const pageNum = response.data.totalPage;
-                setPage(pageNum);
-                // console.log(JSON.stringify(products));
-                setProductList(products);
+                // console.log(products);
+                setPage(products.page_count);
+                setProductList(products.data);
             })
             .catch((error) => {
                 if (error.response) {
@@ -95,6 +100,7 @@ export default function ProductsManagement() {
                     console.error('Error:', error.message);
                 }
             })
+
 
     }
 
