@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import axios from "axios";
-import DayPick from "../components/DayPick.jsx";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -30,10 +29,8 @@ export default function Login() {
           localStorage.setItem("userID", userData.id);
           localStorage.setItem("userName", userData.name);
           localStorage.setItem("userEmail", userData.email);
-          
-          
           alert("Đăng nhập thành công");
-          
+          navigate("/customer/homepage")
         }
       })
       .catch((error) => {

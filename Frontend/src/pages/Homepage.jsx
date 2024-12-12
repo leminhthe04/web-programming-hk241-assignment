@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import ProductCard from "../components/ProductCard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMobile } from "@fortawesome/free-solid-svg-icons";
+import ProductCardSmall from "../components/ProductCardSmall";
+
 import Slider from "../components/Slider";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -14,7 +13,7 @@ export default function Homepage() {
 
 
     useEffect(() => {
-        axios.get(`http://localhost/Assignment/Backend/api/product/fetch/0/4`)
+        axios.get(`http://localhost/Assignment/Backend/api/product/fetch/0/5`)
             .then((response) => {
                 if(response.status === 200) {
                     console.log("Check response: ", response.data.data.data);
@@ -70,7 +69,7 @@ export default function Homepage() {
                             <span className="px-4 text-red-600">Sản phẩm nổi bật</span>
                         </div>
                         <div className="w-11/12 mx-auto flex justify-between pb-6">
-                        {productList.map((prod, index) => (<ProductCard prodID={prod.id} prodName={prod.name} prodPrice={prod.price} prodRating={prod.avg_rating}  />))}
+                        {productList.map((prod, index) => (<ProductCardSmall prodID={prod.id} prodName={prod.name} prodPrice={prod.price} prodRating={prod.avg_rating} prodImage={prod.image[0].url} />))}
                         </div>
                       
                     </div>

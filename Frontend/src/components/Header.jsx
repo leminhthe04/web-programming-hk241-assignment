@@ -1,19 +1,23 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-export default function Header({ page, role }) {
+export default function Header({ page }) {
     const navigate = useNavigate();
     const [user_id, setUser_id] = useState(null);   
+    const [role, setRole] = useState(null);
     const [displayCat, setDisplayCat] = useState(false);
     const [displayAccount, setDisplayAccount] = useState(false);
     
     function handleLogout() {
-        localStorage.removeItem("token");
-        localStorage.removeItem("role");
+        localStorage.removeItem("userID");
+        localStorage.removeItem("userName");
+        localStorage.removeItem("userEmail");
         navigate("/");
     }   
 
     useEffect(() => {
         const userID = localStorage.getItem("userID");
+        const accountRole = localStorage.getItem("role");
+        setRole(accountRole);
         console.log("userID: ", userID);
         setUser_id(userID);
     }, [])
@@ -25,20 +29,17 @@ export default function Header({ page, role }) {
                     <div className={"w-1/6 text-2xl font-bold tex-white flex justify-start pl-20"}>EXCLUSIVE</div>
                     <div className="menu w-4/6 justify-center text-center flex flex-row">
                         <ul className="flex flex-row space-x-9 text-lg items-center">
-                            <li  className={`${page === "homepage" ? "border-b" : ""}`}>Trang chủ</li>
-                            <li className={`${page === "revenue" ? "border-b" : null}`} >
-                                <a href="/revenue">Doanh thu</a>
-                                
-                            </li>
                             <li className={`${page === "product-manage" ? "border-b" : null} w-20`}>
                                 <a href="/admin/product-manage">Quản lý sản phẩm</a>
                             </li>
-                            <li className={`${page === "promotion-manage" ? "border-b" : null} w-24`}>
-                                <a href="/admin/all-promo">Quản lý khuyến mãi</a>
-                            </li>
+                            
                             <li className={`${page === "user-manage" ? "border-b" : null} w-24`}>
                                 
                                 <a href="/admin/user-management">Quản lý người dùng</a>    
+                            </li>
+
+                            <li className={`${page === "promotion-manage" ? "border-b" : null} w-24`}>
+                                <a href="/admin/all-promo">Quản lý đơn hàng</a>
                             </li>
                         </ul>
                     </div>
@@ -63,7 +64,7 @@ export default function Header({ page, role }) {
             </header>
         )
     }
-    return (
+    else return (
         <header className="h-16 bg-black text-white w-full">
             <div className="w-full h-full flex items-center">
                 <div className="w-1/6 text-2xl font-bold tex-white flex justify-start pl-20">PRISMORA</div>
@@ -137,7 +138,7 @@ export default function Header({ page, role }) {
                             </svg>
                         </div>
                         
-                        <ul className={`absolute bg-black mt-2 min-w-48 ${displayAccount ? "block" : "hidden"}`}>
+                        <ul className={`absolute z-10 bg-black mt-2 min-w-48 ${displayAccount ? "block" : "hidden"}`}>
                             <li className="p-2 border-b-2 hover:font-semibold"
                                 onClick={() => navigate(`/customer/account/${user_id}`)}
                             >Thông tin cá nhân</li>

@@ -176,6 +176,7 @@ export default function Shopping() {
 
 
             </main>
+            <div className="h-10"></div>
             <Footer />
 
         </div>

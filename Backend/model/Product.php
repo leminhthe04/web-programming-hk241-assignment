@@ -26,7 +26,7 @@ class Product {
         // Get image for each product
         $productImage = new ProductImage();
         foreach ($arr as $key => $product) {
-            echo $product['id'];
+
             $product['image'] = $productImage->getAllByProductId($product['id']);
             $arr[$key] = $product;
         }
