@@ -1,16 +1,78 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import axios from "axios";
 
 export default function ProductDetail() {
-    const [quantity, setQuantity] = useState(1);
+    const {prodID} = useParams();
+
+    // ### PRODUCT INFO
+    const [prodName, setProdName] = useState(null);
+    const [prodPrice, setProdPrice] = useState(null);
+    const [prodQuantity, ssetProdQuantity] = useState(null);
+    const [prodDescript, setProdDescript] = useState(null);
+    const [prodAvgRating, setProdAvgRating] = useState(0);   
+    const [prodBuyCount, setProdBuyCount] = useState(0);
+    const [prodStatus, setProdStatus]  = useState("Available")
+
+    // ### IMAGE LIST
+    const [imgList, setImgList] = useState([]);
+
+    // ### REVIEW
+    const [reviewList, setReviewList] = useState([]);
+    const [pageNumReview, setPageNumReview] = useState(0);
+
     const increaseQuantity = () => setQuantity((prev) => prev + 1);
     const decreaseQuantity = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+
+    useEffect(() => {
+        const fetchProductDetail = axios.get(`http://localhost/Assignment/Backend/api/product/detail/${prodID}`)
+        const fetchImgList = axios.get(`http://localhost/Assignment/Backend/api/product-image/product/${prodID}`)
+        const fetchReviewList = axios.get(`http://localhost/Assignment/Backend/api/review/product/${prodID}/fetch/0/10`)    
+       
+        Promise.all([fetchProductDetail, fetchImgList, fetchReviewList])
+            .then((response) => {
+                const [productListResponse, imgListResponse, reviewListResponse] = response;    
+                console.log("PRODUCT LIST: ", ProductDetail.data.data);
+                console.log("IMG LIST: ", imgListResponse.data.data);
+                console.log("REVIEW LIST: ", reviewListResponse.data.data);
+
+                if(productListResponse.status === 200) {
+                    const {name , price, quantity, description, buy_count, avg_rating, status} = productListResponse.data.data;
+                    setProdName(name);
+                    setProdPrice(price);
+                    ssetProdQuantity(quantity);
+                    setProdDescript(description);
+                    setProdBuyCount(buy_count);
+                    setProdAvgRating(avg_rating);
+                    setProdStatus(status);
+                }
+
+                if(imgListResponse.status === 200) {    
+                    setImgList(imgListResponse.data.data);
+                }
+
+                if(reviewListResponse.status === 200) {
+                    
+                }
+            })
+            .catch((error) => {
+                if (error.response) {
+                    alert(error.response.data.msg);
+                } else {
+                    console.error('Error:', error.message);
+                }
+            });
+    }, [prodID])
 
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow mt-6">
+                {/* CHECK ID */} 
+                <div className="bg-red-500">{prodID}</div>
+            
                 <div className="w-10/12 mx-auto h-10 justify-center">
                     <span><a href="customer/shopping">
                         Mua sắm
@@ -53,7 +115,7 @@ export default function ProductDetail() {
                             <span class="star">★</span>
                         </div>
                         <div className="price text-lg font-bold">192.000.000 VND</div>
-                        <div className="short-descript w-10/12">Sản phẩm chính hãng, được cung cấp bởi.... Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit officia ut tempora, laboriosam, doloribus provident voluptate, cum aliquid delectus temporibus nostrum iure veniam quidem necessitatibus sed quasi. Perspiciatis, eveniet laudantium?</div>
+                        {/* <div className="short-descript w-10/12">Sản phẩm chính hãng, được cung cấp bởi.... Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit officia ut tempora, laboriosam, doloribus provident voluptate, cum aliquid delectus temporibus nostrum iure veniam quidem necessitatibus sed quasi. Perspiciatis, eveniet laudantium?</div> */}
 
 
                         <div className="border border-b-1 w-10/12 "></div>

@@ -11,10 +11,18 @@ export default function Login() {
   const [mode, setMode] = useState("login");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState(null);
-  const [gender, setGender] = useState(null);
+  const [name, setName] = useState(null);
   const [address, setAddress] = useState(null);
+  // const [fname, setFname] = useState("");
+  // const [lname, setLname] = useState("");
+  const [phone, setPhone] = useState(null);
+  const [gender, setGender] = useState('M');
+  const [role, setRole] = useState("customer");
+  const [dateOfBirth, setDateOfBirth] = useState({
+    day: "",
+    month: "",
+    year: "",
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -54,17 +62,20 @@ export default function Login() {
   }
 
   async function handleSignUp(e) {
-
-    axios.post("http://localhost/Assignment/Backend/api/user/signup", {
+    const newUserData = {
+      name: name,
+      sex: gender,
       email: email,
-        password: pass,
-        confirmPassword: pass,
-        name: name,
-        gender: gender,
+      password: pass,
+      address: address,
+      phone: phone,
+      avt_url: "null.png"
+    }
 
-    })
+    console.log(newUserData);
+    axios.post("http://localhost/Assignment/Backend/api/user/signup", JSON.stringify(newUserData))
       .then((response) => {
-        if (response.status == 200) {
+        if (response.status == 201) {
           alert("Create account success");
           navigate("/")
         }
@@ -183,7 +194,8 @@ export default function Login() {
                         id="name"
                         name="firstName"
                         className={`outline-none mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 ${name != "" ? 'bg-blue-100' : null}`}
-                        placeholder="Huỳnh Bảo Ngọc"
+                        placeholder="Huỳnh Bảo "
+                        value={name}
                         onChange={(e) => setName(e.target.value)}
                       />
                   </div>
@@ -195,6 +207,7 @@ export default function Login() {
                       name="email"
                       className={`mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 ${email !== "" ? 'bg-blue-100' : null}`}
                       placeholder="ngoc@gmail.com"
+                      value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
 
@@ -203,27 +216,29 @@ export default function Login() {
                   <div>
                     <div>Số điện thoại</div>
                     <input
-                      type="number"
+                      type="text"
                       id="phone"
                       name="phone"
                       className={`mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 ${phone != "" ? 'bg-blue-100' : null}`}
                       placeholder="09xxxx"
+                      value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                     />
 
                   </div>
 
-                  <div>
+
+                  <div className="mb-4">
                     <div>Địa chỉ</div>
                     <input
                       type="text"
                       id="address"
                       name="address"
-                      className={`mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 ${phone != "" ? 'bg-blue-100' : null}`}
-                      placeholder="100, Ly Thuong Kiet, Quan 10, TP.HCM"
+                      className={`mt-1 p-2 w-4/5 border-b border-black  ${pass != "" ? "bg-blue-100" : null}`}
+                      placeholder="100 Ly Thuong Kiet, Quan 10, TPHCM"
+                      value={address}
                       onChange={(e) => setAddress(e.target.value)}
                     />
-
                   </div>
 
                   <div className="mb-4">
@@ -234,27 +249,21 @@ export default function Login() {
                       name="password"
                       className={`mt-1 p-2 w-4/5 border-b border-black  ${pass != "" ? "bg-blue-100" : null}`}
                       placeholder="****"
+                      value={pass}
                       onChange={(e) => setPass(e.target.value)}
                     />
                   </div>
 
                   <div className="mb-4 flex space-x-2">
                     <div className="pr-4">Giới tính</div>
-                    <input type="radio" id="male" value="male" name="gender" onClick={() => {setGender("male")}} />
+                    <input type="radio" id="male" value="M" name="gender" onClick={() => {setGender("M")}} />
                     <label htmlFor="male">Nam</label>
-                    <input type="radio" id="female" value="female" name="gender" onClick={() => {setGender("female")}} />
+                    <input type="radio" id="female" value="F" name="gender" onClick={() => {setGender("F")}} />
                     <label htmlFor="female">Nữ</label>
                   </div>
 
-                 
 
-                  {/* <div className="role flex space-x-2">
-                      <div>Bạn là nhân viên ? </div>
-                      <input type="radio" value="admin" name="role" onClick={() => {setRole("admin")}} />
-                      <label htmlFor="role">Đúng</label>
-                      <input type="radio" value="customer" name="role" onClick={() => {setRole("customer")}} />
-                      <label htmlFor="role">Không</label>
-                  </div> */}
+                  
                 </div>
 
 
