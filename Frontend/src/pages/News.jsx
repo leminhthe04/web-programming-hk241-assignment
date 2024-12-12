@@ -34,6 +34,7 @@ import { useState } from "react"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import Slider from "../components/Slider"
+import { Link } from "react-router-dom"
 
 export default function News() {
     // Mảng dữ liệu tin tức mẫu
@@ -52,9 +53,9 @@ export default function News() {
         },
         {
             id: 3,
-            title: "Sức khỏe và chăm sóc sức khỏe trong thời đại mới",
-            summary: "Chăm sóc sức khỏe luôn là ưu tiên hàng đầu. Trong năm 2024, các công nghệ mới sẽ giúp cải thiện chất lượng dịch vụ y tế toàn cầu.",
-            image: "https://backend.aih.com.vn/assets/uploads/myfiles/files/giai-phap-cham-soc-suc-khoe.png",
+            title: "Đánh giá ASUS ExpertBook P5: Làm việc mượt hơn với trợ lý AI, pin 14 tiếng, business laptop nhưng hiệu năng gaming?",
+            summary: "Không chỉ có ngoại hình nhỏ nhẹ, mềm mại và chuyên nghiệp, ASUS ExpertBook P5 sở hữu tất cả những tố chất, sức mạnh và tiềm năng cho tương lai để đảm đương mọi công việc một cách tròn vai, chu đáo miễn chê.",
+            image: "https://cdn-media.sforum.vn/storage/app/media/nhatquang519/danh-gia-asus-expertbook-p5/danh-gia-asus-expertbook-p5-2024-cover.jpg",
         },
         {
             id: 4,
@@ -72,38 +73,35 @@ export default function News() {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <Header />
-
-            <div className="breadcums my-5 ml-10">
-                <span className="">Trang chủ</span> /
-                <span className="font-bold"> Tin tức</span>
-            </div>
-
-            <main className="p-8 bg-gray-100">
-                <Slider />
-                <section className="mb-8 w-10/12 mx-auto">
-                    <div className="grid grid-cols-2 mx-auto">
-                        <div className="justify-center items-center my-auto"></div>
-                        <h1 className="text-4xl font-bold mb-4">Tin tức</h1>
-                        {/* <p className="text-lg mb-8">Đây là trang tin tức của chúng tôi. Cập nhật những thông tin mới nhất từ chúng tôi.</p> */}
-                    </div>
-
-                    {/* Danh sách các bài viết tin tức */}
-                    <div className="grid grid-cols-3 gap-6">
-                        {news.map((item) => (
-                            <div key={item.id} className="bg-white p-6 rounded-lg shadow-md">
-                                <img src={item.image} alt={item.title} className="w-full h-48 object-cover rounded-md mb-4" />
-                                <h2 className="text-xl font-bold mb-2">{item.title}</h2>
-                                <p className="text-gray-600 mb-4">{item.summary}</p>
-                                <a href={`/news/${item.id}`} className="text-blue-600 hover:underline">Xem thêm</a>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-            </main>
-
-            <Footer />
+          <Header />
+    
+          <div className="breadcums my-5 ml-10">
+            <span>Trang chủ</span> /
+            <span className="font-bold"> Tin tức</span>
+          </div>
+    
+          <main className="p-8 bg-gray-100">
+            <Slider />
+            <section className="mb-8 w-10/12 mx-auto">
+              <div className="grid grid-cols-2 mx-auto">
+                <div className="justify-center items-center my-auto"></div>
+                <h1 className="text-4xl font-bold mb-4">Tin tức</h1>
+              </div>
+    
+              <div className="grid grid-cols-3 gap-6">
+                {news.map((item) => (
+                  <div key={item.id} className="bg-white p-6 rounded-lg shadow-md">
+                    <img src={item.image} alt={item.title} className="w-full h-48 object-cover rounded-md mb-4" />
+                    <h2 className="text-xl font-bold mb-2">{item.title}</h2>
+                    <p className="text-gray-600 mb-4">{item.summary}</p>
+                    <Link to={`/news/${item.id}`} className="text-blue-600 hover:underline">Xem thêm</Link>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </main>
+    
+          <Footer />
         </div>
-    );
-}
-
+      );
+    }
