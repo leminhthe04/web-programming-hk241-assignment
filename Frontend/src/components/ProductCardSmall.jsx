@@ -3,7 +3,7 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function ProductCartSmall({prodID, prodName, prodPrice, prodRating}) {
+export default function ProductCartSmall({prodID, prodName, prodPrice, prodRating, prodImage}) {
     const navigate = useNavigate();
     const [showBuy, setShowBuy] = useState(false);
     const formattedPrice = new Intl.NumberFormat('vi-VN', {
@@ -11,6 +11,7 @@ export default function ProductCartSmall({prodID, prodName, prodPrice, prodRatin
         currency: 'VND'
     }).format(prodPrice);
     console.log("CHECK PROD ID: ", prodID);
+    console.log("CHECK PROD image: ", prodImage);
 
     const renderStars = (rating) => {
         const totalStars = 5;
@@ -38,7 +39,7 @@ export default function ProductCartSmall({prodID, prodName, prodPrice, prodRatin
                 onMouseOut={() => setShowBuy(false)}
                 onClick={() => navigate(`/customer/productDetail/${prodID}`)}
             >
-                <img src="https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/xiaomi_14t_black_1_bb226cd286.png" alt="" className="w-auto h-28" />
+                <img src={prodImage} alt="" className="w-auto h-28" />
                 {/* <div className="cart-icon absolute right-2 top-2  rounded-full p-2 bg-indigo-300 hover:bg-indigo-400 ">
                     <FontAwesomeIcon icon={faCartShopping} />
                 </div> */}
