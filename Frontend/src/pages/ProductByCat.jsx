@@ -20,7 +20,7 @@ export default function ProductByCat() {
     const [pageNum, setPageNum] = useState(0);
 
     useEffect(() => {
-                 axios.get(`http://localhost/Assignment/Backend/api/product/category/${catID}/fetch/0/3`)
+                 axios.get(`http://localhost/Assignment/Backend/api/product/category/${catID}/fetch/0/10`)
                      .then((response) => {
                          if (response.status === 200) {
                              setProductList(response.data.data.data);
@@ -55,7 +55,7 @@ export default function ProductByCat() {
         setCurrentPage(pageNum);
         const index = Number(pageNum);
         const offset = index*3;
-        axios.get(`http://localhost/Assignment/Backend/api/product/category/${catID}/fetch/${offset}/3`)
+        axios.get(`http://localhost/Assignment/Backend/api/product/category/${catID}/fetch/${offset}/10`)
         .then((response) => {
             if (response.status === 200) {
                 setProductList(response.data.data.data);

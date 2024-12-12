@@ -76,7 +76,7 @@ export default function Header({ page, role }) {
                                     <li className="border-b p-2 hover:font-bold" 
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            navigate(`/customer/category/smartphone`)
+                                            window.location.href = (`/customer/category/smartphone`)
                                         }}
                                     >
                                         Điện thoại
@@ -84,26 +84,26 @@ export default function Header({ page, role }) {
                                     <li className="border-b p-2 hover:font-bold" 
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            navigate(`/customer/category/laptop`)
+                                            window.location.href = (`/customer/category/laptop`)
                                         }}
                                     >Laptop</li>
                                     <li className="border-b p-2 hover:font-bold" 
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            navigate(`/customer/category/tablet`)
+                                            window.location.href = (`/customer/category/tablet`)
                                         }}
                                     >
                                         Máy tính bảng  </li>
                                     <li className="border-b p-2 hover:font-bold" 
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            navigate(`/customer/category/swatch`)
+                                            window.location.href = (`/customer/category/swatch`)
                                         }}
                                     >Đồng hồ thông minh  </li>
                                     <li className="p-2 hover:font-bold"
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            navigate(`/customer/category/other`)
+                                            window.location.href = (`/customer/category/other`)
                                         }}
                                     >Phụ kiện  </li>
                                 </ul>

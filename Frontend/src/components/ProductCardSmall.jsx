@@ -37,12 +37,9 @@ export default function ProductCartSmall({prodID, prodName, prodPrice, prodRatin
             <div className="relative w-44 h-44 border bg-white flex justify-center items-center align-center rounded-lg"
                 onMouseOver={() => setShowBuy(true)}
                 onMouseOut={() => setShowBuy(false)}
-                onClick={() => navigate(`/customer/productDetail/${prodID}`)}
+                onClick={() => window.location.href = (`/customer/productDetail/${prodID}`)}
             >
                 <img src={prodImage} alt="" className="w-auto h-28" />
-                {/* <div className="cart-icon absolute right-2 top-2  rounded-full p-2 bg-indigo-300 hover:bg-indigo-400 ">
-                    <FontAwesomeIcon icon={faCartShopping} />
-                </div> */}
                 {showBuy ? 
                     <div className="buy-now absolute bottom-0 bg-black text-white w-full text-center p-1"
                         onClick={(e) => 
@@ -60,15 +57,6 @@ export default function ProductCartSmall({prodID, prodName, prodPrice, prodRatin
                     <span className="text-red-600">{formattedPrice}</span>
                     {/* <span className="mx-2 line-through">22.000.000</span> */}
                 </div>
-                {/* <div class="rating space-x-1 text-sm">
-                    <span class="star filled text-yellow-400">★</span>
-                    <span class="star filled text-yellow-400">★</span>
-                    <span class="star filled text-yellow-400">★</span>
-                    <span class="star text-yellow-400">★</span>
-                    <span class="star">★</span>
-
-                    <span>(88)</span>
-                </div> */}
                  <div className="rating space-x-1 text-sm">
                 {renderStars(prodRating)}
                 <span>({prodRating})</span>
