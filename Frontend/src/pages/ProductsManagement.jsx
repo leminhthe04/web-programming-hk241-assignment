@@ -12,17 +12,10 @@ export default function ProductsManagement() {
     const navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
     const [productList, setProductList] = useState([]);
-    // const [priceToggle, setPriceToggle] = useState(false);
-    // const [nameToggle, setNameToggle] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [page, setPage] = useState(null);
-    // const [errors, setErrors] = useState(null);
-    // const [token, setToken] = useState(null);
     const [count, setCount] = useState(0);
-    // const [keyword, setKeyword] = useState("");
     const [loading, setLoading] = useState(false);
-
-
 
     useEffect(() => {
         axios.get("http://localhost/Assignment/Backend/api/product/fetch/0/10",)

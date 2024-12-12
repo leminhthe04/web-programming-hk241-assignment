@@ -13,13 +13,12 @@ export default function UsersManagement() {
     const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
-        axios.get("http://localhost:8000/api/user/users?limit=10")
+        axios.get("")
             .then((response) => {
                 const userData = response.data.data;
-                console.log(userData);
-                setUserData(userData);
-                setTotalUser(response.data[totalUser]);
-                setTotalPage(response.data["totalPage"]);
+                console.log(userData.data);
+                setUserData(userData.data); 
+                setTotalPage(userData.page_count);
                 console.log(page, currentPage)
             })
             .catch((err) => {
@@ -30,13 +29,14 @@ export default function UsersManagement() {
 
     function handlePageClick(pageNum) {
         const index = Number(pageNum);
-        axios.get(`http://localhost:8000/api/user/users?page=${index}&limit=10`,)
+        const offset = index * 10;
+        axios.get(`http://localhost/Assignment/Backend/api/user/fetch/${offset}/10`,)
             .then((response) => {
-                console.log(response);
+
                 setCurrentPage(pageNum)
-                const users = response.data.data;
-                // console.log(JSON.stringify(products));
-                setUserData(users);
+                const userData = response.data.data;
+                console.log(userData.data);
+                setUserData(userData.data); 
             })
             .catch((error) => {
                 if (error.response) {
