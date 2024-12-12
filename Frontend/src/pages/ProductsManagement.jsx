@@ -97,23 +97,22 @@ export default function ProductsManagement() {
     }
 
     function handleDeleteProduct(prodID) {
-        // alert(prodID + token);
-        axios.delete(`http://localhost:8000/api/product/DeleteProduct/${prodID}`, null, {
-            headers: {
-                Authorization: `Bearer ${token}`, // Replace <your-auth-token> with the actual token
-            },
-        })
-            .then((response) => {
-                alert(response.data.msg);
-                setCount((pre) => pre + 1);
-            })
-            .catch((error) => {
-                if (error.response) {
-                    alert(error.response.data.msg);
-                } else {
-                    console.error('Error:', error.message);
-                }
-            })
+        // axios.delete(`http://localhost:8000/api/product/DeleteProduct/${prodID}`, null, {
+        //     headers: {
+        //         Authorization: `Bearer ${token}`, // Replace <your-auth-token> with the actual token
+        //     },
+        // })
+        //     .then((response) => {
+        //         alert(response.data.msg);
+        //         setCount((pre) => pre + 1);
+        //     })
+        //     .catch((error) => {
+        //         if (error.response) {
+        //             alert(error.response.data.msg);
+        //         } else {
+        //             console.error('Error:', error.message);
+        //         }
+        //     })
 
     }
 
@@ -228,11 +227,11 @@ export default function ProductsManagement() {
                                         </td>
                                         <td>
                                             <div className="flex justify-center items-center">
-                                                <button onClick={() => handleUpdateProduct(prod.product_id)} className="bg-green-600 px-4 rounded-md font-bold text-white uppercase">
+                                                <button onClick={() => window.location.href= `/admin/edit-product/${prod.id}`} className="bg-green-600 px-4 rounded-md font-bold text-white uppercase">
                                                     Sửa
                                                 </button>
                                                 <div className="w-2"></div>
-                                                <div className="bg-red-600 px-4 rounded-md font-bold text-white uppercase " onClick={() => handleDeleteProduct(prod.product_id)} >
+                                                <div className="bg-red-600 px-4 rounded-md font-bold text-white uppercase " onClick={() => handleDeleteProduct(prod.id)} >
                                                     Xóa
                                                 </div>
                                             </div>
