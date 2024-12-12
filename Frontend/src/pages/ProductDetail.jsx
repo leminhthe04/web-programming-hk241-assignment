@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import RenderStars from "../components/RenderStart";
@@ -15,6 +15,7 @@ const categoryMap = {
 }
 
 export default function ProductDetail() {
+    const navigate = useNavigate();
     const { prodID } = useParams();
     const [quantity, setQuantity] = useState(1);
 
@@ -49,8 +50,6 @@ export default function ProductDetail() {
     const decreaseQuantity = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
     useEffect(() => {
-        
-
         const fetchData = async () => {
             try {
                 const fetchProductDetails = axios.get(`http://localhost/Assignment/Backend/api/product/detail/${prodID}`);
@@ -90,6 +89,18 @@ export default function ProductDetail() {
     // FUNTION
     function handleDisplayImg(index) {
         setDisplayImg(imgList[index].url);
+    }
+
+    function handleCheckout(productID, productQuantity) {
+        console.log("CHECKOUT: ", productID, productQuantity);
+        navigate(`/customer/pay/${productID}`, 
+            {state: {
+                quantity: productQuantity, 
+                img: imgList[0].url,
+                prodName: prodName,
+                price: prodPrice
+            }}
+        );
     }
 
 
@@ -160,7 +171,11 @@ export default function ProductDetail() {
                                     +
                                 </button>
                             </div>
-                            <div className="bg-red-500 font-bold text-white p-2">Mua ngay</div>
+                            <div className="bg-red-500 font-bold text-white p-2"
+                                onClick={() => {
+                                    handleCheckout(prodID, quantity)}
+                                }
+                            >Mua ngay</div>
                         </div>
                     </div>
 
