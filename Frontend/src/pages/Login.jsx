@@ -24,15 +24,15 @@ export default function Login() {
     year: "",
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setDateOfBirth({
-      ...dateOfBirth,
-      [name]: value,
-    });
-  };
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setDateOfBirth({
+  //     ...dateOfBirth,
+  //     [name]: value,
+  //   });
+  // };
 
-  const { day, month, year } = dateOfBirth;
+  // const { day, month, year } = dateOfBirth;
 
 
   async function handleLogin(e) {
@@ -46,6 +46,8 @@ export default function Login() {
           console.log("Check response: ", response.data.data[0]);
           const userData = response.data.data[0];
           localStorage.setItem("userID", userData.id);
+          localStorage.setItem("userName", userData.name);
+          localStorage.setItem("userEmail", userData.email);
           
           
           alert("Đăng nhập thành công");
@@ -53,7 +55,7 @@ export default function Login() {
         }
       })
       .catch((error) => {
-        if (error.response) {
+        if (error.response.data) {
           alert(error.response.data.msg);
         } else {
           console.error('Error:', error.message);
