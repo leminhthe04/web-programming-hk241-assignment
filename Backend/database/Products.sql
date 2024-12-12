@@ -1,5 +1,16 @@
 USE prismora;
 
+
+DROP PROCEDURE IF EXISTS findAllProducts;
+CREATE PROCEDURE findAllProducts (
+    IN _offset INT,
+    IN _limit INT
+) BEGIN 
+    SELECT * FROM products 
+    ORDER BY buy_count DESC 
+    LIMIT _offset, _limit;
+END;
+
 -- $name, $price, $description, $quantity, $category_id, $status
 DROP PROCEDURE IF EXISTS insertProduct;
 CREATE PROCEDURE insertProduct (
