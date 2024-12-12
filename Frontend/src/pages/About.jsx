@@ -15,12 +15,12 @@ export default function About() {
 
                     <div className="grid grid-cols-2 mx-auto">
                         <div className="justify-center items-center my-auto ">
-                            <h1 className="text-4xl font-bold mb-4">Công ty Exclusive</h1>
+                            <h1 className="text-4xl font-bold mb-4">Công ty Prismora</h1>
                             <p className="text-lg">
-                                Vào năm 2024, công ty Exclusive được thành lâp với mục tiêu trở thành công ty hàng đầu
+                                Vào năm 2024, công ty Prismora được thành lâp với mục tiêu trở thành công ty hàng đầu
                                 trong lĩnh vực thương mại điện tử. Chúng tôi cung cấp các sản phẩm chất lượng cao với giá cả hợp lý. Chúng tôi luôn lắng nghe ý kiến của khách hàng và không ngừng cải thiện dịch vụ của mình.
                                 <br />
-                                Đến nay, công ty Exclusive tự hào là một trong các đơn vị phân phối hàng đầu ở thị trường trong và ngoài nước. Chúng tôi đã hợp tác với hơn 100+
+                                Đến nay, công ty Prismora tự hào là một trong các đơn vị phân phối hàng đầu ở thị trường trong và ngoài nước. Chúng tôi đã hợp tác với hơn 100+
                                 thương hiệu, nhãn hàng, có hơn 200+ sản phẩm để phục vụ
                             </p>
                         </div>

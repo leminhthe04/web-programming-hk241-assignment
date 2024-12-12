@@ -38,23 +38,10 @@ export default function ProductByCat() {
                      })
     }, [])
 
-
-
-    // const [editMode, setEditMode] = useState(false);
-    // const [productList, setProductList] = useState([]);
-    // const [priceToggle, setPriceToggle] = useState(false);
-    // const [nameToggle, setNameToggle] = useState(false);
-    // const [currentPage, setCurrentPage] = useState(0);
-    // const [page, setPage] = useState(null);
-    // const [errors, setErrors] = useState(null);
-    // const [token, setToken] = useState(null);
-    // const [count, setCount] = useState(0);
-    // const [keyword, setKeyword] = useState("");
-
     function handlePageClick(pageNum) {
         setCurrentPage(pageNum);
         const index = Number(pageNum);
-        const offset = index*3;
+        const offset = index*10;
         axios.get(`http://localhost/Assignment/Backend/api/product/category/${catID}/fetch/${offset}/10`)
         .then((response) => {
             if (response.status === 200) {
@@ -90,10 +77,6 @@ export default function ProductByCat() {
                 <div className="w-10/12 mx-auto bg-product">
                     <div className="h-10"></div>
                     <div className="grid grid-cols-5 gap-y-10 ">
-                        {/* {Array.from({ length: 10 }, (_, i) => (
-                                <ProductCartSmall prodName={} />
-                            ))} */}
-
                         {productList.map((product, index) => (
                             <ProductCartSmall key={index} prodName={product.name} prodPrice={product.price} prodID={product.id} prodRating={product.avg_rating} prodImage={product.image[0].url} />
                         ))}
@@ -106,7 +89,7 @@ export default function ProductByCat() {
                     {Array.from({ length: pageNum }, (_, i) => (
                         <button
                             key={i}
-                            onClick={() => handlePageClick(i)} // Pass the page number to the handler
+                            onClick={() => handlePageClick(i)} 
                             className={`px-3 py-1 mx-1 hover:bg-blue-300 ${currentPage === i ? "bg-blue-500 text-white" : "bg-gray-200"
                                 } rounded`}
                         >

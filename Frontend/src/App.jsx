@@ -15,6 +15,7 @@ import News from "./pages/News";
 
 import UsersManagement from "./pages/UsersManagement";
 import Checkout from "./pages/Checkout";
+import Test from "./pages/Test";  
 import Dashboard from "./pages/Dashboard";
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
       <AuthProvider >
         <Routes>
           <Route path="/" element={<Login />} />
-
+          <Route path="/test" element={<Test />} />
           
           <Route path="/customer/pay" element={<Checkout />} />
           <Route path="/customer/homepage" element={<Homepage />} />
