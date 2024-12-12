@@ -30,11 +30,13 @@
 //     )
 // }
 
-import { useState } from "react"
-import Header from "../components/Header"
-import Footer from "../components/Footer"
-import Slider from "../components/Slider"
-import { Link } from "react-router-dom"
+
+
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Slider from "../components/Slider";
 
 export default function News() {
     // Mảng dữ liệu tin tức mẫu
@@ -73,35 +75,30 @@ export default function News() {
 
     return (
         <div className="flex flex-col min-h-screen">
-          <Header />
-    
-          <div className="breadcums my-5 ml-10">
-            <span>Trang chủ</span> /
-            <span className="font-bold"> Tin tức</span>
-          </div>
-    
-          <main className="p-8 bg-gray-100">
-            <Slider />
-            <section className="mb-8 w-10/12 mx-auto">
-              <div className="grid grid-cols-2 mx-auto">
-                <div className="justify-center items-center my-auto"></div>
-                <h1 className="text-4xl font-bold mb-4">Tin tức</h1>
-              </div>
-    
-              <div className="grid grid-cols-3 gap-6">
-                {news.map((item) => (
-                  <div key={item.id} className="bg-white p-6 rounded-lg shadow-md">
-                    <img src={item.image} alt={item.title} className="w-full h-48 object-cover rounded-md mb-4" />
-                    <h2 className="text-xl font-bold mb-2">{item.title}</h2>
-                    <p className="text-gray-600 mb-4">{item.summary}</p>
-                    <Link to={`/news/${item.id}`} className="text-blue-600 hover:underline">Xem thêm</Link>
-                  </div>
-                ))}
-              </div>
-            </section>
-          </main>
-    
-          <Footer />
+            <Header />
+            <div className="breadcums my-5 ml-10">
+                <span className="">Trang chủ</span> /
+                <span className="font-bold"> Tin tức</span>
+            </div>
+            <main className="p-8 bg-gray-100">
+                <Slider />
+                <section className="mb-8 w-10/12 mx-auto">
+                    <div className="grid grid-cols-2 mx-auto">
+                        <h1 className="text-4xl font-bold mb-4">Tin tức</h1>
+                    </div>
+                    <div className="grid grid-cols-3 gap-6">
+                        {news.map((item) => (
+                            <div key={item.id} className="bg-white p-6 rounded-lg shadow-md">
+                                <img src={item.image} alt={item.title} className="w-full h-48 object-cover rounded-md mb-4" />
+                                <h2 className="text-xl font-bold mb-2">{item.title}</h2>
+                                <p className="text-gray-600 mb-4">{item.summary}</p>
+                                <Link to={`/news/${item.id}`} className="text-blue-600 hover:underline">Xem thêm</Link>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            </main>
+            <Footer />
         </div>
-      );
-    }
+    );
+}
