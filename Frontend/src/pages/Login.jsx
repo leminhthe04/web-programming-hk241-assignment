@@ -13,26 +13,8 @@ export default function Login() {
   const [pass, setPass] = useState("");
   const [name, setName] = useState(null);
   const [address, setAddress] = useState(null);
-  // const [fname, setFname] = useState("");
-  // const [lname, setLname] = useState("");
   const [phone, setPhone] = useState(null);
   const [gender, setGender] = useState('M');
-  const [role, setRole] = useState("customer");
-  const [dateOfBirth, setDateOfBirth] = useState({
-    day: "",
-    month: "",
-    year: "",
-  });
-
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setDateOfBirth({
-  //     ...dateOfBirth,
-  //     [name]: value,
-  //   });
-  // };
-
-  // const { day, month, year } = dateOfBirth;
 
 
   async function handleLogin(e) {
@@ -155,10 +137,6 @@ export default function Login() {
                   </span>
                 </div>
 
-                {/* <div className="block my-4 space-x-4">
-                  <span>Bạn là chủ shop?</span>
-                  <span className="border-b border-black p-1">Kênh người bán</span>
-                </div> */}
               </form>
 
             </div>

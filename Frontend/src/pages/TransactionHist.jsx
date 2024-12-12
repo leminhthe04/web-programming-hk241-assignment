@@ -5,24 +5,11 @@ import CustomerPie from "../components/CustomerPie";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-
-
 export default function TransactionHist() {
-    const {id} = useParams();
+    const {userID} = useParams();
     const [userDetail, setUserDetail] = useState({});
     useEffect(() => {
-        axios.get(`http://localhost:8000/api/user/get-detail/${id}`)
-            .then((response) => {
-                const detail = response.data.data;
-                setUserDetail(detail);
-            })
-            .catch((error) => {
-                if (error.response) {
-                    alert(error.response.data.msg);
-                } else {
-                    console.error('Error:', error.message);
-                }
-            })
+        
     }, [])
 
     return (
@@ -30,8 +17,8 @@ export default function TransactionHist() {
             <Header />
 
             <div className="m-4 mb-10 pl-6">
-                <span className="text-grey-500">User / </span>
-                <span className=" font-medium">Transaction History</span>
+                <span className="text-grey-500">Cá nhân / </span>
+                <span className=" font-medium">Lịch sử mua hàng</span>
             </div>
             <main className="min-h-screen">
                 <div className="info grid grid-cols-2">
@@ -40,13 +27,13 @@ export default function TransactionHist() {
                             <div className="space-y-1">
                                 <label htmlFor="name">Tên</label>
                                 <div className="pl-2 bg-gray-100 rounded-ms p-1 text-gray-600">
-                                    {userDetail.lname + " " + userDetail.fname}
+                                    {/* {userDetail.lname + " " + userDetail.fname} */}
                                 </div>
                             </div>
                             <div className="space-y-1">
                                 <label htmlFor="name">Email</label>
                                 <div className="pl-2 bg-gray-100 rounded-ms p-1 text-gray-600">
-                                    {userDetail.email}
+                                    {/* {userDetail.email} */}
                                 </div>
                             </div>
                             <div className="space-y-1">
@@ -65,10 +52,10 @@ export default function TransactionHist() {
                             <div className="sta space-y-1 p-4 ">
                                 <div>Tổng chi tiêu</div>
                                 <div className="font-bold text-2xl">
-                                    {new Intl.NumberFormat('vi-VN').format(userDetail.total_payment)}
+                                    {/* {new Intl.NumberFormat('vi-VN').format(userDetail.total_payment)} */}
                                 </div>
                                 <div className="text-gray-700">12 sản phẩm</div>
-                                <div className="text-gray-700">Thẻ thành viên: {userDetail.ranking}</div>
+                                {/* <div className="text-gray-700">Thẻ thành viên: {userDetail.ranking}</div> */}
                             </div>
                             <div className="graph pr-4">
                                   <CustomerPie />       

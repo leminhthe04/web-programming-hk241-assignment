@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 export default function Header({ page, role }) {
     const navigate = useNavigate();
+    const [user_id, setUser_id] = useState(null);   
     const [displayCat, setDisplayCat] = useState(false);
     const [displayAccount, setDisplayAccount] = useState(false);
     
@@ -10,6 +11,11 @@ export default function Header({ page, role }) {
         localStorage.removeItem("role");
         navigate("/");
     }   
+
+    useEffect(() => {
+        const userID = localStorage.getItem("userID");
+        setUser_id(userID);
+    }, [])
     
     if (role == "admin") {
         return (
@@ -119,9 +125,8 @@ export default function Header({ page, role }) {
                         >Giới thiệu</li>
                     </ul>
                 </div>
-                <div className="w-1/6 pr-20 py-2 "
-                    onMouseEnter={() =>{ 
-                        setDisplayAccount(true)}} // Hiển thị menu
+                <div className={`w-1/6 pr-20 py-2 bg-red-500`}
+                    onMouseEnter={() =>{ setDisplayAccount(true)}} // Hiển thị menu
                     onMouseLeave={() => setDisplayAccount(false)} // Ẩn menu khi ra ngoài
                 >
                    
