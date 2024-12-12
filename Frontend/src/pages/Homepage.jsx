@@ -18,7 +18,8 @@ export default function Homepage() {
             .then((response) => {
                 if(response.status === 200) {
                     console.log("Check response: ", response.data.data.data);
-                    setProductList(response.data.data.data);
+                    const resultData = response.data.data.data;
+                    setProductList(resultData);
                 }
             })
             .catch((error) => {
@@ -69,7 +70,7 @@ export default function Homepage() {
                             <span className="px-4 text-red-600">Sản phẩm nổi bật</span>
                         </div>
                         <div className="w-11/12 mx-auto flex justify-between pb-6">
-                        {productList.map((prod, index) => (<ProductCard prodID={prod.id} prodName={prod.name} prodPrice={prod.price} prodRating={prod.avg_rating} prodImage={prod} />))}
+                        {productList.map((prod, index) => (<ProductCard prodID={prod.id} prodName={prod.name} prodPrice={prod.price} prodRating={prod.avg_rating}  />))}
                         </div>
                       
                     </div>
