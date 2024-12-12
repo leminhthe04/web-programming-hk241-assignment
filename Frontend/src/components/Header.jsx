@@ -14,6 +14,7 @@ export default function Header({ page, role }) {
 
     useEffect(() => {
         const userID = localStorage.getItem("userID");
+        console.log("userID: ", userID);
         setUser_id(userID);
     }, [])
     
@@ -68,8 +69,8 @@ export default function Header({ page, role }) {
                 <div className="w-1/6 text-2xl font-bold tex-white flex justify-start pl-20">PRISMORA</div>
                 <div className="menu w-4/6 justify-center text-center flex flex-row">
                     <ul className="grid grid-cols-4 gap-4 text-lg items-center">
-                        <li className=" p-2" onClick={() => navigate("/customer/homepage")} >Trang chủ</li>
-                        <li className=" " onClick={() => navigate("/customer/shopping")} >
+                        <li className="p-2" onClick={() => navigate("/customer/homepage")} >Trang chủ</li>
+                        <li className="" onClick={() => navigate("/customer/shopping")} >
                             <div className="w-full h-full p-2 relative "
                                
                                 onMouseEnter={() =>{ 
@@ -125,7 +126,7 @@ export default function Header({ page, role }) {
                         >Giới thiệu</li>
                     </ul>
                 </div>
-                <div className={`w-1/6 pr-20 py-2 bg-red-500`}
+                <div className={`w-1/6 pr-20 py-2 ${user_id ? "block" : "hidden"}`}             
                     onMouseEnter={() =>{ setDisplayAccount(true)}} // Hiển thị menu
                     onMouseLeave={() => setDisplayAccount(false)} // Ẩn menu khi ra ngoài
                 >
@@ -138,10 +139,10 @@ export default function Header({ page, role }) {
                         
                         <ul className={`absolute bg-black mt-2 min-w-48 ${displayAccount ? "block" : "hidden"}`}>
                             <li className="p-2 border-b-2 hover:font-semibold"
-                                onClick={() => navigate("/customer/account/1")}
+                                onClick={() => navigate(`/customer/account/${user_id}`)}
                             >Thông tin cá nhân</li>
                             <li className="p-2 border-b-2 hover:font-semibold"
-                                onClick={() => navigate("/customer/history/1")}
+                                onClick={() => navigate(`/customer/history/${user_id}`)}
                             >Lịch sử mua hàng</li>
                             <li className="p-2 border-b-2 hover:font-semibold"
                                 onClick={handleLogout}
