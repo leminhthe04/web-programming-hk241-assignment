@@ -45,9 +45,9 @@ class Product {
             if($table) $table->free();
             $stmt->close();
 
-            // Get image for this product
-            // $productImage = new ProductImage();
-            // $arr[0]['image'] = $productImage->getAllByProductId($id);
+            Get image for this product
+            $productImage = new ProductImage();
+            $arr[0]['image'] = $productImage->getAllByProductId($id);
 
             return $arr;
         } catch (mysqli_sql_exception $e) {
