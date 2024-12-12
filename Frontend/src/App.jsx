@@ -36,6 +36,9 @@ function App() {
           <Route path="/customer/shopping" element={<Shopping />} />
           <Route path="/customer/about" element={<About />} />
           <Route path="/customer/news" element={<News />} />
+          
+          <Route path="/customer/news/:id" element={<NewsDetail />} />
+
           <Route path="/customer/shopping" element={<Shopping />} />
           <Route path="/customer/category/:catName" element={<ProductByCat />} />
           <Route path="/customer/productDetail/:prodID" element={<ProductDetail />} />
