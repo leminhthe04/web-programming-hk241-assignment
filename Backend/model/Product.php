@@ -24,13 +24,13 @@ class Product {
         $stmt->close();
 
         // Get image for each product
-        // $productImage = new ProductImage();
-        // foreach ($arr as $key => $product) {
-        //     echo $product['id'];
-        //     $product['image'] = $productImage->getAllByProductId($product['id']);
-        //     $arr[$key] = $product;
-        // }
-        // return [ "page_count" => $page_count, "data" => $arr ];        
+        $productImage = new ProductImage();
+        foreach ($arr as $key => $product) {
+            echo $product['id'];
+            $product['image'] = $productImage->getAllByProductId($product['id']);
+            $arr[$key] = $product;
+        }
+        return [ "page_count" => $page_count, "data" => $arr ];        
     }
 
     public function getById($id) {
