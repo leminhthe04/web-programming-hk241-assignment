@@ -25,7 +25,9 @@ class User {
         $table = $stmt->get_result();
         $arr = Util::fetch($table);
         $stmt->close();
-        return $arr;        
+
+        $data = [ "page_count" => $page_count, "data" => $arr ];
+        return $data;
     }
 
     public function getById($id) {
