@@ -38,10 +38,10 @@ CREATE PROCEDURE insertReview (
         (_customer_id, _product_id, _rating, _comment);
 
     SET @current_rating_count = (SELECT rating_count FROM products WHERE id = _product_id);
-    SET @current_rating = (SELECT rating FROM products WHERE id = _product_id);
+    SET @current_rating = (SELECT avg_rating FROM products WHERE id = _product_id);
     SET @new_rating = (@current_rating * @current_rating_count + _rating) / (@current_rating_count + 1);
     UPDATE products
-    SET rating = @new_rating,
+    SET avg_rating = @new_rating,
         rating_count = @current_rating_count + 1
     WHERE id = _product_id;
 
@@ -62,10 +62,11 @@ CREATE PROCEDURE findAllReviewByProductId (
         SIGNAL SQLSTATE '45404'
             SET MESSAGE_TEXT = 'Product not found';
     END IF;
-    -- CALL findAllByField('reviews', 'product_id', _product_id, _offset, _limit); 
+
     SELECT R.id AS review_id, R.product_id, U.id AS customer_id, U.name AS customer_name, R.rating, R.comment, R.time
     FROM reviews R, users U
-    WHERE R.customer_id = U.id AND R.product_id = _product_id;
+    WHERE R.customer_id = U.id AND R.product_id = _product_id
+    LIMIT _offset, _limit;
 END;
 
 DROP PROCEDURE IF EXISTS findAllReviewByUserId;
@@ -79,10 +80,11 @@ CREATE PROCEDURE findAllReviewByUserId (
         SIGNAL SQLSTATE '45404'
             SET MESSAGE_TEXT = 'User not found';
     END IF;
-    -- CALL findAllByField('reviews', 'customer_id', _user_id, _offset, _limit); 
+
     SELECT R.id AS review_id, R.product_id, U.id AS customer_id, U.name AS customer_name, R.rating, R.comment, R.time
     FROM reviews R, users U
-    WHERE R.customer_id = U.id AND R.customer_id = _user_id;
+    WHERE R.customer_id = U.id AND R.customer_id = _user_id
+    LIMIT _offset, _limit;
 END;
 
 -- INSERT INTO reviews(customer_id, product_id, rating, comment) VALUES
@@ -96,7 +98,7 @@ END;
 -- CALL findAllReviewByProductId(1, 0, 10);
 -- CALL findAllReviewByUserId(1, 0, 10);
 
-SELECT * FROM reviews;
+-- SELECT * FROM reviews;
 
 DROP PROCEDURE IF EXISTS updateReviewRating;
 CREATE PROCEDURE updateReviewRating (IN _id INT, IN _rating INT)

@@ -1,11 +1,6 @@
 USE prismora;
 
 
--- order_id                INT                                                         NOT NULL,
---     product_id              INT                                                         NOT NULL,
---     quantity                INT                                                         NOT NULL,
---     subtotal_price 
-
 
 DROP PROCEDURE IF EXISTS findDetailOrder;
 CREATE PROCEDURE findDetailOrder (
@@ -18,7 +13,6 @@ CREATE PROCEDURE findDetailOrder (
             SET MESSAGE_TEXT = 'Order not found';
     END IF;
 
-    -- CALL findAllByField('bought_products', 'order_id', _order_id, 0, 9999);
     SELECT * FROM bought_products WHERE order_id = _order_id;
 END;
 
@@ -105,7 +99,6 @@ CREATE PROCEDURE updateOrderStatus (
     CALL updateFieldById('orders', _order_id, 'status', _status);
 END;
 
--- SELECT * FROM orders;
 
 -- CALL findAll('orders', 0, 10);
 

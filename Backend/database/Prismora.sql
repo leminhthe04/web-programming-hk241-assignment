@@ -53,13 +53,6 @@ CREATE TABLE product_images (
 );
 
 
--- SELECT * FROM products;
-
--- DELETE FROM products WHERE id > 25;
-
--- SELECT * FROM product_images;
-
-
 CREATE TABLE orders (
     id                      INT                         AUTO_INCREMENT                  PRIMARY KEY,
     customer_id             INT                                                         NOT NULL,

@@ -11,7 +11,7 @@ CREATE PROCEDURE findAllProducts (
     LIMIT _offset, _limit;
 END;
 
--- $name, $price, $description, $quantity, $category_id, $status
+
 DROP PROCEDURE IF EXISTS insertProduct;
 CREATE PROCEDURE insertProduct (
     IN _name VARCHAR(50),
@@ -100,10 +100,6 @@ BEGIN CALL findByFieldHasToken('products', 'name', _token); END;
 CALL findbyNameHasToken('iphone');
 
 
-
-
--- -- SELECT * FROM products;
-DELETE FROM products WHERE id > 25;
 
 -- SELECT * FROM product_images;
 
