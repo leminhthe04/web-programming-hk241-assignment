@@ -110,7 +110,7 @@ export default function TransactionHist() {
 
                 <div className="text-2xl font-bold py-10 pl-10">Lịch sử mua hàng</div>
 
-                <div style={{"height": "335px"}}>
+                <div style={{"height": "345px"}}>
                     <table className="w-11/12 text-center text-bold text-xl m-auto" >
                         <thead>
                             <tr className="h-14 bg-purple-1 border rounded-e-sm text-l">
@@ -161,7 +161,7 @@ export default function TransactionHist() {
                 </div>
 
             </main>
-
+            <div className="h-20"></div>
             <Footer />
         </>
     )
