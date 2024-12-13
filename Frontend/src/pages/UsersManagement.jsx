@@ -2,52 +2,51 @@
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useRevalidator } from "react-router-dom";
 
 export default function UsersManagement() {
     const navigate = useNavigate();
-    const [totalUser, setTotalUser] = useState(null);
-    const [sellerList, setSellerList] = useState([]);
+    const [userList, setUserList] = useState([]);   
     const [page, setTotalPage] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
-
-            axios.post("http://localhost/Assignment/Backend/api/user/fetch/0/10")
-            .then((response) => {
-                console.log(response.data.data);
-                const result = response.data.data;
-                // console.log(result.data.data);
-                setSellerList(result);
-                // setTotalUser(response.data[totalUser]);
-                // setTotalPage(response.data["totalPage"]);
-                // console.log(page, currentPage)
-                console.log(result);
-            })
-            .catch((err) => {
-                // alert(err.msg);
-            });
+        axios.get(`http://localhost/Assignment/Backend/api/user/fetch/0/10`,)
+        .then((response) => {
+            console.log(response.data.data);
+            const resData = response.data.data;
+            setUserList(resData.data);
+            setCurrentPage(0);
+            setTotalPage(resData.page_count);   
+        })
+        .catch((error) => {
+            if (error.response) {
+                alert(error.response.data.msg);
+            } else {
+                console.error('Error:', error.message);
+            }
+        })
     }, [])
 
-    console.log("CHECK SELLER LIST: " , sellerList);
 
     function handlePageClick(pageNum) {
         const index = Number(pageNum);
-        axios.get(`http://localhost:8000/api/user/users?page=${index}&limit=10`,)
-            .then((response) => {
-                console.log(response);
-                setCurrentPage(pageNum)
-                const users = response.data.data;
-                // console.log(JSON.stringify(products));
-                setUserData(users);
-            })
-            .catch((error) => {
-                if (error.response) {
-                    alert(error.response.data.msg);
-                } else {
-                    console.error('Error:', error.message);
-                }
-            })
+        const offset = index * 10;
+        axios.get(`http://localhost/Assignment/Backend/api/user/fetch/${offset}/10`,)
+        .then((response) => {
+            console.log(response.data.data);
+            const resData = response.data.data;
+            setUserList(resData.data);
+            setCurrentPage(0);
+            setTotalPage(resData.page_count);   
+        })
+        .catch((error) => {
+            if (error.response) {
+                alert(error.response.data.msg);
+            } else {
+                console.error('Error:', error.message);
+            }
+        })
     }
 
     return (
@@ -64,14 +63,15 @@ export default function UsersManagement() {
                     <div className="font-bold text-lg px-6 pt-6">Tất cả người bán</div>
 
 
-                    <div className="w-10/12 m-auto mt-6" style={{ height: "540px" }} >
+                    <div className="w-10/12 m-auto mt-6" style={{ height: "500px" }} >
                         <table className="border-none w-full" >
                             <thead>
                                 <tr className="w-full h-6 font-bold text-base">
                                     <td className="w-1/6 text-center ">STT</td>
                                     <td className="w-1/6 ">Tên người bán</td>
                                     <td className="w-1/6 ">Số điện thoại</td>
-                                    <td className="w-1/6 ">Email</td>
+                                    <td className="w-1/6 px-2 ">Email</td>
+                                    <td className="w-1/6 ">Vai trò</td>
                                     <td className="w-1/6">Thông tin</td>
 
                                 </tr>
@@ -80,17 +80,18 @@ export default function UsersManagement() {
                             </thead>
                             <tbody>
 
-                                {sellerList.map((seller, index) => (
+                                {userList.length > 0 && userList.map((user, index) => (
                                     <>
                                     <tr className="h-2"></tr>
                                     <tr className="w-full h-6  text-base" >
                                         <td className="w-1/6 text-center ">{index + 1}</td>
-                                        <td className="w-1/6 ">{seller.fname + " " + seller.lname}</td>
-                                        <td className="w-1/6 ">{seller.phone}</td>
-                                        <td className="w-1/6 ">{seller.email}</td>
+                                        <td className="w-1/6 ">{user.name}</td>
+                                        <td className="w-1/6 ">{user.phone}</td>
+                                        <td className="w-1/6 px-2 ">{user.email}</td>
+                                        <td className="w-1/6 ">{user.role}</td>
                                         <td className="w-1/6">
-                                            <button className="bg-green-600 text-white px-4 py-1 rounded-lg"
-                                                onClick={() => {navigate(`/seller-detail/${seller.id}`)}}
+                                            <button className="bg-green-700 text-white px-4 py-1 rounded-sm"
+                                                onClick={() => {navigate(`/admin/history/${user.id}`)}}
                                             >Chi tiết</button>    
                                         </td>
 

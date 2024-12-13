@@ -1,25 +1,50 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import RenderStars from "./RenderStart"
+import axios from "axios";
 
-export default function NewReview() {
+
+export default function NewReview({prodID}) {
     const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState("");
+    const [useName, setUsername] = useState("");
+    const [userID, setUserID] = useState(null);
+    const [count, setCount] = useState(0);
+ 
+    useEffect(() => {
+        setUsername(localStorage.getItem("userName"));
+        setUserID(localStorage.getItem("userID"));
+    }, [count])
+
+    function hanldePostReview() {
+        console.log("Rating: ", rating),
+        console.log("Comment: ", comment),
+        axios.post(`http://localhost/Assignment/Backend/api/product/review/${prodID}`, {
+            "user_id": userID,
+            "rating": rating,
+            "comment": comment
+        })
+        .then((response) => {
+            if(response.status === 201) {
+                alert("Đã thêm nhận xét");
+                setCount(count + 1);        
+            }
+        })
+        .catch((error) => {
+            if (error.response.data) {
+              alert(error.response.data.msg);
+            } else {
+              console.error('Error:', error.message);
+            }
+          })
+    
+    }
 
     return(
         <div className="w-full rounded-md border"> 
-            {/* <div className="userInfo">
-                Huynh Bao Ngoc
-            </div>
-
-            <textarea name="" id="" className="border border-black block min-w-80" placeholder="Bạn nghĩ gì về sản phẩm">
-            </textarea>
-
-            <div className="flex justify-end">
-                <button className="bg-red-500 p-1  text-white font-bold">Thêm nhận xét</button>
-            </div> */}
         <div className="review border border-black rounded-md  p-2">
                 <div className="flex flex-row space-x-2 items-baseline">
-                    <span className="font-semibold mr-2">Bảo Ngọc</span>
-                    <div className=" text-gray-500 italic text-sm">12-02-2024</div>
+                    <span className="font-semibold mr-2">{useName}</span>
+                    <div className=" text-gray-500 italic text-sm">{}</div>
 
 
                 </div>
@@ -40,12 +65,17 @@ export default function NewReview() {
                         onClick={() => setRating(5)}    
                         >★</span>
                 </div>
-                <textarea className="comment border border-black w-full p-1">
+                <textarea className="comment border border-black w-full p-1"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                >
                     
                 </textarea>
 
                 <div className="flex justify-end">
-                    <button className="bg-red-500 p-1  text-white font-bold">Thêm nhận xét</button>
+                    <button className="bg-red-500 p-1  text-white font-bold hover:bg-red-600" 
+                        onClick={hanldePostReview}
+                    >Thêm nhận xét</button>
                 </div> 
             </div>
         </div>

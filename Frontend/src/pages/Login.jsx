@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useRouteError } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import axios from "axios";
@@ -14,13 +14,14 @@ export default function Login() {
   const [address, setAddress] = useState(null);
   const [phone, setPhone] = useState(null);
   const [gender, setGender] = useState('M');
+  const [role, setRole] = useState('customer');
 
 
   async function handleLogin(e) {
     axios.post("http://localhost/Assignment/Backend/api/user/login", {
-        email: email,
-        password: pass
-      })
+      email: email,
+      password: pass
+    })
       .then((response) => {
         console.log(response);
         if (response.status == 200) {
@@ -29,8 +30,10 @@ export default function Login() {
           localStorage.setItem("userID", userData.id);
           localStorage.setItem("userName", userData.name);
           localStorage.setItem("userEmail", userData.email);
+          localStorage.setItem("userRole", userData.role);
           alert("Đăng nhập thành công");
-          navigate("/customer/homepage")
+          if(userData.role === "customer")   navigate("/customer/homepage")
+          else if(userData.role === "admin") navigate("/admin/product-manage")
         }
       })
       .catch((error) => {
@@ -50,6 +53,7 @@ export default function Login() {
       password: pass,
       address: address,
       phone: phone,
+      role: role,
       avt_url: "null.png"
     }
 
@@ -58,7 +62,7 @@ export default function Login() {
       .then((response) => {
         if (response.status == 201) {
           alert("Create account success");
-          navigate("/")
+          setMode("login");
         }
       })
       .catch((error) => {
@@ -165,16 +169,16 @@ export default function Login() {
                 <div className="space-y-6 w-full">
 
                   <div className="items-end w-full">
-                      <div>Họ và tên</div>
-                      <input
-                        type="text"
-                        id="name"
-                        name="firstName"
-                        className={`outline-none mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 ${name != "" ? 'bg-blue-100' : null}`}
-                        placeholder="Huỳnh Bảo "
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                      />
+                    <div>Họ và tên</div>
+                    <input
+                      type="text"
+                      id="name"
+                      name="firstName"
+                      className={`outline-none mt-1 p-2  w-4/5 border-b border-black hover:bg-blue-100 ${name != "" ? 'bg-blue-100' : null}`}
+                      placeholder="Huỳnh Bảo "
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
                   </div>
                   <div className="mb-4">
                     <div>Email</div>
@@ -233,14 +237,22 @@ export default function Login() {
 
                   <div className="mb-4 flex space-x-2">
                     <div className="pr-4">Giới tính</div>
-                    <input type="radio" id="male" value="M" name="gender" onClick={() => {setGender("M")}} />
+                    <input type="radio" id="male" value="M" name="gender" onClick={() => { setGender("M") }} />
                     <label htmlFor="male">Nam</label>
-                    <input type="radio" id="female" value="F" name="gender" onClick={() => {setGender("F")}} />
+                    <input type="radio" id="female" value="F" name="gender" onClick={() => { setGender("F") }} />
                     <label htmlFor="female">Nữ</label>
                   </div>
 
+                  <div className="role flex space-x-2">
+                    <div>Bạn là nhân viên ? </div>
+                    <input type="radio" value="admin" name="role" onClick={() => { setRole("admin") }} />
+                    <label htmlFor="role">Đúng</label>
+                    <input type="radio" value="customer" name="role" onClick={() => { setRole("customer") }} />
+                    <label htmlFor="role">Không</label>
+                  </div>
 
-                  
+
+
                 </div>
 
 

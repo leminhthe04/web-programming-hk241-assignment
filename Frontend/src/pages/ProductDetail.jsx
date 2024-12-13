@@ -37,7 +37,6 @@ export default function ProductDetail() {
     const [prodStatus, setProdStatus] = useState("Available")
     const [prodCatID, setProdCatID] = useState(null);
 
-
     // ### IMAGE LIST
     const [imgList, setImgList] = useState([]);
     const [displayImg, setDisplayImg] = useState(null);
@@ -45,6 +44,7 @@ export default function ProductDetail() {
     // ### REVIEW
     const [reviewList, setReviewList] = useState([]);
     const [pageNumReview, setPageNumReview] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
 
     const increaseQuantity = () => setQuantity((prev) => prev + 1);
     const decreaseQuantity = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
@@ -53,8 +53,9 @@ export default function ProductDetail() {
         const fetchData = async () => {
             try {
                 const fetchProductDetails = axios.get(`http://localhost/Assignment/Backend/api/product/detail/${prodID}`);
-                const fetchImgList = axios.get(`http://localhost/Assignment/Backend/api/product-image/product/${prodID}`)
-                const [productResponse, imgListResponse] = await Promise.all([fetchProductDetails, fetchImgList]);
+                const fetchImgList = axios.get(`http://localhost/Assignment/Backend/api/product-image/product/${prodID}`);
+                const fetchReviewList = axios.get(`http://localhost/Assignment/Backend/api/review/product/${prodID}/fetch/0/3`);  
+                const [productResponse, imgListResponse, reviewResponse] = await Promise.all([fetchProductDetails, fetchImgList, fetchReviewList]);
 
                 if (productResponse.status === 200) {
                     console.log(productResponse.data.data[0]);
@@ -67,12 +68,21 @@ export default function ProductDetail() {
                     setProdBuyCount(prodData.buy_count);
                     setProdAvgRating(prodData.avg_rating);
                     setProdStatus(prodData.status);
+                    
                 }
                 if (imgListResponse.status === 200) {
                     console.log(imgListResponse.data.data);
                     setImgList(imgListResponse.data.data);
                     setDisplayImg(imgListResponse.data.data[0].url);
                     console.log("CHECK IMG LIST: ", imgList);
+                }
+                if (reviewResponse.status === 200){
+                    console.log("REVIEW LIST: ", reviewResponse.data.data.data);
+                    const reviewData = reviewResponse.data.data.data;
+                    if(!reviewData) return; 
+                    setReviewList(reviewResponse.data.data.data);
+                    setPageNumReview(reviewResponse.data.data.page_count);
+                    setCurrentPage(0);
                 }
             } catch (error) {
                 if (error.response) {
@@ -102,6 +112,28 @@ export default function ProductDetail() {
             }}
         );
     }
+
+    function handlePageClick(pageNum) {
+        setCurrentPage(pageNum);
+        const index = Number(pageNum);
+        const offset = index*3;
+        axios.get(`http://localhost/Assignment/Backend/api/review/product/${prodID}/fetch/${offset}/3`)
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log("REVIEW LIST 2: ", response.data.data.data);
+                    setReviewList(response.data.data.data);
+                    setPageNumReview(response.data.data.page_count);
+                    setCurrentPage(0);
+                }
+            })
+            .catch((error) => {
+                if (error.response) {
+                    alert(error.response.data.msg);
+                } else {
+                    console.error('Error:', error.message);
+                }
+            })
+        }
 
 
     return (
@@ -193,8 +225,23 @@ export default function ProductDetail() {
 
                 <div className="w-10/12 mx-auto space-y-4">
                     <div className="text-2xl text-red-500 text-center font-semibold mb-4 mt-10">Đánh giá và nhận xét</div>
-                    <NewReview />
-                    {Array.from({ length: 3 }).map((item, index) => (   <Reviews rating={Number(2)} />))}               
+                    <NewReview prodID={prodID} />
+                    {/* {Array.from({ length: 3 }).map((item, index) => (   <Reviews rating={Number(2)} />))}                */}
+                    {reviewList.length > 0 &&  reviewList.map((item, index) => <Reviews rating={item.rating} customer_name={item.customer_name}  comment={item.comment} time={item.time} />)}
+                </div>
+
+                
+                <div className="flex justify-end z-10 w-10/12 mx-auto my-4">
+                        {Array.from({ length: pageNumReview }, (_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => handlePageClick(i)} 
+                                className={`px-3 py-1 mx-1 hover:bg-blue-300 ${currentPage === i ? "bg-blue-500 text-white" : "bg-gray-200"
+                                    } rounded`}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
                 </div>
             </main>
             <div className="h-60"></div>
