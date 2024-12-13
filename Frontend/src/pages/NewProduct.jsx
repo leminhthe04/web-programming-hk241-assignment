@@ -80,13 +80,7 @@ export default function NewProduct() {
             setImg2(null);
         } else if (index == 3) {
             setImg3(null);
-        } else if (index == 4) {
-            setImg4(null);
-        } else if (index == 5) {
-            setImg5(null);
-        } else if (index == 6) {
-            setImg6(null);
-        }
+        } 
     }
 
     function handleSelectCat(e) {
