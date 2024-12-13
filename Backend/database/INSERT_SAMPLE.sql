@@ -18,8 +18,6 @@ END;
 
 CALL clearData();
 
--- SELECT * FROM users;
-
 
 INSERT INTO categories (id, name) VALUES
 (1, 'Điện thoại'),
@@ -29,8 +27,7 @@ INSERT INTO categories (id, name) VALUES
 (5, 'Phụ kiện');
 
 
--- SET FOREIGN_KEY_CHECKS = 1;
--- DELETE FROM products;
+
 INSERT INTO products (id, name, description, price, quantity, category_id) VALUES 
 (1, 
  'Laptop Lenovo Legion 7 16IRX9 83FD004MVN', 
@@ -206,9 +203,6 @@ INSERT INTO products (id, name, description, price, quantity, category_id) VALUE
 100,
 2);
 
--- SELECT P.name, C.name FROM products P, categories C
--- WHERE P.category_id = C.id
--- ORDER BY category_id;
 
 DELETE FROM product_images;
 INSERT INTO product_images (id, product_id, url) VALUES
@@ -364,7 +358,6 @@ INSERT INTO users (id, name, sex, avt_url, address, email, password, phone, role
 (10, 'Nguyễn Văn Nguyễn', 'M', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPc2cV5ODgkjEDqRmUJrnA-r85XCQ1hif8rQ&s',
  '85 Hai Bà Trưng, Phường 6, Quận 3, TP.HCM', 'nguyenadmin@prismora.com', 'aksjdfioa93i293uksnkdvjiou192u4i2r', '0948274622', 'admin');
 
--- SELECT * FROM users;
 
 DELETE FROM orders;
 INSERT INTO orders (id, customer_id, shipping_address) VALUES
@@ -391,14 +384,6 @@ INSERT INTO product_in_orders (id, order_id, product_id, quantity) VALUES
 (13, 13, 22, 1);
 
 
--- SELECT * FROM product_in_orders;
--- (16, 4, 4, 1), (17, 4, 8, 1), (18, 4, 12, 1), (19, 4, 16, 1), (20, 4, 20, 1),
--- (21, 5, 5, 1), (24, 5, 17, 1), (25, 5, 21, 1),
--- (26, 6, 6, 1), (27, 6, 10, 1), (28, 6, 14, 1), (29, 6, 18, 1), (30, 6, 22, 1),
--- (31, 7, 7, 1), (32, 7, 11, 1), (34, 7, 19, 1), (35, 7, 23, 1),
--- (36, 8, 8, 1), (37, 8, 12, 1), (38, 8, 16, 1), (39, 8, 20, 1), (40, 8, 24, 1),
--- (12, 9, 9, 1), (13, 9, 13, 1), (14, 9, 17, 1), (15, 9, 21, 1),
--- (22, 10, 2, 1), (23, 10, 6, 1), (33, 10, 10, 1), (41, 10, 14, 1), (42, 10, 18, 1);
 
 
 INSERT INTO reviews (id, customer_id, product_id, rating, comment) VALUES

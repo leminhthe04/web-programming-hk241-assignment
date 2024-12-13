@@ -1,7 +1,6 @@
 USE prismora;
 
--- POST
--- $name, $price, $description, $quantity, $category_id, $status
+
 DROP PROCEDURE IF EXISTS insertProductImage;
 CREATE PROCEDURE insertProductImage (
     IN _product_id INT,
@@ -30,6 +29,9 @@ BEGIN
 
     CALL findAllByField('product_images', 'product_id', _product_id, 0, 9999);
 END;
+
+
+
 
 
 -- CALL insertProductImage(1, 'https://hinh1.jpg');

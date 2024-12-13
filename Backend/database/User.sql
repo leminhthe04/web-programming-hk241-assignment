@@ -42,7 +42,6 @@ CREATE PROCEDURE findUserHistory (
             SET MESSAGE_TEXT = 'User not found';
     END IF;
 
-    -- CALL findAllByField('user_histories', 'user_id', _user_id, 0, 9999);
     SELECT * FROM user_histories WHERE user_id = _user_id;
 END;
 
@@ -119,6 +118,9 @@ BEGIN
     CALL updateUserAvtUrl(_id, _avt_url);
     CALL updateUserAddress(_id, _address);
 END;
+
+
+
 
 
 -- CALL insertUser('Nguyen Van B', 'M', '123456', 'nguyenB@gmail.com', '0123456790', 'admin', 'avt_url', '192 ĐPB, Q.1, TP.HCM');
